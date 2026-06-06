@@ -137,26 +137,16 @@ export default function Diary() {
                 </header>
 
                 <div className="diary__layout">
-                    <aside className="diary__sidebar">
-                        <div className="diary-panel">
-                            <Calendar
-                                viewDate={viewDate}
-                                selectedDate={selectedDate}
-                                entryDates={entryDates}
-                                onPrev={() => changeMonth(-1)}
-                                onNext={() => changeMonth(1)}
-                                onSelect={handleSelectDate}
-                            />
-                        </div>
-
-                        <EntryList
-                            entries={entries}
+                    <div className="diary-panel diary__calendar">
+                        <Calendar
+                            viewDate={viewDate}
                             selectedDate={selectedDate}
-                            showAll={showAll}
+                            entryDates={entryDates}
+                            onPrev={() => changeMonth(-1)}
+                            onNext={() => changeMonth(1)}
                             onSelect={handleSelectDate}
-                            onToggleAll={() => setShowAll((open) => !open)}
                         />
-                    </aside>
+                    </div>
 
                     <main className="diary__content">
                         <EntryEditor
@@ -170,6 +160,14 @@ export default function Diary() {
                             onDelete={handleDelete}
                         />
                     </main>
+
+                    <EntryList
+                        entries={entries}
+                        selectedDate={selectedDate}
+                        showAll={showAll}
+                        onSelect={handleSelectDate}
+                        onToggleAll={() => setShowAll((open) => !open)}
+                    />
                 </div>
             </div>
         </div>

@@ -74,13 +74,23 @@ body {
 .diary__layout {
     display: grid;
     grid-template-columns: 360px 1fr;
+    grid-template-areas:
+        "calendar content"
+        "entries  content";
+    align-items: start;
     gap: 1.5rem;
 }
 
-.diary__sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+.diary__calendar {
+    grid-area: calendar;
+}
+
+.diary__content {
+    grid-area: content;
+}
+
+.diary-entries {
+    grid-area: entries;
 }
 
 .diary-panel {
@@ -512,6 +522,10 @@ body {
 
     .diary__layout {
         grid-template-columns: 1fr;
+        grid-template-areas:
+            "calendar"
+            "content"
+            "entries";
     }
 
     /* Evita que os dias do calendário fiquem enormes ao ocupar a
