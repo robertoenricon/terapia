@@ -126,16 +126,13 @@ export default function Diary() {
                         <h1 className="diary__title">
                             <span className="diary__logo">🌱</span> Diário
                         </h1>
-                        <p className="diary__subtitle">
-                            Registre seus pensamentos, sentimentos e acontecimentos.
-                        </p>
                     </div>
                     <button
                         type="button"
                         className="diary-save-btn diary__new"
                         onClick={() => handleSelectDate(new Date())}
                     >
-                        ＋ Nova Data
+                        ＋
                     </button>
                 </header>
 

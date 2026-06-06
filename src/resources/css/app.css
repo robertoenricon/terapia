@@ -71,11 +71,6 @@ body {
     color: var(--diary-green);
 }
 
-.diary__subtitle {
-    color: var(--diary-muted);
-    margin: 0.35rem 0 0;
-}
-
 .diary__layout {
     display: grid;
     grid-template-columns: 360px 1fr;
@@ -540,7 +535,7 @@ body {
     }
 
     .diary-save-btn {
-        width: 100%;
+        width: 20%;
         justify-content: center;
     }
 }
