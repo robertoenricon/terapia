@@ -514,6 +514,13 @@ body {
         grid-template-columns: 1fr;
     }
 
+    /* Evita que os dias do calendário fiquem enormes ao ocupar a
+       largura total numa coluna única; limita e centraliza o calendário. */
+    .diary-calendar {
+        max-width: 380px;
+        margin: 0 auto;
+    }
+
     .diary__header {
         flex-direction: row;
         align-items: center;
