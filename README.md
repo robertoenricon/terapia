@@ -124,16 +124,26 @@ tabela abaixo resume o que cada arquivo passou a fazer:
 - `resources/js/components/Welcome.jsx` -> Tela de boas-vindas com título, chamada e cards de recursos
 - `resources/views/welcome.blade.php` -> Reduzida ao shell que monta o React via @vite
 
-### Rodando o frontend em desenvolvimento
+### Rodando o frontend
 
-Dentro do container (`docker compose exec app bash`), na raiz do Laravel:
+Em seguida, dentro do container (`docker compose exec app bash`), na raiz do
+Laravel:
 
 ```bash
 composer install      # dependências PHP (caso ainda não instaladas)
 npm install           # dependências JS (React, Bootstrap, Vite)
-composer dev          # sobe Laravel + Vite juntos (hot reload)
+npm run build         # compila os assets e gera public/build/manifest.json
 ```
 
-> `composer dev` é um atalho do `composer.json` do Laravel 12 que roda o
-> servidor PHP e o Vite em paralelo. Para gerar o build de produção, use
-> `npm run build`.
+> Sem o `npm run build` (ou `npm run dev`), o Laravel lança
+> `ViteManifestNotFoundException`, pois procura os assets compilados em
+> `public/build/manifest.json`.
+
+Para desenvolvimento com **hot reload**, use o atalho do Laravel 12 que sobe o
+servidor PHP e o Vite em paralelo:
+
+```bash
+composer dev
+```
+
+Para o build final de produção, use `npm run build`.

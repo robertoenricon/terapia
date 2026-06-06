@@ -10,10 +10,13 @@ ARG UID=1000
 ARG GID=1000
 
 # Pacotes de sistema necessarios para compilar/usar as extensoes do PHP.
+# Inclui Node.js e npm para o build do frontend (React + Vite + Bootstrap).
 RUN apk add --no-cache \
         bash \
         git \
         curl \
+        nodejs \
+        npm \
         libpng-dev \
         libjpeg-turbo-dev \
         freetype-dev \
