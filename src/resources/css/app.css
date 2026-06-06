@@ -25,12 +25,6 @@ body {
     color: var(--diary-text);
 }
 
-/* Plano de fundo em gradiente da antiga tela de boas-vindas. */
-.welcome-bg {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #6f42c1 0%, #4361ee 100%);
-}
-
 /* ------------------------------------------------------------------ */
 /* Estrutura geral                                                   */
 /* ------------------------------------------------------------------ */

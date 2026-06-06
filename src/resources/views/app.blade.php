@@ -10,7 +10,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     </head>
     <body>
-        <!-- Elemento raiz onde a aplica��o React � montada -->
+        <!-- Elemento raiz onde a aplicação React é montada -->
         <div id="app"></div>
     </body>
 </html>
