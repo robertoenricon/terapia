@@ -556,7 +556,8 @@ body {
     }
 
     .diary-save-btn {
-        width: 20%;
+        width: 100%;
         justify-content: center;
+        white-space: nowrap;
     }
 }
