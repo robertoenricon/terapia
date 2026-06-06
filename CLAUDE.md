@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-Arquivo de regras e diretrizes do projeto **terapia** ? sistema para controle e acompanhamento de terapias.
+Arquivo de regras e diretrizes do projeto **terapia** â€” sistema para controle e acompanhamento de terapias.
 
-Este documento define como o código deve ser escrito, documentado e organizado. Todas as instruções aqui valem para qualquer geração ou alteração de código no projeto.
+Este documento define como o cÃ³digo deve ser escrito, documentado e organizado. Todas as instruÃ§Ãµes aqui valem para qualquer geraÃ§Ã£o ou alteraÃ§Ã£o de cÃ³digo no projeto.
 
 ---
 
@@ -10,54 +10,54 @@ Este documento define como o código deve ser escrito, documentado e organizado. 
 
 - **Backend:** PHP 8.0 / Laravel 12.0
 - **Frontend:** React.js
-- **Estilização:** Bootstrap 5 e CSS
+- **EstilizaÃ§Ã£o:** Bootstrap 5 e CSS
 
 ---
 
 ## 2. Regras Gerais
 
-- **Não cometa erros.** Valide a lógica, as dependências e a sintaxe antes de finalizar qualquer código.
-- **Documente todas as classes e métodos criados**, de forma simples e objetiva.
-- **A documentação (comentários, docblocks, descrições) deve estar em Português do Brasil (PT-BR).**
-- **A nomenclatura de arquivos, classes e métodos deve estar em Inglês.**
+- **NÃ£o cometa erros.** Valide a lÃ³gica, as dependÃªncias e a sintaxe antes de finalizar qualquer cÃ³digo.
+- **Documente todas as classes e mÃ©todos criados**, de forma simples e objetiva.
+- **A documentaÃ§Ã£o (comentÃ¡rios, docblocks, descriÃ§Ãµes) deve estar em PortuguÃªs do Brasil (PT-BR).**
+- **A nomenclatura de arquivos, classes e mÃ©todos deve estar em InglÃªs.**
 
 ---
 
-## 3. Nomenclatura (em Inglês)
+## 3. Nomenclatura (em InglÃªs)
 
-| Elemento               | Convenção           | Exemplo                       |
+| Elemento               | ConvenÃ§Ã£o           | Exemplo                       |
 |------------------------|---------------------|-------------------------------|
 | Classes                | `PascalCase`        | `TherapySession`              |
-| Métodos / funções      | `camelCase`         | `scheduleSession()`           |
-| Variáveis              | `camelCase`         | `nextAppointment`             |
+| MÃ©todos / funÃ§Ãµes      | `camelCase`         | `scheduleSession()`           |
+| VariÃ¡veis              | `camelCase`         | `nextAppointment`             |
 | Arquivos (PHP/Laravel) | `PascalCase`        | `TherapyController.php`       |
 | Arquivos (React)       | `PascalCase`        | `SessionList.jsx`             |
 | Constantes             | `UPPER_SNAKE_CASE`  | `MAX_SESSIONS_PER_WEEK`       |
 | Tabelas (DB)           | `snake_case` plural | `therapy_sessions`            |
 | Colunas (DB)           | `snake_case`        | `started_at`                  |
 
-> Os nomes são sempre em Inglês; apenas a documentação é em PT-BR.
+> Os nomes sÃ£o sempre em InglÃªs; apenas a documentaÃ§Ã£o Ã© em PT-BR.
 
 ---
 
-## 4. Documentação (em PT-BR)
+## 4. DocumentaÃ§Ã£o (em PT-BR)
 
-Toda classe e método deve conter documentação simples e objetiva explicando o que faz.
+Toda classe e mÃ©todo deve conter documentaÃ§Ã£o simples e objetiva explicando o que faz.
 
-### Exemplo ? PHP / Laravel
+### Exemplo â€” PHP / Laravel
 
 ```php
 /**
- * Gerencia as sessões de terapia do paciente.
+ * Gerencia as sessÃµes de terapia do paciente.
  */
 class TherapySession
 {
     /**
-     * Agenda uma nova sessão para a data informada.
+     * Agenda uma nova sessÃ£o para a data informada.
      *
      * @param  int    $patientId  Identificador do paciente.
-     * @param  string $date       Data da sessão (formato Y-m-d).
-     * @return bool   Verdadeiro se a sessão foi agendada com sucesso.
+     * @param  string $date       Data da sessÃ£o (formato Y-m-d).
+     * @return bool   Verdadeiro se a sessÃ£o foi agendada com sucesso.
      */
     public function scheduleSession(int $patientId, string $date): bool
     {
@@ -66,14 +66,14 @@ class TherapySession
 }
 ```
 
-### Exemplo ? JavaScript / React
+### Exemplo â€” JavaScript / React
 
 ```javascript
 /**
- * Lista as sessões de terapia do paciente.
+ * Lista as sessÃµes de terapia do paciente.
  *
  * @param {number} patientId - Identificador do paciente.
- * @returns {JSX.Element} Componente com a lista de sessões.
+ * @returns {JSX.Element} Componente com a lista de sessÃµes.
  */
 function SessionList(patientId) {
     // ...
@@ -82,21 +82,22 @@ function SessionList(patientId) {
 
 ---
 
-## 5. Boas Práticas
+## 5. Boas PrÃ¡ticas
 
-- Mantenha as classes e métodos com responsabilidade única.
-- Evite duplicação de código (DRY).
-- Prefira nomes descritivos a comentários redundantes; o comentário explica o "porquê", o código explica o "como".
-- Siga os padrões do framework: convenções do Laravel no backend e organização por componentes no React.
-- Trate erros e valide entradas antes de processá-las.
+- Mantenha as classes e mÃ©todos com responsabilidade Ãºnica.
+- Evite duplicaÃ§Ã£o de cÃ³digo (DRY).
+- Prefira nomes descritivos a comentÃ¡rios redundantes; o comentÃ¡rio explica o "porquÃª", o cÃ³digo explica o "como".
+- Siga os padrÃµes do framework: convenÃ§Ãµes do Laravel no backend e organizaÃ§Ã£o por componentes no React.
+- Trate erros e valide entradas antes de processÃ¡-las.
 
 ---
 
 ## 6. Estrutura de Resposta Esperada
 
-Ao gerar ou alterar código, o Claude deve:
+Ao gerar ou alterar cÃ³digo, o Claude deve:
 
 1. Respeitar todas as regras deste documento.
-2. Garantir que classes e métodos novos estejam documentados em PT-BR.
-3. Garantir que nomes de arquivos, classes e métodos estejam em Inglês.
-4. Revisar o código antes de entregar para evitar erros.
+2. Garantir que classes e mÃ©todos novos estejam documentados em PT-BR.
+3. Garantir que nomes de arquivos, classes e mÃ©todos estejam em InglÃªs.
+4. Revisar o cÃ³digo antes de entregar para evitar erros.
+5. Criar branchs seguindo modelo Git Flow e usar nomes simples e direto.
