@@ -394,9 +394,9 @@ body {
 }
 
 .diary-editor {
+    position: relative;
     border: 1px solid var(--diary-border);
     border-radius: 0.85rem;
-    overflow: hidden;
     background-color: var(--diary-panel);
 }
 
@@ -406,6 +406,8 @@ body {
     gap: 0.35rem;
     padding: 0.6rem 0.75rem;
     border-bottom: 1px solid var(--diary-border);
+    border-top-left-radius: 0.85rem;
+    border-top-right-radius: 0.85rem;
 }
 
 .diary-tool {
@@ -436,13 +438,14 @@ body {
 }
 
 .diary-emoji {
-    position: relative;
+    display: inline-flex;
 }
 
 .diary-emoji__panel {
     position: absolute;
-    top: 2.6rem;
-    left: 0;
+    top: 3.4rem;
+    left: 0.6rem;
+    right: 0.6rem;
     z-index: 10;
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -451,10 +454,15 @@ body {
     border: 1px solid var(--diary-border);
     border-radius: 0.6rem;
     padding: 0.5rem;
-    width: 16rem;
+    max-width: 18rem;
+    box-sizing: border-box;
 }
 
 .diary-emoji__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
     background: transparent;
     border: none;
     font-size: 1.1rem;
