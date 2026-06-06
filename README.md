@@ -60,10 +60,18 @@ cp .env.example .env
 docker compose build
 ```
 
+```bash
+docker compose exec app bash
+```
+
 ### 3. Instale o esqueleto do Laravel (apenas na primeira vez)
 
+O diretório `src/` já contém o arquivo `.gitkeep`, então o `composer
+create-project` não pode instalar diretamente nele (exige um diretório vazio).
+Instale em um diretório temporário e copie o conteúdo para `src/`:
+
 ```bash
-docker compose run --rm app composer create-project laravel/laravel .
+composer create-project laravel/laravel .
 ```
 
 ### 4. Suba os containers
@@ -91,11 +99,11 @@ DB_PASSWORD=secret
 ### 6. Gere a chave e rode as migrations
 
 ```bash
-make key      # docker compose exec app php artisan key:generate
-make migrate  # docker compose exec app php artisan migrate
+php artisan key:generate
+php artisan migrate
 ```
 
 ### 7. Acesse a aplicação
 
 - Aplicação: http://localhost:8080
-- MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)W
+- MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)
