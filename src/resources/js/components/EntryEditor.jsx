@@ -72,7 +72,7 @@ export default function EntryEditor({
                     onClick={onSave}
                     disabled={saving || length > MAX_LENGTH}
                 >
-                    🔖 {saving ? 'Salvando...' : 'Salvar registro'}
+                    {saving ? 'Salvando...' : 'Salvar registro'}
                 </button>
             </div>
         </div>
