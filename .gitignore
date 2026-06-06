@@ -1,0 +1,18 @@
+# Variaveis de ambiente da infraestrutura (Docker Compose).
+/.env
+
+# Aplicacao Laravel (versionada no proprio repositorio do app, em ./src).
+# Itens gerados que nao devem ser versionados:
+/src/vendor
+/src/node_modules
+/src/.env
+/src/.phpunit.result.cache
+/src/storage/*.key
+/src/public/storage
+/src/public/hot
+
+# Sistema operacional / editores.
+.DS_Store
+Thumbs.db
+.idea
+.vscode

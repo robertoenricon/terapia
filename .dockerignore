@@ -1,0 +1,10 @@
+# Arquivos e diretorios ignorados no build da imagem Docker.
+.git
+.gitignore
+docker
+docker-compose.yml
+README.md
+CLAUDE.md
+src/vendor
+src/node_modules
+src/.env
