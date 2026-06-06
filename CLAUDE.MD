@@ -100,3 +100,4 @@ Ao gerar ou alterar código, o Claude deve:
 2. Garantir que classes e métodos novos estejam documentados em PT-BR.
 3. Garantir que nomes de arquivos, classes e métodos estejam em Inglês.
 4. Revisar o código antes de entregar para evitar erros.
+
