@@ -28,7 +28,9 @@ export default function Diary() {
     const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
     const [length, setLength] = useState(0);
+    const [loadingEntries, setLoadingEntries] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const [alert, setAlert] = useState(null);
 
@@ -42,7 +44,8 @@ export default function Diary() {
                     type: 'danger',
                     message: error.message,
                 });
-            });
+            })
+            .finally(() => setLoadingEntries(false));
     }, []);
 
     /** Chave da data atualmente selecionada (ou nulo se o editor está oculto). */
@@ -218,6 +221,8 @@ export default function Diary() {
         if (!selectedEntry || !window.confirm('Deseja realmente excluir esta entrada?')) {
             return;
         }
+        setDeleting(true);
+        setAlert(null);
         try {
             await deleteEntry(selectedEntry.id);
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
@@ -232,6 +237,8 @@ export default function Diary() {
                 type: 'danger',
                 message: error.message,
             });
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -254,47 +261,55 @@ export default function Diary() {
                     />
                 )}
 
-                <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
-                    <div className="diary-panel diary__calendar">
-                        <Calendar
-                            viewDate={viewDate}
+                {loadingEntries ? (
+                    <div className="diary-panel diary-loading" role="status" aria-live="polite">
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                        <span>Carregando entradas...</span>
+                    </div>
+                ) : (
+                    <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
+                        <div className="diary-panel diary__calendar">
+                            <Calendar
+                                viewDate={viewDate}
+                                selectedDate={selectedDate}
+                                entryThemes={entryThemes}
+                                activeCategory={activeCategory}
+                                onPrev={() => changeMonth(-1)}
+                                onNext={() => changeMonth(1)}
+                                onSelect={handleSelectDate}
+                            />
+                        </div>
+
+                        {selectedDate && activeCategory && (
+                            <main className="diary__content">
+                                <EntryEditor
+                                    selectedDate={selectedDate}
+                                    category={activeCategory}
+                                    content={content}
+                                    length={length}
+                                    canDelete={Boolean(selectedEntry)}
+                                    saving={saving}
+                                    deleting={deleting}
+                                    onChange={handleChange}
+                                    onSave={handleSave}
+                                    onDelete={handleDelete}
+                                    onBack={handleCloseEditor}
+                                />
+                            </main>
+                        )}
+
+                        <EntryList
+                            entries={filteredEntries}
                             selectedDate={selectedDate}
-                            entryThemes={entryThemes}
                             activeCategory={activeCategory}
-                            onPrev={() => changeMonth(-1)}
-                            onNext={() => changeMonth(1)}
-                            onSelect={handleSelectDate}
+                            showAll={showAll}
+                            onEdit={handleEditEntry}
+                            onSelectCategory={handleSelectCategory}
+                            onClearCategory={handleClearCategory}
+                            onToggleAll={() => setShowAll((open) => !open)}
                         />
                     </div>
-
-                    {selectedDate && activeCategory && (
-                        <main className="diary__content">
-                            <EntryEditor
-                                selectedDate={selectedDate}
-                                category={activeCategory}
-                                content={content}
-                                length={length}
-                                canDelete={Boolean(selectedEntry)}
-                                saving={saving}
-                                onChange={handleChange}
-                                onSave={handleSave}
-                                onDelete={handleDelete}
-                                onBack={handleCloseEditor}
-                            />
-                        </main>
-                    )}
-
-                    <EntryList
-                        entries={filteredEntries}
-                        selectedDate={selectedDate}
-                        activeCategory={activeCategory}
-                        showAll={showAll}
-                        onEdit={handleEditEntry}
-                        onSelectCategory={handleSelectCategory}
-                        onClearCategory={handleClearCategory}
-                        onToggleAll={() => setShowAll((open) => !open)}
-                    />
-                </div>
+                )}
             </div>
 
             {showModal && (

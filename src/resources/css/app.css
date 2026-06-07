@@ -109,6 +109,20 @@ body {
     filter: invert(1) grayscale(1);
 }
 
+.diary-loading {
+    min-height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: var(--diary-muted);
+    font-weight: 600;
+}
+
+.diary-loading .spinner-border {
+    color: var(--diary-sonhos);
+}
+
 .diary__title {
     font-size: 1.9rem;
     font-weight: 800;
@@ -184,6 +198,10 @@ body {
 }
 
 .diary-save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
     background: var(--grad-terapia);
     color: #fff;
     border: none;
@@ -229,6 +247,11 @@ body {
 .diary-back-btn:hover {
     background-color: var(--diary-border-strong);
     border-color: var(--diary-border-strong);
+}
+
+.diary-back-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .diary-delete-btn {

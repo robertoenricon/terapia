@@ -19,6 +19,7 @@ const MAX_LENGTH = 5000;
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
+ * @param {boolean} props.deleting - Indica se a exclusão está em curso.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
@@ -32,6 +33,7 @@ export default function EntryEditor({
     length,
     canDelete,
     saving,
+    deleting,
     onChange,
     onSave,
     onDelete,
@@ -53,10 +55,12 @@ export default function EntryEditor({
                     type="button"
                     className="diary-delete-btn"
                     onClick={onDelete}
-                    disabled={!canDelete}
+                    disabled={!canDelete || saving || deleting}
                     aria-label="Excluir entrada"
                 >
-                    🗑
+                    {deleting ? (
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                    ) : '🗑'}
                 </button>
             </div>
 
@@ -79,6 +83,7 @@ export default function EntryEditor({
                     type="button"
                     className="diary-back-btn"
                     onClick={onBack}
+                    disabled={saving || deleting}
                 >
                     &larr; Voltar
                 </button>
@@ -86,8 +91,11 @@ export default function EntryEditor({
                     type="button"
                     className={`diary-save-btn diary-save-btn--${categoryInfo?.theme || 'terapia'}`}
                     onClick={onSave}
-                    disabled={saving || length > MAX_LENGTH}
+                    disabled={saving || deleting || length > MAX_LENGTH}
                 >
+                    {saving && (
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                    )}
                     {saving ? 'Salvando...' : 'Salvar registro'}
                 </button>
             </div>
