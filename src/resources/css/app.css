@@ -532,7 +532,7 @@ body {
     overflow-wrap: anywhere;
 }
 
-/* Filtros de categoria ("Suas entradas") */
+/* Filtros de categoria ("Registros") */
 .diary-categories {
     display: flex;
     align-items: center;

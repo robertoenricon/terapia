@@ -9,7 +9,7 @@ import {
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
 /**
- * Lista as entradas recentes do diário ("Suas entradas").
+ * Lista as entradas recentes do diário ("Registros").
  *
  * Exibe dois filtros de categoria (Terapia e Sonhos); ao escolher um, o
  * outro é ocultado e a lista passa a mostrar apenas aquela categoria. Cada
@@ -47,7 +47,7 @@ export default function EntryList({
 
     return (
         <div className="diary-panel diary-entries">
-            <h2 className="diary-entries__title">Suas entradas</h2>
+            <h2 className="diary-entries__title">Registros</h2>
 
             <div className="diary-categories">
                 {CATEGORY_LIST
