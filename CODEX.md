@@ -1,4 +1,4 @@
-# CLAUDE.md
+# CODEX.md
 
 Arquivo de regras e diretrizes do projeto **terapia** — sistema para controle e acompanhamento de terapias.
 
