@@ -3,6 +3,7 @@ import Calendar from './Calendar';
 import EntryList from './EntryList';
 import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
+import BootstrapAlert from './BootstrapAlert';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
 import { fromDateKey, toDateKey } from '../utils/date';
 
@@ -29,12 +30,19 @@ export default function Diary() {
     const [length, setLength] = useState(0);
     const [saving, setSaving] = useState(false);
     const [showAll, setShowAll] = useState(false);
+    const [alert, setAlert] = useState(null);
 
     // Carrega as entradas existentes ao montar o componente.
     useEffect(() => {
         fetchEntries()
             .then(setEntries)
-            .catch(() => setEntries([]));
+            .catch((error) => {
+                setEntries([]);
+                setAlert({
+                    type: 'danger',
+                    message: error.message,
+                });
+            });
     }, []);
 
     /** Chave da data atualmente selecionada (ou nulo se o editor está oculto). */
@@ -176,15 +184,28 @@ export default function Diary() {
      * Salva (cria ou atualiza) a entrada da data e categoria selecionadas.
      */
     const handleSave = async () => {
+        const isEditing = Boolean(selectedEntry);
         setSaving(true);
+        setAlert(null);
         try {
             const saved = await saveEntry(selectedKey, content, activeCategory);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
             });
+            setAlert({
+                type: 'success',
+                message: isEditing
+                    ? 'Registro alterado com sucesso.'
+                    : 'Registro salvo com sucesso.',
+            });
         } catch (error) {
-            window.alert(error.message);
+            setAlert({
+                type: 'danger',
+                message: isEditing
+                    ? `Não foi possível alterar o registro. ${error.message}`
+                    : error.message,
+            });
         } finally {
             setSaving(false);
         }
@@ -202,8 +223,15 @@ export default function Diary() {
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
             setContent('');
             setLength(0);
+            setAlert({
+                type: 'success',
+                message: 'Registro excluído com sucesso.',
+            });
         } catch (error) {
-            window.alert(error.message);
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
         }
     };
 
@@ -217,6 +245,14 @@ export default function Diary() {
                         </h1>
                     </div>
                 </header>
+
+                {alert && (
+                    <BootstrapAlert
+                        type={alert.type}
+                        message={alert.message}
+                        onClose={() => setAlert(null)}
+                    />
+                )}
 
                 <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
                     <div className="diary-panel diary__calendar">

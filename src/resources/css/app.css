@@ -88,6 +88,27 @@ body {
     margin-bottom: 1.75rem;
 }
 
+.diary-alert {
+    margin: -0.5rem 0 1.5rem;
+    border: 0;
+    border-radius: 0.85rem;
+    box-shadow: var(--diary-shadow-sm);
+}
+
+.diary-alert.alert-success {
+    color: #d1fae5;
+    background-color: rgba(16, 185, 129, 0.18);
+}
+
+.diary-alert.alert-danger {
+    color: #ffe4e6;
+    background-color: rgba(240, 85, 107, 0.18);
+}
+
+.diary-alert .btn-close {
+    filter: invert(1) grayscale(1);
+}
+
 .diary__title {
     font-size: 1.9rem;
     font-weight: 800;
