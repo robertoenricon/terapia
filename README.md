@@ -377,3 +377,52 @@ Depois envie por FTP apenas o que mudou — tipicamente `app/`, `resources/`,
 `vendor/`. Se houver novas migrations, rode `php artisan migrate` da sua máquina
 com o `.env` apontando para a DBaaS (mesmo esquema do Passo 3) — não precisa de
 SSH no servidor.
+
+---
+
+## Deploy automático (GitHub Actions + FTP)
+
+Em vez de buildar e enviar à mão, o repositório traz um workflow que faz isso
+sozinho a cada `push` na branch **`main`**:
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+
+O que o workflow faz, na nuvem:
+
+1. Instala as dependências PHP de produção (`composer install --no-dev`).
+2. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
+3. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
+   `../../terapia_app/`.
+4. Envia por FTP a aplicação para `terapia_app/` e o conteúdo público para
+   `public_html/diario/`.
+
+As **migrations não rodam** no deploy (decisão de projeto). Quando houver
+mudança no banco, rode `php artisan migrate` da sua máquina apontando para a
+DBaaS (Passo 3).
+
+### Configuração (uma vez)
+
+1. **Pré-requisito manual:** o servidor já precisa ter a estrutura criada por um
+   primeiro deploy manual (Passos 5 e 6) e, principalmente, o **`.env` em
+   `terapia_app/.env`**. O workflow **nunca** envia o `.env` (ele é ignorado),
+   para não sobrescrever as credenciais de produção.
+2. No GitHub, em **Settings → Secrets and variables → Actions**, crie os
+   segredos:
+
+   | Segredo | Valor |
+   |---|---|
+   | `FTP_SERVER` | host de FTP da LocalWeb (ex.: `ftp.seu-dominio.com.br`) |
+   | `FTP_USERNAME` | usuário de FTP |
+   | `FTP_PASSWORD` | senha de FTP |
+
+3. Confirme os `server-dir` no `deploy.yml`. O padrão assume que o login de FTP
+   cai na **home** do usuário (onde ficam `terapia_app/` e `public_html/`). Se o
+   seu FTP já entra dentro de `public_html`, ajuste os caminhos (ex.:
+   `../terapia_app/` e `./diario/`).
+
+### Usando
+
+- **Deploy:** faça `merge`/`push` na branch `main`. Acompanhe em **Actions**.
+- **Disparo manual:** aba **Actions → Deploy LocalWeb (FTP) → Run workflow**.
+
+> O primeiro envio é mais lento (sobe o `vendor/` inteiro). Nos seguintes, a
+> action envia **apenas o que mudou**, então é rápido.
