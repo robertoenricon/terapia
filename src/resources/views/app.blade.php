@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <!-- Favicon: emoji 🌱 desenhado via SVG inline (sem arquivo de imagem) -->
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%B1</text></svg>">
+
         <title>{{ config('app.name', 'Terapia') }}</title>
 
         <!-- Estilos e scripts compilados pelo Vite (React + Bootstrap 5) -->

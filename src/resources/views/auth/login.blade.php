@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <!-- Favicon: emoji 🌱 desenhado via SVG inline (sem arquivo de imagem) -->
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%B1</text></svg>">
+
         <title>Login | {{ config('app.name', 'Terapia') }}</title>
 
         @vite(['resources/css/app.css'])
