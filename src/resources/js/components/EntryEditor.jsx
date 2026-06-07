@@ -22,6 +22,7 @@ const MAX_LENGTH = 5000;
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
+ * @param {Function} props.onBack - Callback para fechar o editor.
  * @returns {JSX.Element} Componente do editor de entrada.
  */
 export default function EntryEditor({
@@ -34,6 +35,7 @@ export default function EntryEditor({
     onChange,
     onSave,
     onDelete,
+    onBack,
 }) {
     const categoryInfo = CATEGORIES[category];
 
@@ -73,6 +75,13 @@ export default function EntryEditor({
             </div>
 
             <div className="diary-main__actions">
+                <button
+                    type="button"
+                    className="diary-back-btn"
+                    onClick={onBack}
+                >
+                    &larr; Voltar
+                </button>
                 <button
                     type="button"
                     className={`diary-save-btn diary-save-btn--${categoryInfo?.theme || 'terapia'}`}

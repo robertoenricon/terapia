@@ -4,7 +4,7 @@ import EntryList from './EntryList';
 import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
-import { toDateKey } from '../utils/date';
+import { fromDateKey, toDateKey } from '../utils/date';
 
 /**
  * Tela principal do Diário.
@@ -98,14 +98,6 @@ export default function Diary() {
     };
 
     /**
-     * Abre o modal de categoria para criar uma nova entrada na data de hoje.
-     */
-    const handleNewEntry = () => {
-        setPendingDate(new Date());
-        setShowModal(true);
-    };
-
-    /**
      * Define a categoria escolhida no modal e abre o editor na data pendente.
      *
      * @param {string} category - Categoria selecionada ("terapia" ou "sonhos").
@@ -142,6 +134,22 @@ export default function Diary() {
     const handleClearCategory = () => {
         setActiveCategory(null);
         setSelectedDate(null);
+    };
+
+    const handleCloseEditor = () => {
+        setSelectedDate(null);
+    };
+
+    /**
+     * Abre no editor a entrada escolhida na lista.
+     *
+     * @param {Object} entry - Entrada que será alterada.
+     */
+    const handleEditEntry = (entry) => {
+        const date = fromDateKey(entry.entry_date.slice(0, 10));
+        setActiveCategory(entry.category);
+        setSelectedDate(date);
+        setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
     };
 
     /**
@@ -208,13 +216,6 @@ export default function Diary() {
                             <span className="diary__logo">🌱</span> Diário
                         </h1>
                     </div>
-                    <button
-                        type="button"
-                        className="diary-save-btn diary__new"
-                        onClick={handleNewEntry}
-                    >
-                        ＋
-                    </button>
                 </header>
 
                 <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
@@ -242,6 +243,7 @@ export default function Diary() {
                                 onChange={handleChange}
                                 onSave={handleSave}
                                 onDelete={handleDelete}
+                                onBack={handleCloseEditor}
                             />
                         </main>
                     )}
@@ -251,7 +253,7 @@ export default function Diary() {
                         selectedDate={selectedDate}
                         activeCategory={activeCategory}
                         showAll={showAll}
-                        onSelect={handleSelectDate}
+                        onEdit={handleEditEntry}
                         onSelectCategory={handleSelectCategory}
                         onClearCategory={handleClearCategory}
                         onToggleAll={() => setShowAll((open) => !open)}

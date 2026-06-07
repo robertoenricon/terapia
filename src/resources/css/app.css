@@ -127,14 +127,10 @@ body {
     grid-area: entries;
 }
 
-/* Sem o editor aberto, calendário e entradas ocupam uma coluna central
-   única (evita deixar a área do editor vazia à direita). */
+/* Sem o editor aberto, calendário e entradas ficam lado a lado. */
 .diary__layout--no-editor {
-    grid-template-columns: minmax(0, 480px);
-    grid-template-areas:
-        "calendar"
-        "entries";
-    justify-content: center;
+    grid-template-columns: 360px minmax(0, 1fr);
+    grid-template-areas: "calendar entries";
 }
 
 .diary-panel {
@@ -198,16 +194,20 @@ body {
     box-shadow: 0 12px 28px var(--diary-sonhos-glow);
 }
 
-/* Botão "+" no cabeçalho usa o gradiente da marca */
-.diary__new {
-    white-space: nowrap;
-    background: var(--grad-brand);
-    font-size: 1.2rem;
-    padding: 0.55rem 1.1rem;
+.diary-back-btn {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
+    border: 1px solid var(--diary-border);
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
 }
 
-.diary__new:hover:not(:disabled) {
-    box-shadow: 0 12px 28px var(--diary-sonhos-glow);
+.diary-back-btn:hover {
+    background-color: var(--diary-border-strong);
+    border-color: var(--diary-border-strong);
 }
 
 .diary-delete-btn {
@@ -347,16 +347,11 @@ body {
 
 .diary-entry-card {
     width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
     background-color: var(--diary-surface);
     border: 1px solid var(--diary-border);
     border-radius: 0.85rem;
-    padding: 0.7rem 0.85rem;
-    cursor: pointer;
-    text-align: left;
     transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
+    overflow: hidden;
 }
 
 .diary-entry-card:hover {
@@ -367,6 +362,31 @@ body {
 .diary-entry-card--selected {
     border-color: var(--diary-terapia);
     background-color: var(--diary-terapia-soft);
+}
+
+.diary-entry-card__top {
+    display: flex;
+    align-items: stretch;
+}
+
+.diary-entry-card__summary {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0.85rem;
+    color: var(--diary-text);
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.diary-entry-card__summary:focus-visible,
+.diary-entry-card__edit:focus-visible {
+    outline: 2px solid var(--diary-sonhos);
+    outline-offset: -2px;
 }
 
 .diary-entry-card__date {
@@ -430,6 +450,42 @@ body {
 
 .diary-entry-card__badge--sonhos {
     background: var(--grad-sonhos);
+}
+
+.diary-entry-card__edit {
+    align-self: center;
+    margin-right: 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 0.65rem;
+    padding: 0.45rem 0.7rem;
+    background: transparent;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.diary-entry-card__edit--terapia {
+    color: var(--diary-terapia);
+}
+
+.diary-entry-card__edit--sonhos {
+    color: var(--diary-sonhos);
+}
+
+.diary-entry-card__edit:hover {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
+}
+
+.diary-entry-card__description {
+    padding: 0.9rem 1rem 1rem;
+    border-top: 1px solid var(--diary-border);
+    color: var(--diary-text);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 /* Filtros de categoria ("Suas entradas") */
@@ -677,6 +733,7 @@ body {
 .diary-main__actions {
     display: flex;
     justify-content: flex-end;
+    gap: 0.75rem;
     margin-top: 1.25rem;
 }
 
@@ -702,6 +759,13 @@ body {
             "entries";
     }
 
+    .diary__layout--no-editor {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "calendar"
+            "entries";
+    }
+
     /* Evita que os dias do calendário fiquem enormes ao ocupar a
        largura total numa coluna única; limita e centraliza o calendário. */
     .diary-calendar {
@@ -718,13 +782,25 @@ body {
         font-size: 1.5rem;
     }
 
-    .diary-main__actions .diary-save-btn,
-    .diary__new {
+    .diary-main__actions .diary-save-btn {
         padding: 0.65rem 1rem;
     }
 }
 
 @media (max-width: 575px) {
+    .diary-entry-card__top {
+        align-items: center;
+    }
+
+    .diary-entry-card__summary {
+        gap: 0.6rem;
+        padding-right: 0.5rem;
+    }
+
+    .diary-entry-card__badge {
+        display: none;
+    }
+
     .diary-main__actions {
         justify-content: stretch;
     }
@@ -732,6 +808,10 @@ body {
     .diary-main__actions .diary-save-btn {
         width: 100%;
         justify-content: center;
+        white-space: nowrap;
+    }
+
+    .diary-main__actions .diary-back-btn {
         white-space: nowrap;
     }
 }
