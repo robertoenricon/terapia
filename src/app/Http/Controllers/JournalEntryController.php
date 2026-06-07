@@ -54,10 +54,20 @@ class JournalEntryController extends Controller
             'content' => ['nullable', 'string', 'max:50000'],
         ]);
 
-        $entry = JournalEntry::updateOrCreate(
-            ['entry_date' => $data['entry_date'], 'category' => $data['category']],
-            ['content' => $data['content'] ?? ''],
-        );
+        $entry = JournalEntry::query()
+            ->whereDate('entry_date', $data['entry_date'])
+            ->where('category', $data['category'])
+            ->first();
+
+        if ($entry === null) {
+            $entry = new JournalEntry([
+                'entry_date' => $data['entry_date'],
+                'category' => $data['category'],
+            ]);
+        }
+
+        $entry->content = $data['content'] ?? '';
+        $entry->save();
 
         return response()->json($entry, $entry->wasRecentlyCreated ? 201 : 200);
     }
