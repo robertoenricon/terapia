@@ -2,59 +2,59 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* ------------------------------------------------------------------ */
-/* Tema do Diário — paleta "Terapia & Sonhos"                         */
+/* Tema do Diário — paleta "Verde-menta & Azul-mar"                   */
 /*                                                                    */
-/* Terapia = rosé/âmbar (acolhimento, humano).                        */
-/* Sonhos  = índigo/violeta (noite, sonho).                           */
-/* Fundo em gradiente crepuscular com brilhos ambientes das duas      */
-/* cores, painéis em vidro (glass) para um visual profissional.       */
+/* Terapia = verde esmeralda/lima (cura, natureza, serenidade).       */
+/* Sonhos  = ciano/azul-mar (profundidade, calma, sonho).             */
+/* Fundo em gradiente escuro esverdeado com brilhos ambientes das     */
+/* duas cores, painéis em vidro (glass) para um visual profissional.  */
 /*                                                                    */
 /* Os modificadores de cor são nomeados pela categoria (--terapia /   */
 /* --sonhos), não pelo tom, para não quebrarem ao mudar a paleta.     */
 /* ------------------------------------------------------------------ */
 
 :root {
-    /* Base escura levemente fria */
-    --diary-bg: #090d17;
-    --diary-panel: rgba(19, 26, 40, 0.72);
+    /* Base escura levemente esverdeada */
+    --diary-bg: #0a1014;
+    --diary-panel: rgba(16, 26, 28, 0.72);
     --diary-panel-alt: rgba(255, 255, 255, 0.04);
     --diary-surface: rgba(255, 255, 255, 0.025);
     --diary-border: rgba(255, 255, 255, 0.08);
     --diary-border-strong: rgba(255, 255, 255, 0.16);
-    --diary-text: #eaf0f8;
-    --diary-muted: #97a4ba;
-    --diary-faint: #5f6c82;
+    --diary-text: #eafaf4;
+    --diary-muted: #93b1aa;
+    --diary-faint: #5d7872;
 
-    /* Terapia — rosé/âmbar */
-    --diary-terapia: #fb7185;
-    --diary-terapia-dark: #f43f5e;
-    --diary-terapia-soft: rgba(251, 113, 133, 0.16);
-    --diary-terapia-glow: rgba(251, 113, 133, 0.32);
-    --grad-terapia: linear-gradient(135deg, #fb7185 0%, #fbbf24 100%);
+    /* Terapia — verde esmeralda/lima */
+    --diary-terapia: #34d399;
+    --diary-terapia-dark: #10b981;
+    --diary-terapia-soft: rgba(52, 211, 153, 0.16);
+    --diary-terapia-glow: rgba(52, 211, 153, 0.32);
+    --grad-terapia: linear-gradient(135deg, #34d399 0%, #a3e635 100%);
 
-    /* Sonhos — índigo/violeta */
-    --diary-sonhos: #818cf8;
-    --diary-sonhos-dark: #6366f1;
-    --diary-sonhos-soft: rgba(129, 140, 248, 0.16);
-    --diary-sonhos-glow: rgba(99, 102, 241, 0.32);
-    --grad-sonhos: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+    /* Sonhos — ciano/azul-mar */
+    --diary-sonhos: #38bdf8;
+    --diary-sonhos-dark: #0ea5e9;
+    --diary-sonhos-soft: rgba(56, 189, 248, 0.16);
+    --diary-sonhos-glow: rgba(14, 165, 233, 0.32);
+    --grad-sonhos: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
 
     /* Marca: combinação das duas categorias */
-    --grad-brand: linear-gradient(135deg, #fb7185 0%, #6366f1 100%);
+    --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
 
     --diary-danger: #f0556b;
-    --diary-shadow: 0 20px 55px rgba(2, 6, 18, 0.55);
-    --diary-shadow-sm: 0 8px 24px rgba(2, 6, 18, 0.35);
+    --diary-shadow: 0 20px 55px rgba(2, 12, 10, 0.55);
+    --diary-shadow-sm: 0 8px 24px rgba(2, 12, 10, 0.35);
 }
 
 body {
     min-height: 100vh;
     color: var(--diary-text);
     background:
-        radial-gradient(900px 520px at 10% -10%, rgba(251, 113, 133, 0.16), transparent 60%),
-        radial-gradient(950px 540px at 100% -5%, rgba(99, 102, 241, 0.18), transparent 58%),
-        radial-gradient(800px 800px at 50% 120%, rgba(167, 139, 250, 0.12), transparent 60%),
-        linear-gradient(160deg, #0b1122 0%, #090d17 55%);
+        radial-gradient(900px 520px at 10% -10%, rgba(52, 211, 153, 0.16), transparent 60%),
+        radial-gradient(950px 540px at 100% -5%, rgba(14, 165, 233, 0.18), transparent 58%),
+        radial-gradient(800px 800px at 50% 120%, rgba(34, 211, 238, 0.12), transparent 60%),
+        linear-gradient(160deg, #0c1418 0%, #0a1014 55%);
     background-attachment: fixed;
 }
 
@@ -459,7 +459,7 @@ body {
 }
 
 .diary-calendar__day--today {
-    color: #34f313;
+    color: #a78bfa;
     font-weight: 700;
 }
 
@@ -851,7 +851,7 @@ body {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 0.15rem;
-    background-color: #161d2c;
+    background-color: #111d1e;
     border: 1px solid var(--diary-border-strong);
     border-radius: 0.6rem;
     padding: 0.5rem;
@@ -1006,7 +1006,7 @@ body {
 
 .diary-modal__card {
     width: min(26rem, 100%);
-    background-color: #131a29;
+    background-color: #0f1a1c;
     border: 1px solid var(--diary-border-strong);
     border-radius: 1.25rem;
     padding: 1.75rem;
