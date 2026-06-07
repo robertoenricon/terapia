@@ -29,6 +29,7 @@ class JournalEntryFactory extends Factory
         return [
             'entry_date' => $this->faker->unique()->date(),
             'category' => $this->faker->randomElement(['terapia', 'sonhos', 'evento']),
+            'title' => $this->faker->sentence(3),
             'content' => '<p>'.$this->faker->sentence().'</p>',
         ];
     }

@@ -14,12 +14,14 @@ const MAX_LENGTH = 5000;
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
- * @param {string} props.category - Categoria da entrada ("terapia" ou "sonhos").
+ * @param {string} props.category - Categoria da entrada ("terapia", "sonhos" ou "evento").
+ * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
  * @param {boolean} props.deleting - Indica se a exclusão está em curso.
+ * @param {Function} props.onTitleChange - Callback com o novo título.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
@@ -29,11 +31,13 @@ const MAX_LENGTH = 5000;
 export default function EntryEditor({
     selectedDate,
     category,
+    title,
     content,
     length,
     canDelete,
     saving,
     deleting,
+    onTitleChange,
     onChange,
     onSave,
     onDelete,
@@ -67,6 +71,19 @@ export default function EntryEditor({
             <h3 className={`semear-main__subtitle semear-main__subtitle--${categoryInfo?.theme || 'terapia'}`}>
                 {categoryInfo?.label || 'Acontecimentos do dia'}
             </h3>
+
+            <div className="semear-main__field">
+                <label className="semear-main__label" htmlFor="entry-title">Título</label>
+                <input
+                    id="entry-title"
+                    type="text"
+                    className="semear-main__title-input"
+                    value={title}
+                    onChange={(event) => onTitleChange(event.target.value)}
+                    placeholder="Dê um título para este registro..."
+                    maxLength={255}
+                />
+            </div>
 
             <RichTextEditor
                 value={content}

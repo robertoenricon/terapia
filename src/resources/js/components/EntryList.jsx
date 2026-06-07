@@ -109,7 +109,7 @@ export default function EntryList({
                                     </span>
                                     <span className="semear-entry-card__info">
                                         <span className="semear-entry-card__weekday">
-                                            {WEEKDAY_NAMES[date.getDay()]}
+                                            {entry.title || WEEKDAY_NAMES[date.getDay()]}
                                         </span>
                                         <span className="semear-entry-card__long">
                                             {getPlainText(entry.content) || 'Sem descrição'}

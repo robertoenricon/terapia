@@ -952,6 +952,41 @@ body {
     color: var(--semear-evento);
 }
 
+.semear-main__field {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.semear-main__label {
+    color: var(--semear-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.semear-main__title-input {
+    width: 100%;
+    border: 1px solid var(--semear-border);
+    border-radius: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    color: var(--semear-text);
+    background-color: var(--semear-surface);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.semear-main__title-input::placeholder {
+    color: var(--semear-faint);
+    font-weight: 400;
+}
+
+.semear-main__title-input:focus {
+    outline: none;
+    border-color: var(--semear-border-strong);
+    box-shadow: 0 0 0 0.2rem var(--semear-border);
+}
+
 .semear-editor {
     position: relative;
     border: 1px solid var(--semear-border);
