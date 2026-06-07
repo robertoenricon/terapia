@@ -55,41 +55,43 @@ export default function EntryList({
         <div className="semear-panel semear-entries">
             <h2 className="semear-entries__title">Registros</h2>
 
-            <div className="semear-categories">
-                {CATEGORY_LIST
-                    .filter((category) => !activeCategory || category.value === activeCategory)
-                    .map((category) => (
-                        <button
-                            key={category.value}
-                            type="button"
-                            className={[
-                                'semear-category-chip',
-                                `semear-category-chip--${category.theme}`,
-                                activeCategory === category.value ? 'semear-category-chip--active' : '',
-                            ].filter(Boolean).join(' ')}
-                            onClick={() => onSelectCategory(category.value)}
-                        >
-                            {category.label}
+            <div className="semear-entries__toolbar">
+                <div className="semear-categories">
+                    {CATEGORY_LIST
+                        .filter((category) => !activeCategory || category.value === activeCategory)
+                        .map((category) => (
+                            <button
+                                key={category.value}
+                                type="button"
+                                className={[
+                                    'semear-category-chip',
+                                    `semear-category-chip--${category.theme}`,
+                                    activeCategory === category.value ? 'semear-category-chip--active' : '',
+                                ].filter(Boolean).join(' ')}
+                                onClick={() => onSelectCategory(category.value)}
+                            >
+                                {category.label}
+                            </button>
+                        ))}
+
+                    {activeCategory && (
+                        <button type="button" className="semear-category-clear" onClick={onClearCategory}>
+                            ← Voltar
                         </button>
-                    ))}
+                    )}
+                </div>
 
-                {activeCategory && (
-                    <button type="button" className="semear-category-clear" onClick={onClearCategory}>
-                        ← Voltar
-                    </button>
-                )}
-            </div>
-
-            <div className="semear-entries__search">
-                <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
-                <input
-                    type="search"
-                    className="semear-entries__search-input"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder="Buscar por título..."
-                    aria-label="Buscar registros por título"
-                />
+                <div className="semear-entries__search">
+                    <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
+                    <input
+                        type="search"
+                        className="semear-entries__search-input"
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Buscar por título..."
+                        aria-label="Buscar registros por título"
+                    />
+                </div>
             </div>
 
             {visible.length === 0 && (
