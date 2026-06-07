@@ -554,35 +554,46 @@ body {
     font-weight: 700;
 }
 
-/* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
-   categoria correspondente. "mixed" = data com categorias diferentes. */
-.semear-calendar__day--fill-terapia {
-    background: var(--grad-terapia);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__day-num {
+    line-height: 1;
 }
 
-.semear-calendar__day--fill-sonhos {
-    background: var(--grad-sonhos);
-    color: #fff;
-    font-weight: 700;
+/* Bolinhas abaixo do número do dia: uma para cada registro, na cor da
+   categoria. Vários registros no mesmo dia exibem várias bolinhas. */
+.semear-calendar__dots {
+    position: absolute;
+    bottom: 0.22rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
 }
 
-.semear-calendar__day--fill-evento {
-    background: var(--grad-evento);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--semear-muted);
 }
 
-.semear-calendar__day--fill-mixed {
-    background: var(--grad-brand);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__dot--terapia {
+    background: var(--semear-terapia);
 }
 
-/* Anel branco interno destaca o dia atualmente selecionado. */
+.semear-calendar__dot--sonhos {
+    background: var(--semear-sonhos);
+}
+
+.semear-calendar__dot--evento {
+    background: var(--semear-evento);
+}
+
+/* Fundo sutil e anel interno destacam o dia atualmente selecionado. */
 .semear-calendar__day--selected {
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
+    background-color: var(--semear-border);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
 }
 
 /* ------------------------------------------------------------------ */

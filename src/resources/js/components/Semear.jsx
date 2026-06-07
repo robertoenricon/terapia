@@ -66,21 +66,20 @@ export default function Semear({ userName }) {
     );
 
     /**
-     * Mapa "YYYY-MM-DD" → tema da entrada ("terapia", "sonhos" ou "mixed"
-     * quando a data tem as duas categorias). Usado para preencher os dias do
-     * calendário com a cor correspondente.
+     * Mapa "YYYY-MM-DD" → lista das categorias dos registros daquele dia.
+     * Cada categoria vira uma bolinha no calendário, permitindo identificar
+     * vários registros no mesmo dia (ex.: dois eventos).
      */
-    const entryThemes = useMemo(() => {
-        const themes = {};
+    const entryMarks = useMemo(() => {
+        const marks = {};
         filteredEntries.forEach((entry) => {
             const key = entry.entry_date.slice(0, 10);
-            if (!themes[key]) {
-                themes[key] = entry.category;
-            } else if (themes[key] !== entry.category) {
-                themes[key] = 'mixed';
+            if (!marks[key]) {
+                marks[key] = [];
             }
+            marks[key].push(entry.category);
         });
-        return themes;
+        return marks;
     }, [filteredEntries]);
 
     /** Entrada atualmente em edição (nula quando é um novo registro). */
@@ -387,8 +386,7 @@ export default function Semear({ userName }) {
                             <Calendar
                                 viewDate={viewDate}
                                 selectedDate={selectedDate}
-                                entryThemes={entryThemes}
-                                activeCategory={activeCategory}
+                                entryMarks={entryMarks}
                                 onPrev={() => changeMonth(-1)}
                                 onNext={() => changeMonth(1)}
                                 onSelect={handleSelectDate}
