@@ -9,7 +9,7 @@ import {
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
 /**
- * Lista as entradas recentes do diário ("Registros").
+ * Lista as entradas recentes do Semear ("Registros").
  *
  * Exibe dois filtros de categoria (Terapia e Sonhos); ao escolher um, o
  * outro é ocultado e a lista passa a mostrar apenas aquela categoria. Cada
@@ -17,7 +17,7 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
  * completa ou abrir a entrada correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
- * @param {Array} props.entries - Entradas do diário (já filtradas por categoria).
+ * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
  * @param {Date|null} props.selectedDate - Data atualmente selecionada.
  * @param {string|null} props.activeCategory - Categoria filtrada no momento.
  * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
@@ -46,10 +46,10 @@ export default function EntryList({
     };
 
     return (
-        <div className="diary-panel diary-entries">
-            <h2 className="diary-entries__title">Registros</h2>
+        <div className="semear-panel semear-entries">
+            <h2 className="semear-entries__title">Registros</h2>
 
-            <div className="diary-categories">
+            <div className="semear-categories">
                 {CATEGORY_LIST
                     .filter((category) => !activeCategory || category.value === activeCategory)
                     .map((category) => (
@@ -57,9 +57,9 @@ export default function EntryList({
                             key={category.value}
                             type="button"
                             className={[
-                                'diary-category-chip',
-                                `diary-category-chip--${category.theme}`,
-                                activeCategory === category.value ? 'diary-category-chip--active' : '',
+                                'semear-category-chip',
+                                `semear-category-chip--${category.theme}`,
+                                activeCategory === category.value ? 'semear-category-chip--active' : '',
                             ].filter(Boolean).join(' ')}
                             onClick={() => onSelectCategory(category.value)}
                         >
@@ -68,17 +68,17 @@ export default function EntryList({
                     ))}
 
                 {activeCategory && (
-                    <button type="button" className="diary-category-clear" onClick={onClearCategory}>
+                    <button type="button" className="semear-category-clear" onClick={onClearCategory}>
                         ← Voltar
                     </button>
                 )}
             </div>
 
             {visible.length === 0 && (
-                <p className="diary-entries__empty">Nenhuma entrada registrada ainda.</p>
+                <p className="semear-entries__empty">Nenhuma entrada registrada ainda.</p>
             )}
 
-            <ul className="diary-entries__list">
+            <ul className="semear-entries__list">
                 {visible.map((entry) => {
                     const date = fromDateKey(entry.entry_date.slice(0, 10));
                     const isSelected = selectedDate
@@ -90,39 +90,39 @@ export default function EntryList({
                     return (
                         <li
                             key={entry.id}
-                            className={`diary-entry-card ${isSelected ? 'diary-entry-card--selected' : ''}`}
+                            className={`semear-entry-card ${isSelected ? 'semear-entry-card--selected' : ''}`}
                         >
-                            <div className="diary-entry-card__top">
+                            <div className="semear-entry-card__top">
                                 <button
                                     type="button"
-                                    className="diary-entry-card__summary"
+                                    className="semear-entry-card__summary"
                                     onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
                                     aria-expanded={isExpanded}
                                     aria-controls={`entry-description-${entry.id}`}
                                 >
-                                    <span className="diary-entry-card__date">
-                                        <span className={`diary-entry-card__day diary-entry-card__day--${entry.category}`}>
+                                    <span className="semear-entry-card__date">
+                                        <span className={`semear-entry-card__day semear-entry-card__day--${entry.category}`}>
                                             {date.getDate()}
                                         </span>
-                                        <span className="diary-entry-card__month">
+                                        <span className="semear-entry-card__month">
                                             {MONTH_ABBREVIATIONS[date.getMonth()]}
                                         </span>
                                     </span>
-                                    <span className="diary-entry-card__info">
-                                        <span className="diary-entry-card__weekday">
+                                    <span className="semear-entry-card__info">
+                                        <span className="semear-entry-card__weekday">
                                             {WEEKDAY_NAMES[date.getDay()]}
                                         </span>
-                                        <span className="diary-entry-card__long">{formatLongDate(date)}</span>
+                                        <span className="semear-entry-card__long">{formatLongDate(date)}</span>
                                     </span>
                                     {category && (
-                                        <span className={`diary-entry-card__badge diary-entry-card__badge--${category.theme}`}>
+                                        <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
                                             {category.label}
                                         </span>
                                     )}
                                 </button>
                                 <button
                                     type="button"
-                                    className={`diary-entry-card__edit diary-entry-card__edit--${category?.theme || 'terapia'}`}
+                                    className={`semear-entry-card__edit semear-entry-card__edit--${category?.theme || 'terapia'}`}
                                     onClick={() => onEdit(entry)}
                                 >
                                     Alterar
@@ -132,7 +132,7 @@ export default function EntryList({
                             {isExpanded && (
                                 <div
                                     id={`entry-description-${entry.id}`}
-                                    className="diary-entry-card__description"
+                                    className="semear-entry-card__description"
                                 >
                                     {getPlainText(entry.content) || 'Esta entrada não possui descrição.'}
                                 </div>
@@ -143,7 +143,7 @@ export default function EntryList({
             </ul>
 
             {entries.length > 3 && (
-                <button type="button" className="diary-entries__toggle" onClick={onToggleAll}>
+                <button type="button" className="semear-entries__toggle" onClick={onToggleAll}>
                     {showAll ? 'Ver menos' : 'Ver todas as entradas'}
                 </button>
             )}

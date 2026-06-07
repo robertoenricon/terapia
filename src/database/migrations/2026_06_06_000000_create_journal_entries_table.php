@@ -5,14 +5,14 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Cria a tabela que armazena as entradas do diário.
+ * Cria a tabela que armazena as entradas do Semear.
  *
  * Cada registro representa os acontecimentos anotados em uma data específica.
  */
 return new class extends Migration
 {
     /**
-     * Executa a migração, criando a tabela de entradas do diário.
+     * Executa a migração, criando a tabela de entradas do Semear.
      */
     public function up(): void
     {
@@ -32,7 +32,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverte a migração, removendo a tabela de entradas do diário.
+     * Reverte a migração, removendo a tabela de entradas do Semear.
      */
     public function down(): void
     {

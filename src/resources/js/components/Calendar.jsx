@@ -7,7 +7,7 @@ import {
 } from '../utils/date';
 
 /**
- * Calendário mensal do diário.
+ * Calendário mensal do Semear.
  *
  * Exibe os dias do mês, destaca a data selecionada e marca os dias que
  * já possuem entradas registradas. Permite navegar entre os meses e
@@ -28,26 +28,26 @@ export default function Calendar({ viewDate, selectedDate, entryThemes, activeCa
     const today = new Date();
 
     return (
-        <div className="diary-calendar">
-            <div className="diary-calendar__header">
-                <button type="button" className="diary-icon-btn" onClick={onPrev} aria-label="Mês anterior">
+        <div className="semear-calendar">
+            <div className="semear-calendar__header">
+                <button type="button" className="semear-icon-btn" onClick={onPrev} aria-label="Mês anterior">
                     ‹
                 </button>
-                <span className="diary-calendar__title">
+                <span className="semear-calendar__title">
                     {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
                 </span>
-                <button type="button" className="diary-icon-btn" onClick={onNext} aria-label="Próximo mês">
+                <button type="button" className="semear-icon-btn" onClick={onNext} aria-label="Próximo mês">
                     ›
                 </button>
             </div>
 
-            <div className="diary-calendar__grid diary-calendar__weekdays">
+            <div className="semear-calendar__grid semear-calendar__weekdays">
                 {WEEKDAY_INITIALS.map((initial, index) => (
-                    <span key={index} className="diary-calendar__weekday">{initial}</span>
+                    <span key={index} className="semear-calendar__weekday">{initial}</span>
                 ))}
             </div>
 
-            <div className="diary-calendar__grid">
+            <div className="semear-calendar__grid">
                 {days.map(({ date, inMonth }) => {
                     const key = toDateKey(date);
                     const isSelected = selectedDate && isSameDay(date, selectedDate);
@@ -64,11 +64,11 @@ export default function Calendar({ viewDate, selectedDate, entryThemes, activeCa
                     }
 
                     const classes = [
-                        'diary-calendar__day',
-                        inMonth ? '' : 'diary-calendar__day--muted',
-                        fillTheme ? `diary-calendar__day--fill-${fillTheme}` : '',
-                        isSelected ? 'diary-calendar__day--selected' : '',
-                        !fillTheme && isToday ? 'diary-calendar__day--today' : '',
+                        'semear-calendar__day',
+                        inMonth ? '' : 'semear-calendar__day--muted',
+                        fillTheme ? `semear-calendar__day--fill-${fillTheme}` : '',
+                        isSelected ? 'semear-calendar__day--selected' : '',
+                        !fillTheme && isToday ? 'semear-calendar__day--today' : '',
                     ].filter(Boolean).join(' ');
 
                     return (

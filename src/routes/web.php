@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/diario');
+Route::redirect('/', '/semear');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -11,6 +11,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::view('/diario', 'app')->name('diary');
+    Route::view('/semear', 'app')->name('semear');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

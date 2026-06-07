@@ -10,7 +10,7 @@ import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 
 /**
- * Tela principal do Diário.
+ * Tela principal do Semear.
  *
  * Coordena o calendário, a lista de entradas e o editor, gerenciando o
  * estado da data e da categoria selecionadas e a comunicação com a API
@@ -19,9 +19,9 @@ import { fromDateKey, toDateKey } from '../utils/date';
  * O editor só é exibido após o usuário escolher uma data; quando nenhuma
  * categoria está ativa, um modal pergunta entre Terapia e Sonhos.
  *
- * @returns {JSX.Element} Componente do Diário.
+ * @returns {JSX.Element} Componente do Semear.
  */
-export default function Diary({ userName }) {
+export default function Semear({ userName }) {
     const [entries, setEntries] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [viewDate, setViewDate] = useState(new Date());
@@ -282,19 +282,19 @@ export default function Diary({ userName }) {
     };
 
     return (
-        <div className="diary">
-            <div className="diary__container">
-                <header className="diary__header">
+        <div className="semear">
+            <div className="semear__container">
+                <header className="semear__header">
                     <div>
-                        <h1 className="diary__title">
-                            <span className="diary__logo">🌱</span> Diário
+                        <h1 className="semear__title">
+                            <span className="semear__logo">🌱</span> Semear
                         </h1>
                     </div>
-                    <div className="diary-user">
-                        <span className="diary-user__name">{userName}</span>
+                    <div className="semear-user">
+                        <span className="semear-user__name">{userName}</span>
                         <button
                             type="button"
-                            className="diary-logout-btn"
+                            className="semear-logout-btn"
                             onClick={handleLogout}
                             disabled={loggingOut}
                         >
@@ -315,13 +315,13 @@ export default function Diary({ userName }) {
                 )}
 
                 {loadingEntries ? (
-                    <div className="diary-panel diary-loading" role="status" aria-live="polite">
+                    <div className="semear-panel semear-loading" role="status" aria-live="polite">
                         <span className="spinner-border spinner-border-sm" aria-hidden="true" />
                         <span>Carregando entradas...</span>
                     </div>
                 ) : (
-                    <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
-                        <div className="diary-panel diary__calendar">
+                    <div className={`semear__layout ${selectedDate && activeCategory ? '' : 'semear__layout--no-editor'}`}>
+                        <div className="semear-panel semear__calendar">
                             <Calendar
                                 viewDate={viewDate}
                                 selectedDate={selectedDate}
@@ -334,7 +334,7 @@ export default function Diary({ userName }) {
                         </div>
 
                         {selectedDate && activeCategory && (
-                            <main className="diary__content">
+                            <main className="semear__content">
                                 <EntryEditor
                                     selectedDate={selectedDate}
                                     category={activeCategory}

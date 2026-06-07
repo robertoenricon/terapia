@@ -3,8 +3,8 @@
 # A cada push na branch "main" (ou disparo manual), o workflow:
 #   1. Compila os assets do front-end (Vite).
 #   2. Prepara a pasta pública do subdomínio com o index.php ajustado.
-#   3. Envia por FTP a aplicação para "terapia_app/" (fora do public_html) e o
-#      conteúdo público para "public_html/diario/".
+#   3. Envia por FTP a aplicação para "semear_app/" (fora do public_html) e o
+#      conteúdo público para "public_html/semear/".
 #
 # O "vendor/" NÃO é enviado pelo workflow (envie-o manualmente uma vez e a cada
 # mudança em composer.lock — a LocalWeb não tem SSH para rodar "composer").
@@ -51,23 +51,23 @@ jobs:
           npm ci
           npm run build
 
-      - name: Preparar pasta pública do subdomínio (diario)
+      - name: Preparar pasta pública do subdomínio (semear)
         run: |
-          rm -rf deploy-diario
-          mkdir -p deploy-diario
-          cp -r src/public/. deploy-diario/
-          # Ajusta os caminhos do index.php: o app está em terapia_app/, dois
-          # níveis acima de public_html/diario/.
-          sed -i "s#__DIR__\.'/\.\./#__DIR__.'/../../terapia_app/#g" deploy-diario/index.php
+          rm -rf deploy-semear
+          mkdir -p deploy-semear
+          cp -r src/public/. deploy-semear/
+          # Ajusta os caminhos do index.php: o app está em semear_app/, dois
+          # níveis acima de public_html/semear/.
+          sed -i "s#__DIR__\.'/\.\./#__DIR__.'/../../semear_app/#g" deploy-semear/index.php
 
-      - name: Enviar a aplicação para terapia_app/ (FTP)
+      - name: Enviar a aplicação para semear_app/ (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./src/
-          server-dir: ./terapia_app/
+          server-dir: ./semear_app/
           # Itens que NÃO devem ser enviados nem apagados no servidor.
           # (Definir "exclude" substitui os padrões da action, por isso os
           # itens de Git/node_modules são repetidos aqui.)
@@ -84,11 +84,11 @@ jobs:
             storage/framework/sessions/**
             storage/framework/views/**
 
-      - name: Enviar a pasta pública para public_html/diario/ (FTP)
+      - name: Enviar a pasta pública para public_html/semear/ (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./deploy-diario/
-          server-dir: ./public_html/diario/
+          local-dir: ./deploy-semear/
+          server-dir: ./public_html/semear/

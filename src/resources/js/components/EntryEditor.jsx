@@ -42,18 +42,18 @@ export default function EntryEditor({
     const categoryInfo = CATEGORIES[category];
 
     return (
-        <div className="diary-panel diary-main">
-            <div className="diary-main__header">
-                <div className="diary-main__heading">
-                    <span className={`diary-main__icon diary-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
+        <div className="semear-panel semear-main">
+            <div className="semear-main__header">
+                <div className="semear-main__heading">
+                    <span className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
                     <div>
-                        <h2 className="diary-main__date">{formatLongDate(selectedDate)}</h2>
-                        <p className="diary-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
+                        <h2 className="semear-main__date">{formatLongDate(selectedDate)}</h2>
+                        <p className="semear-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
                     </div>
                 </div>
                 <button
                     type="button"
-                    className="diary-delete-btn"
+                    className="semear-delete-btn"
                     onClick={onDelete}
                     disabled={!canDelete || saving || deleting}
                     aria-label="Excluir entrada"
@@ -64,7 +64,7 @@ export default function EntryEditor({
                 </button>
             </div>
 
-            <h3 className={`diary-main__subtitle diary-main__subtitle--${categoryInfo?.theme || 'terapia'}`}>
+            <h3 className={`semear-main__subtitle semear-main__subtitle--${categoryInfo?.theme || 'terapia'}`}>
                 {categoryInfo?.label || 'Acontecimentos do dia'}
             </h3>
 
@@ -74,14 +74,14 @@ export default function EntryEditor({
                 placeholder="Descreva os acontecimentos do seu dia..."
             />
 
-            <div className="diary-main__counter">
+            <div className="semear-main__counter">
                 {length}/{MAX_LENGTH} caracteres
             </div>
 
-            <div className="diary-main__actions">
+            <div className="semear-main__actions">
                 <button
                     type="button"
-                    className="diary-back-btn"
+                    className="semear-back-btn"
                     onClick={onBack}
                     disabled={saving || deleting}
                 >
@@ -89,7 +89,7 @@ export default function EntryEditor({
                 </button>
                 <button
                     type="button"
-                    className={`diary-save-btn diary-save-btn--${categoryInfo?.theme || 'terapia'}`}
+                    className={`semear-save-btn semear-save-btn--${categoryInfo?.theme || 'terapia'}`}
                     onClick={onSave}
                     disabled={saving || deleting || length > MAX_LENGTH}
                 >

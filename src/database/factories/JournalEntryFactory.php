@@ -6,7 +6,7 @@ use App\Models\JournalEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Fábrica de dados de teste para entradas do diário.
+ * Fábrica de dados de teste para entradas do Semear.
  *
  * @extends Factory<JournalEntry>
  */

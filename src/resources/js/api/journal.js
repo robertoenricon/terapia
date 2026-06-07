@@ -1,11 +1,11 @@
 /**
- * Camada de comunicação com a API de entradas do diário.
+ * Camada de comunicação com a API de entradas do Semear.
  *
  * Centraliza as chamadas HTTP para listar, consultar, salvar e remover
  * as entradas, retornando os dados já convertidos de JSON.
  */
 
-/** Prefixo base das rotas da API do diário. */
+/** Prefixo base das rotas da API do Semear. */
 const BASE_URL = '/api/journal-entries';
 
 /**
@@ -22,7 +22,7 @@ function jsonHeaders() {
 }
 
 /**
- * Busca todas as entradas do diário.
+ * Busca todas as entradas do Semear.
  *
  * @returns {Promise<Array>} Lista de entradas registradas.
  */
@@ -59,7 +59,7 @@ export async function saveEntry(entryDate, content, category) {
 }
 
 /**
- * Remove uma entrada do diário pelo seu identificador.
+ * Remove uma entrada do Semear pelo seu identificador.
  *
  * @param {number} id - Identificador da entrada.
  * @returns {Promise<void>} Resolve quando a remoção é concluída.

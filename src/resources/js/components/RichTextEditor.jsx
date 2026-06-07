@@ -61,36 +61,36 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
     };
 
     return (
-        <div className="diary-editor">
-            <div className="diary-editor__toolbar">
-                <button type="button" className="diary-tool" onClick={() => applyCommand('bold')} aria-label="Negrito">
+        <div className="semear-editor">
+            <div className="semear-editor__toolbar">
+                <button type="button" className="semear-tool" onClick={() => applyCommand('bold')} aria-label="Negrito">
                     <strong>B</strong>
                 </button>
-                <button type="button" className="diary-tool" onClick={() => applyCommand('italic')} aria-label="Itálico">
+                <button type="button" className="semear-tool" onClick={() => applyCommand('italic')} aria-label="Itálico">
                     <em>I</em>
                 </button>
-                <span className="diary-tool__divider" />
-                <button type="button" className="diary-tool" onClick={() => applyCommand('insertUnorderedList')} aria-label="Lista com marcadores">
+                <span className="semear-tool__divider" />
+                <button type="button" className="semear-tool" onClick={() => applyCommand('insertUnorderedList')} aria-label="Lista com marcadores">
                     ☰
                 </button>
-                <button type="button" className="diary-tool" onClick={() => applyCommand('insertOrderedList')} aria-label="Lista numerada">
+                <button type="button" className="semear-tool" onClick={() => applyCommand('insertOrderedList')} aria-label="Lista numerada">
                     ⩾
                 </button>
-                <button type="button" className="diary-tool" onClick={() => applyCommand('indent')} aria-label="Aumentar recuo">
+                <button type="button" className="semear-tool" onClick={() => applyCommand('indent')} aria-label="Aumentar recuo">
                     ⇥
                 </button>
-                <span className="diary-tool__divider" />
-                <div className="diary-emoji">
-                    <button type="button" className="diary-tool" onClick={() => setShowEmojis((open) => !open)} aria-label="Inserir emoji">
+                <span className="semear-tool__divider" />
+                <div className="semear-emoji">
+                    <button type="button" className="semear-tool" onClick={() => setShowEmojis((open) => !open)} aria-label="Inserir emoji">
                         🙂
                     </button>
                     {showEmojis && (
-                        <div className="diary-emoji__panel">
+                        <div className="semear-emoji__panel">
                             {EMOJIS.map((emoji) => (
                                 <button
                                     type="button"
                                     key={emoji}
-                                    className="diary-emoji__item"
+                                    className="semear-emoji__item"
                                     onClick={() => insertEmoji(emoji)}
                                 >
                                     {emoji}
@@ -103,7 +103,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
 
             <div
                 ref={editorRef}
-                className="diary-editor__area"
+                className="semear-editor__area"
                 contentEditable
                 role="textbox"
                 aria-multiline="true"

@@ -25,19 +25,19 @@ export default function ConfirmModal({
     onCancel,
 }) {
     return (
-        <div className="diary-modal" onClick={loading ? undefined : onCancel}>
+        <div className="semear-modal" onClick={loading ? undefined : onCancel}>
             <div
-                className="diary-modal__card"
+                className="semear-modal__card"
                 role="alertdialog"
                 aria-modal="true"
                 aria-label={title}
                 onClick={(event) => event.stopPropagation()}
             >
-                <div className="diary-modal__header">
-                    <h2 className="diary-modal__title">{title}</h2>
+                <div className="semear-modal__header">
+                    <h2 className="semear-modal__title">{title}</h2>
                     <button
                         type="button"
-                        className="diary-icon-btn"
+                        className="semear-icon-btn"
                         onClick={onCancel}
                         disabled={loading}
                         aria-label="Fechar"
@@ -46,12 +46,12 @@ export default function ConfirmModal({
                     </button>
                 </div>
 
-                <p className="diary-modal__text">{message}</p>
+                <p className="semear-modal__text">{message}</p>
 
-                <div className="diary-modal__actions">
+                <div className="semear-modal__actions">
                     <button
                         type="button"
-                        className="diary-back-btn"
+                        className="semear-back-btn"
                         onClick={onCancel}
                         disabled={loading}
                     >
@@ -59,7 +59,7 @@ export default function ConfirmModal({
                     </button>
                     <button
                         type="button"
-                        className="diary-modal__confirm"
+                        className="semear-modal__confirm"
                         onClick={onConfirm}
                         disabled={loading}
                     >

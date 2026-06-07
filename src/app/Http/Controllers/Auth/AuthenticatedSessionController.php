@@ -48,7 +48,7 @@ class AuthenticatedSessionController extends Controller
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('diary'));
+        return redirect()->intended(route('semear'));
     }
 
     public function destroy(Request $request): RedirectResponse

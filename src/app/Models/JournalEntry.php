@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Representa uma entrada do diário referente a uma data específica.
+ * Representa uma entrada do Semear referente a uma data específica.
  *
  * Cada entrada guarda os acontecimentos, pensamentos e sentimentos
  * registrados pelo usuário em um determinado dia.

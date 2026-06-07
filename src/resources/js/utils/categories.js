@@ -1,5 +1,5 @@
 /**
- * Categorias das entradas do diário.
+ * Categorias das entradas do Semear.
  *
  * Centraliza o rótulo e a cor de cada categoria para reuso na lista,
  * no editor, no calendário e no modal de seleção.

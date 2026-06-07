@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * Gerencia as entradas do diário (acontecimentos do dia).
+ * Gerencia as entradas do Semear (acontecimentos do dia).
  *
  * Disponibiliza as operações de listagem, consulta por data, criação,
  * atualização e remoção das entradas registradas pelo usuário.
@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class JournalEntryController extends Controller
 {
     /**
-     * Lista as entradas do diário em ordem decrescente de data.
+     * Lista as entradas do Semear em ordem decrescente de data.
      *
      * @return JsonResponse Coleção de entradas registradas.
      */
@@ -80,7 +80,7 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Remove a entrada informada do diário.
+     * Remove a entrada informada do Semear.
      *
      * @param  JournalEntry $journalEntry Entrada a ser removida.
      * @return JsonResponse                Resposta vazia de confirmação.

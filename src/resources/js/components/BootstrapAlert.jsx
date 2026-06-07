@@ -10,7 +10,7 @@
 export default function BootstrapAlert({ type, message, onClose }) {
     return (
         <div
-            className={`alert alert-${type} alert-dismissible fade show diary-alert`}
+            className={`alert alert-${type} alert-dismissible fade show semear-alert`}
             role="alert"
             aria-live="polite"
         >

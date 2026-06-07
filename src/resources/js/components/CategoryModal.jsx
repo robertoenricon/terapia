@@ -14,19 +14,19 @@ import { CATEGORY_LIST } from '../utils/categories';
  */
 export default function CategoryModal({ onChoose, onClose }) {
     return (
-        <div className="diary-modal" onClick={onClose}>
+        <div className="semear-modal" onClick={onClose}>
             <div
-                className="diary-modal__card"
+                className="semear-modal__card"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Escolha a categoria"
                 onClick={(event) => event.stopPropagation()}
             >
-                <div className="diary-modal__header">
-                    <h2 className="diary-modal__title">Escolha a categoria</h2>
+                <div className="semear-modal__header">
+                    <h2 className="semear-modal__title">Escolha a categoria</h2>
                     <button
                         type="button"
-                        className="diary-icon-btn"
+                        className="semear-icon-btn"
                         onClick={onClose}
                         aria-label="Fechar"
                     >
@@ -34,12 +34,12 @@ export default function CategoryModal({ onChoose, onClose }) {
                     </button>
                 </div>
 
-                <div className="diary-modal__options">
+                <div className="semear-modal__options">
                     {CATEGORY_LIST.map((category) => (
                         <button
                             key={category.value}
                             type="button"
-                            className={`diary-modal__option diary-modal__option--${category.theme}`}
+                            className={`semear-modal__option semear-modal__option--${category.theme}`}
                             onClick={() => onChoose(category.value)}
                         >
                             {category.label}

@@ -2,7 +2,7 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* ------------------------------------------------------------------ */
-/* Tema do Diário — paleta "Verde-menta & Azul-mar"                   */
+/* Tema do Semear — paleta "Verde-menta & Azul-mar"                   */
 /*                                                                    */
 /* Terapia = verde esmeralda/lima (cura, natureza, serenidade).       */
 /* Sonhos  = ciano/azul-mar (profundidade, calma, sonho).             */
@@ -15,41 +15,41 @@
 
 :root {
     /* Base escura levemente esverdeada */
-    --diary-bg: #0a1014;
-    --diary-panel: rgba(16, 26, 28, 0.72);
-    --diary-panel-alt: rgba(255, 255, 255, 0.04);
-    --diary-surface: rgba(255, 255, 255, 0.025);
-    --diary-border: rgba(255, 255, 255, 0.08);
-    --diary-border-strong: rgba(255, 255, 255, 0.16);
-    --diary-text: #eafaf4;
-    --diary-muted: #93b1aa;
-    --diary-faint: #5d7872;
+    --semear-bg: #0a1014;
+    --semear-panel: rgba(16, 26, 28, 0.72);
+    --semear-panel-alt: rgba(255, 255, 255, 0.04);
+    --semear-surface: rgba(255, 255, 255, 0.025);
+    --semear-border: rgba(255, 255, 255, 0.08);
+    --semear-border-strong: rgba(255, 255, 255, 0.16);
+    --semear-text: #eafaf4;
+    --semear-muted: #93b1aa;
+    --semear-faint: #5d7872;
 
     /* Terapia — verde esmeralda/lima */
-    --diary-terapia: #34d399;
-    --diary-terapia-dark: #10b981;
-    --diary-terapia-soft: rgba(52, 211, 153, 0.16);
-    --diary-terapia-glow: rgba(52, 211, 153, 0.32);
+    --semear-terapia: #34d399;
+    --semear-terapia-dark: #10b981;
+    --semear-terapia-soft: rgba(52, 211, 153, 0.16);
+    --semear-terapia-glow: rgba(52, 211, 153, 0.32);
     --grad-terapia: linear-gradient(135deg, #34d399 0%, #a3e635 100%);
 
     /* Sonhos — ciano/azul-mar */
-    --diary-sonhos: #38bdf8;
-    --diary-sonhos-dark: #0ea5e9;
-    --diary-sonhos-soft: rgba(56, 189, 248, 0.16);
-    --diary-sonhos-glow: rgba(14, 165, 233, 0.32);
+    --semear-sonhos: #38bdf8;
+    --semear-sonhos-dark: #0ea5e9;
+    --semear-sonhos-soft: rgba(56, 189, 248, 0.16);
+    --semear-sonhos-glow: rgba(14, 165, 233, 0.32);
     --grad-sonhos: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
 
     /* Marca: combinação das duas categorias */
     --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
 
-    --diary-danger: #f0556b;
-    --diary-shadow: 0 20px 55px rgba(2, 12, 10, 0.55);
-    --diary-shadow-sm: 0 8px 24px rgba(2, 12, 10, 0.35);
+    --semear-danger: #f0556b;
+    --semear-shadow: 0 20px 55px rgba(2, 12, 10, 0.55);
+    --semear-shadow-sm: 0 8px 24px rgba(2, 12, 10, 0.35);
 }
 
 body {
     min-height: 100vh;
-    color: var(--diary-text);
+    color: var(--semear-text);
     background:
         radial-gradient(900px 520px at 10% -10%, rgba(52, 211, 153, 0.16), transparent 60%),
         radial-gradient(950px 540px at 100% -5%, rgba(14, 165, 233, 0.18), transparent 58%),
@@ -68,10 +68,10 @@ body {
 .login-card {
     width: min(28rem, 100%);
     padding: 2rem;
-    background-color: var(--diary-panel);
-    border: 1px solid var(--diary-border);
+    background-color: var(--semear-panel);
+    border: 1px solid var(--semear-border);
     border-radius: 1.35rem;
-    box-shadow: var(--diary-shadow);
+    box-shadow: var(--semear-shadow);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
 }
@@ -95,7 +95,7 @@ body {
 
 .login-card__subtitle {
     margin: 0.25rem 0 0;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
 }
 
 .login-card__alert {
@@ -112,22 +112,22 @@ body {
 .login-form__label {
     display: block;
     margin-bottom: 0.4rem;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-size: 0.85rem;
     font-weight: 700;
 }
 
 .login-form__input {
-    border-color: var(--diary-border-strong);
-    color: var(--diary-text);
-    background-color: var(--diary-surface);
+    border-color: var(--semear-border-strong);
+    color: var(--semear-text);
+    background-color: var(--semear-surface);
 }
 
 .login-form__input:focus {
-    border-color: var(--diary-sonhos);
-    color: var(--diary-text);
-    background-color: var(--diary-surface);
-    box-shadow: 0 0 0 0.2rem var(--diary-sonhos-soft);
+    border-color: var(--semear-sonhos);
+    color: var(--semear-text);
+    background-color: var(--semear-surface);
+    box-shadow: 0 0 0 0.2rem var(--semear-sonhos-soft);
 }
 
 /* Campo de senha com o botão de "olho" sobreposto à direita. */
@@ -152,18 +152,18 @@ body {
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--diary-terapia);
+    color: var(--semear-terapia);
     cursor: pointer;
     border-radius: 0 0.375rem 0.375rem 0;
     transition: color 0.15s;
 }
 
 .login-form__toggle:hover {
-    color: var(--diary-terapia-dark);
+    color: var(--semear-terapia-dark);
 }
 
 .login-form__toggle:focus-visible {
-    outline: 2px solid var(--diary-sonhos);
+    outline: 2px solid var(--semear-sonhos);
     outline-offset: -2px;
 }
 
@@ -185,7 +185,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-size: 0.9rem;
     cursor: pointer;
 }
@@ -199,25 +199,25 @@ body {
 /* Estrutura geral                                                   */
 /* ------------------------------------------------------------------ */
 
-.diary {
+.semear {
     min-height: 100vh;
     background: transparent;
     padding: 2.5rem 1rem;
 }
 
-.diary__container {
+.semear__container {
     max-width: 1140px;
     margin: 0 auto;
-    background-color: var(--diary-panel);
-    border: 1px solid var(--diary-border);
+    background-color: var(--semear-panel);
+    border: 1px solid var(--semear-border);
     border-radius: 1.5rem;
     padding: 2rem;
-    box-shadow: var(--diary-shadow);
+    box-shadow: var(--semear-shadow);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
 }
 
-.diary__header {
+.semear__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -225,42 +225,42 @@ body {
     margin-bottom: 1.75rem;
 }
 
-.diary-alert {
+.semear-alert {
     margin: -0.5rem 0 1.5rem;
     border: 0;
     border-radius: 0.85rem;
-    box-shadow: var(--diary-shadow-sm);
+    box-shadow: var(--semear-shadow-sm);
 }
 
-.diary-alert.alert-success {
+.semear-alert.alert-success {
     color: #d1fae5;
     background-color: rgba(16, 185, 129, 0.18);
 }
 
-.diary-alert.alert-danger {
+.semear-alert.alert-danger {
     color: #ffe4e6;
     background-color: rgba(240, 85, 107, 0.18);
 }
 
-.diary-alert .btn-close {
+.semear-alert .btn-close {
     filter: invert(1) grayscale(1);
 }
 
-.diary-loading {
+.semear-loading {
     min-height: 12rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-weight: 600;
 }
 
-.diary-loading .spinner-border {
-    color: var(--diary-sonhos);
+.semear-loading .spinner-border {
+    color: var(--semear-sonhos);
 }
 
-.diary__title {
+.semear__title {
     font-size: 1.9rem;
     font-weight: 800;
     letter-spacing: -0.01em;
@@ -270,51 +270,51 @@ body {
     gap: 0.7rem;
 }
 
-.diary-user {
+.semear-user {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-.diary-user__name {
-    color: var(--diary-muted);
+.semear-user__name {
+    color: var(--semear-muted);
     font-size: 0.9rem;
     font-weight: 600;
 }
 
-.diary-logout-btn {
+.semear-logout-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.45rem;
-    border: 1px solid var(--diary-border-strong);
+    border: 1px solid var(--semear-border-strong);
     border-radius: 0.7rem;
     padding: 0.5rem 0.8rem;
-    color: var(--diary-text);
+    color: var(--semear-text);
     background: transparent;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.diary-logout-btn:hover:not(:disabled) {
-    border-color: var(--diary-danger);
+.semear-logout-btn:hover:not(:disabled) {
+    border-color: var(--semear-danger);
     background-color: rgba(240, 85, 107, 0.12);
 }
 
-.diary-logout-btn:disabled {
+.semear-logout-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-.diary__logo {
+.semear__logo {
     display: inline-flex;
     align-items: center;
     font-size: 1.6rem;
     line-height: 1;
 }
 
-.diary__layout {
+.semear__layout {
     display: grid;
     grid-template-columns: 360px 1fr;
     grid-template-areas:
@@ -324,27 +324,27 @@ body {
     gap: 1.5rem;
 }
 
-.diary__calendar {
+.semear__calendar {
     grid-area: calendar;
 }
 
-.diary__content {
+.semear__content {
     grid-area: content;
 }
 
-.diary-entries {
+.semear-entries {
     grid-area: entries;
 }
 
 /* Sem o editor aberto, calendário e entradas ficam lado a lado. */
-.diary__layout--no-editor {
+.semear__layout--no-editor {
     grid-template-columns: 360px minmax(0, 1fr);
     grid-template-areas: "calendar entries";
 }
 
-.diary-panel {
-    background-color: var(--diary-panel-alt);
-    border: 1px solid var(--diary-border);
+.semear-panel {
+    background-color: var(--semear-panel-alt);
+    border: 1px solid var(--semear-border);
     border-radius: 1.1rem;
     padding: 1.35rem;
 }
@@ -353,10 +353,10 @@ body {
 /* Botões base                                                       */
 /* ------------------------------------------------------------------ */
 
-.diary-icon-btn {
+.semear-icon-btn {
     background: transparent;
     border: none;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-size: 1.4rem;
     line-height: 1;
     width: 2.1rem;
@@ -366,12 +366,12 @@ body {
     transition: background-color 0.15s, color 0.15s;
 }
 
-.diary-icon-btn:hover {
-    background-color: var(--diary-border);
-    color: var(--diary-text);
+.semear-icon-btn:hover {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
 }
 
-.diary-save-btn {
+.semear-save-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -383,34 +383,34 @@ body {
     padding: 0.7rem 1.4rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: var(--diary-shadow-sm);
+    box-shadow: var(--semear-shadow-sm);
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
 }
 
-.diary-save-btn:hover:not(:disabled) {
+.semear-save-btn:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 12px 28px var(--diary-terapia-glow);
+    box-shadow: 0 12px 28px var(--semear-terapia-glow);
 }
 
-.diary-save-btn:disabled {
+.semear-save-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     box-shadow: none;
 }
 
 /* Variações por categoria */
-.diary-save-btn--sonhos {
+.semear-save-btn--sonhos {
     background: var(--grad-sonhos);
 }
 
-.diary-save-btn--sonhos:hover:not(:disabled) {
-    box-shadow: 0 12px 28px var(--diary-sonhos-glow);
+.semear-save-btn--sonhos:hover:not(:disabled) {
+    box-shadow: 0 12px 28px var(--semear-sonhos-glow);
 }
 
-.diary-back-btn {
-    background-color: var(--diary-border);
-    color: var(--diary-text);
-    border: 1px solid var(--diary-border);
+.semear-back-btn {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
+    border: 1px solid var(--semear-border);
     border-radius: 0.75rem;
     padding: 0.7rem 1rem;
     font-weight: 600;
@@ -418,20 +418,20 @@ body {
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.diary-back-btn:hover {
-    background-color: var(--diary-border-strong);
-    border-color: var(--diary-border-strong);
+.semear-back-btn:hover {
+    background-color: var(--semear-border-strong);
+    border-color: var(--semear-border-strong);
 }
 
-.diary-back-btn:disabled {
+.semear-back-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.diary-delete-btn {
+.semear-delete-btn {
     background: transparent;
-    border: 1px solid var(--diary-border);
-    color: var(--diary-danger);
+    border: 1px solid var(--semear-border);
+    color: var(--semear-danger);
     border-radius: 0.7rem;
     width: 2.6rem;
     height: 2.6rem;
@@ -440,12 +440,12 @@ body {
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.diary-delete-btn:hover:not(:disabled) {
+.semear-delete-btn:hover:not(:disabled) {
     background-color: rgba(240, 85, 107, 0.12);
-    border-color: var(--diary-danger);
+    border-color: var(--semear-danger);
 }
 
-.diary-delete-btn:disabled {
+.semear-delete-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
@@ -454,39 +454,39 @@ body {
 /* Calendário                                                        */
 /* ------------------------------------------------------------------ */
 
-.diary-calendar__header {
+.semear-calendar__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1rem;
 }
 
-.diary-calendar__title {
+.semear-calendar__title {
     font-weight: 700;
     letter-spacing: -0.01em;
 }
 
-.diary-calendar__grid {
+.semear-calendar__grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.25rem;
 }
 
-.diary-calendar__weekdays {
+.semear-calendar__weekdays {
     margin-bottom: 0.5rem;
 }
 
-.diary-calendar__weekday {
+.semear-calendar__weekday {
     text-align: center;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: var(--diary-faint);
+    color: var(--semear-faint);
     padding: 0.25rem 0;
 }
 
-.diary-calendar__day {
+.semear-calendar__day {
     position: relative;
     aspect-ratio: 1 / 1;
     display: flex;
@@ -495,47 +495,47 @@ body {
     background: transparent;
     border: none;
     border-radius: 50%;
-    color: var(--diary-text);
+    color: var(--semear-text);
     font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.15s, color 0.15s, transform 0.15s;
 }
 
-.diary-calendar__day:hover {
-    background-color: var(--diary-border);
+.semear-calendar__day:hover {
+    background-color: var(--semear-border);
 }
 
-.diary-calendar__day--muted {
-    color: var(--diary-faint);
+.semear-calendar__day--muted {
+    color: var(--semear-faint);
 }
 
-.diary-calendar__day--today {
+.semear-calendar__day--today {
     color: #a78bfa;
     font-weight: 700;
 }
 
 /* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
    categoria correspondente. "mixed" = data com Terapia e Sonhos. */
-.diary-calendar__day--fill-terapia {
+.semear-calendar__day--fill-terapia {
     background: var(--grad-terapia);
     color: #fff;
     font-weight: 700;
 }
 
-.diary-calendar__day--fill-sonhos {
+.semear-calendar__day--fill-sonhos {
     background: var(--grad-sonhos);
     color: #fff;
     font-weight: 700;
 }
 
-.diary-calendar__day--fill-mixed {
+.semear-calendar__day--fill-mixed {
     background: var(--grad-brand);
     color: #fff;
     font-weight: 700;
 }
 
 /* Anel branco interno destaca o dia atualmente selecionado. */
-.diary-calendar__day--selected {
+.semear-calendar__day--selected {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
@@ -543,18 +543,18 @@ body {
 /* Lista de entradas                                                 */
 /* ------------------------------------------------------------------ */
 
-.diary-entries__title {
+.semear-entries__title {
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
-.diary-entries__empty {
-    color: var(--diary-muted);
+.semear-entries__empty {
+    color: var(--semear-muted);
     font-size: 0.9rem;
 }
 
-.diary-entries__list {
+.semear-entries__list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -563,51 +563,51 @@ body {
     gap: 0.65rem;
 }
 
-.diary-entry-card {
+.semear-entry-card {
     width: 100%;
-    background-color: var(--diary-surface);
-    border: 1px solid var(--diary-border);
+    background-color: var(--semear-surface);
+    border: 1px solid var(--semear-border);
     border-radius: 0.85rem;
     transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
     overflow: hidden;
 }
 
-.diary-entry-card:hover {
-    border-color: var(--diary-border-strong);
+.semear-entry-card:hover {
+    border-color: var(--semear-border-strong);
     transform: translateY(-1px);
 }
 
-.diary-entry-card--selected {
-    border-color: var(--diary-terapia);
-    background-color: var(--diary-terapia-soft);
+.semear-entry-card--selected {
+    border-color: var(--semear-terapia);
+    background-color: var(--semear-terapia-soft);
 }
 
-.diary-entry-card__top {
+.semear-entry-card__top {
     display: flex;
     align-items: stretch;
 }
 
-.diary-entry-card__summary {
+.semear-entry-card__summary {
     min-width: 0;
     flex: 1;
     display: flex;
     align-items: center;
     gap: 0.85rem;
     padding: 0.7rem 0.85rem;
-    color: var(--diary-text);
+    color: var(--semear-text);
     background: transparent;
     border: 0;
     text-align: left;
     cursor: pointer;
 }
 
-.diary-entry-card__summary:focus-visible,
-.diary-entry-card__edit:focus-visible {
-    outline: 2px solid var(--diary-sonhos);
+.semear-entry-card__summary:focus-visible,
+.semear-entry-card__edit:focus-visible {
+    outline: 2px solid var(--semear-sonhos);
     outline-offset: -2px;
 }
 
-.diary-entry-card__date {
+.semear-entry-card__date {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -615,44 +615,44 @@ body {
     min-width: 2.6rem;
 }
 
-.diary-entry-card__day {
+.semear-entry-card__day {
     font-size: 1.25rem;
     font-weight: 800;
     line-height: 1;
 }
 
-.diary-entry-card__day--terapia {
-    color: var(--diary-terapia);
+.semear-entry-card__day--terapia {
+    color: var(--semear-terapia);
 }
 
-.diary-entry-card__day--sonhos {
-    color: var(--diary-sonhos);
+.semear-entry-card__day--sonhos {
+    color: var(--semear-sonhos);
 }
 
-.diary-entry-card__month {
+.semear-entry-card__month {
     font-size: 0.65rem;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     letter-spacing: 0.05em;
 }
 
-.diary-entry-card__info {
+.semear-entry-card__info {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-width: 0;
 }
 
-.diary-entry-card__weekday {
+.semear-entry-card__weekday {
     font-weight: 600;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
 }
 
-.diary-entry-card__long {
+.semear-entry-card__long {
     font-size: 0.82rem;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
 }
 
-.diary-entry-card__badge {
+.semear-entry-card__badge {
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.03em;
@@ -662,15 +662,15 @@ body {
     color: #fff;
 }
 
-.diary-entry-card__badge--terapia {
+.semear-entry-card__badge--terapia {
     background: var(--grad-terapia);
 }
 
-.diary-entry-card__badge--sonhos {
+.semear-entry-card__badge--sonhos {
     background: var(--grad-sonhos);
 }
 
-.diary-entry-card__edit {
+.semear-entry-card__edit {
     align-self: center;
     margin-right: 0.75rem;
     border: 1px solid currentColor;
@@ -683,23 +683,23 @@ body {
     transition: background-color 0.15s, color 0.15s;
 }
 
-.diary-entry-card__edit--terapia {
-    color: var(--diary-terapia);
+.semear-entry-card__edit--terapia {
+    color: var(--semear-terapia);
 }
 
-.diary-entry-card__edit--sonhos {
-    color: var(--diary-sonhos);
+.semear-entry-card__edit--sonhos {
+    color: var(--semear-sonhos);
 }
 
-.diary-entry-card__edit:hover {
-    background-color: var(--diary-border);
-    color: var(--diary-text);
+.semear-entry-card__edit:hover {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
 }
 
-.diary-entry-card__description {
+.semear-entry-card__description {
     padding: 0.9rem 1rem 1rem;
-    border-top: 1px solid var(--diary-border);
-    color: var(--diary-text);
+    border-top: 1px solid var(--semear-border);
+    color: var(--semear-text);
     font-size: 0.92rem;
     line-height: 1.65;
     white-space: pre-wrap;
@@ -707,15 +707,15 @@ body {
 }
 
 /* Filtros de categoria ("Registros") */
-.diary-categories {
+.semear-categories {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1.1rem;
 }
 
-.diary-category-chip {
-    border: 1px solid var(--diary-border-strong);
+.semear-category-chip {
+    border: 1px solid var(--semear-border-strong);
     background: transparent;
     border-radius: 999px;
     padding: 0.45rem 1.1rem;
@@ -725,34 +725,34 @@ body {
     transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-.diary-category-chip--terapia {
-    color: var(--diary-terapia);
+.semear-category-chip--terapia {
+    color: var(--semear-terapia);
 }
 
-.diary-category-chip--terapia:hover,
-.diary-category-chip--terapia.diary-category-chip--active {
+.semear-category-chip--terapia:hover,
+.semear-category-chip--terapia.semear-category-chip--active {
     background: var(--grad-terapia);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 8px 20px var(--diary-terapia-glow);
+    box-shadow: 0 8px 20px var(--semear-terapia-glow);
 }
 
-.diary-category-chip--sonhos {
-    color: var(--diary-sonhos);
+.semear-category-chip--sonhos {
+    color: var(--semear-sonhos);
 }
 
-.diary-category-chip--sonhos:hover,
-.diary-category-chip--sonhos.diary-category-chip--active {
+.semear-category-chip--sonhos:hover,
+.semear-category-chip--sonhos.semear-category-chip--active {
     background: var(--grad-sonhos);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 8px 20px var(--diary-sonhos-glow);
+    box-shadow: 0 8px 20px var(--semear-sonhos-glow);
 }
 
-.diary-category-clear {
+.semear-category-clear {
     background: transparent;
     border: none;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-size: 0.85rem;
     cursor: pointer;
     padding: 0.4rem 0.6rem;
@@ -760,47 +760,47 @@ body {
     transition: background-color 0.15s, color 0.15s;
 }
 
-.diary-category-clear:hover {
-    background-color: var(--diary-border);
-    color: var(--diary-text);
+.semear-category-clear:hover {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
 }
 
-.diary-entries__toggle {
+.semear-entries__toggle {
     width: 100%;
     margin-top: 1rem;
     background: transparent;
-    border: 1px solid var(--diary-border-strong);
+    border: 1px solid var(--semear-border-strong);
     border-radius: 0.85rem;
-    color: var(--diary-text);
+    color: var(--semear-text);
     padding: 0.7rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.15s, border-color 0.15s;
 }
 
-.diary-entries__toggle:hover {
-    background-color: var(--diary-surface);
-    border-color: var(--diary-border-strong);
+.semear-entries__toggle:hover {
+    background-color: var(--semear-surface);
+    border-color: var(--semear-border-strong);
 }
 
 /* ------------------------------------------------------------------ */
 /* Painel principal / editor                                         */
 /* ------------------------------------------------------------------ */
 
-.diary-main__header {
+.semear-main__header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 1.5rem;
 }
 
-.diary-main__heading {
+.semear-main__heading {
     display: flex;
     align-items: center;
     gap: 0.85rem;
 }
 
-.diary-main__icon {
+.semear-main__icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -808,19 +808,19 @@ body {
     line-height: 1;
 }
 
-.diary-main__date {
+.semear-main__date {
     font-size: 1.4rem;
     font-weight: 800;
     letter-spacing: -0.01em;
     margin: 0;
 }
 
-.diary-main__weekday {
-    color: var(--diary-muted);
+.semear-main__weekday {
+    color: var(--semear-muted);
     margin: 0;
 }
 
-.diary-main__subtitle {
+.semear-main__subtitle {
     font-size: 1.05rem;
     font-weight: 700;
     margin-bottom: 0.85rem;
@@ -829,7 +829,7 @@ body {
     gap: 0.5rem;
 }
 
-.diary-main__subtitle::before {
+.semear-main__subtitle::before {
     content: "";
     width: 0.6rem;
     height: 0.6rem;
@@ -837,35 +837,35 @@ body {
     background: currentColor;
 }
 
-.diary-main__subtitle--terapia {
-    color: var(--diary-terapia);
+.semear-main__subtitle--terapia {
+    color: var(--semear-terapia);
 }
 
-.diary-main__subtitle--sonhos {
-    color: var(--diary-sonhos);
+.semear-main__subtitle--sonhos {
+    color: var(--semear-sonhos);
 }
 
-.diary-editor {
+.semear-editor {
     position: relative;
-    border: 1px solid var(--diary-border);
+    border: 1px solid var(--semear-border);
     border-radius: 0.95rem;
-    background-color: var(--diary-surface);
+    background-color: var(--semear-surface);
 }
 
-.diary-editor__toolbar {
+.semear-editor__toolbar {
     display: flex;
     align-items: center;
     gap: 0.35rem;
     padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--diary-border);
+    border-bottom: 1px solid var(--semear-border);
     border-top-left-radius: 0.95rem;
     border-top-right-radius: 0.95rem;
 }
 
-.diary-tool {
+.semear-tool {
     background: transparent;
     border: none;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     width: 2.1rem;
     height: 2.1rem;
     border-radius: 0.5rem;
@@ -877,23 +877,23 @@ body {
     transition: background-color 0.15s, color 0.15s;
 }
 
-.diary-tool:hover {
-    background-color: var(--diary-border);
-    color: var(--diary-text);
+.semear-tool:hover {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
 }
 
-.diary-tool__divider {
+.semear-tool__divider {
     width: 1px;
     height: 1.3rem;
-    background-color: var(--diary-border);
+    background-color: var(--semear-border);
     margin: 0 0.25rem;
 }
 
-.diary-emoji {
+.semear-emoji {
     display: inline-flex;
 }
 
-.diary-emoji__panel {
+.semear-emoji__panel {
     position: absolute;
     top: 3.4rem;
     left: 0.6rem;
@@ -903,15 +903,15 @@ body {
     grid-template-columns: repeat(8, 1fr);
     gap: 0.15rem;
     background-color: #111d1e;
-    border: 1px solid var(--diary-border-strong);
+    border: 1px solid var(--semear-border-strong);
     border-radius: 0.6rem;
     padding: 0.5rem;
     max-width: 18rem;
     box-sizing: border-box;
-    box-shadow: var(--diary-shadow-sm);
+    box-shadow: var(--semear-shadow-sm);
 }
 
-.diary-emoji__item {
+.semear-emoji__item {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -924,31 +924,31 @@ body {
     cursor: pointer;
 }
 
-.diary-emoji__item:hover {
-    background-color: var(--diary-border);
+.semear-emoji__item:hover {
+    background-color: var(--semear-border);
 }
 
-.diary-editor__area {
+.semear-editor__area {
     min-height: 18rem;
     padding: 1rem;
-    color: var(--diary-text);
+    color: var(--semear-text);
     outline: none;
     overflow-y: auto;
 }
 
-.diary-editor__area:empty::before {
+.semear-editor__area:empty::before {
     content: attr(data-placeholder);
-    color: var(--diary-faint);
+    color: var(--semear-faint);
 }
 
-.diary-main__counter {
+.semear-main__counter {
     text-align: right;
-    color: var(--diary-muted);
+    color: var(--semear-muted);
     font-size: 0.8rem;
     margin-top: 0.5rem;
 }
 
-.diary-main__actions {
+.semear-main__actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
@@ -960,16 +960,16 @@ body {
 /* ------------------------------------------------------------------ */
 
 @media (max-width: 991px) {
-    .diary {
+    .semear {
         padding: 1rem 0.5rem;
     }
 
-    .diary__container {
+    .semear__container {
         padding: 1.25rem;
         border-radius: 1.25rem;
     }
 
-    .diary__layout {
+    .semear__layout {
         grid-template-columns: 1fr;
         grid-template-areas:
             "calendar"
@@ -977,7 +977,7 @@ body {
             "entries";
     }
 
-    .diary__layout--no-editor {
+    .semear__layout--no-editor {
         grid-template-columns: 1fr;
         grid-template-areas:
             "calendar"
@@ -986,54 +986,54 @@ body {
 
     /* Evita que os dias do calendário fiquem enormes ao ocupar a
        largura total numa coluna única; limita e centraliza o calendário. */
-    .diary-calendar {
+    .semear-calendar {
         max-width: 380px;
         margin: 0 auto;
     }
 
-    .diary__header {
+    .semear__header {
         flex-direction: row;
         align-items: center;
     }
 
-    .diary__title {
+    .semear__title {
         font-size: 1.5rem;
     }
 
-    .diary-main__actions .diary-save-btn {
+    .semear-main__actions .semear-save-btn {
         padding: 0.65rem 1rem;
     }
 }
 
 @media (max-width: 575px) {
-    .diary-user__name {
+    .semear-user__name {
         display: none;
     }
 
-    .diary-entry-card__top {
+    .semear-entry-card__top {
         align-items: center;
     }
 
-    .diary-entry-card__summary {
+    .semear-entry-card__summary {
         gap: 0.6rem;
         padding-right: 0.5rem;
     }
 
-    .diary-entry-card__badge {
+    .semear-entry-card__badge {
         display: none;
     }
 
-    .diary-main__actions {
+    .semear-main__actions {
         justify-content: stretch;
     }
 
-    .diary-main__actions .diary-save-btn {
+    .semear-main__actions .semear-save-btn {
         width: 100%;
         justify-content: center;
         white-space: nowrap;
     }
 
-    .diary-main__actions .diary-back-btn {
+    .semear-main__actions .semear-back-btn {
         white-space: nowrap;
     }
 }
@@ -1042,7 +1042,7 @@ body {
 /* Modal de seleção de categoria                                     */
 /* ------------------------------------------------------------------ */
 
-.diary-modal {
+.semear-modal {
     position: fixed;
     inset: 0;
     z-index: 50;
@@ -1055,36 +1055,36 @@ body {
     backdrop-filter: blur(6px);
 }
 
-.diary-modal__card {
+.semear-modal__card {
     width: min(26rem, 100%);
     background-color: #0f1a1c;
-    border: 1px solid var(--diary-border-strong);
+    border: 1px solid var(--semear-border-strong);
     border-radius: 1.25rem;
     padding: 1.75rem;
-    box-shadow: var(--diary-shadow);
+    box-shadow: var(--semear-shadow);
 }
 
-.diary-modal__header {
+.semear-modal__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.4rem;
 }
 
-.diary-modal__title {
+.semear-modal__title {
     font-size: 1.2rem;
     font-weight: 800;
     letter-spacing: -0.01em;
     margin: 0;
 }
 
-.diary-modal__options {
+.semear-modal__options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.85rem;
 }
 
-.diary-modal__option {
+.semear-modal__option {
     border: none;
     border-radius: 0.9rem;
     padding: 1.4rem 1rem;
@@ -1092,45 +1092,45 @@ body {
     font-weight: 700;
     color: #fff;
     cursor: pointer;
-    box-shadow: var(--diary-shadow-sm);
+    box-shadow: var(--semear-shadow-sm);
     transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.diary-modal__option:hover {
+.semear-modal__option:hover {
     transform: translateY(-2px);
 }
 
-.diary-modal__option--terapia {
+.semear-modal__option--terapia {
     background: var(--grad-terapia);
 }
 
-.diary-modal__option--terapia:hover {
-    box-shadow: 0 14px 30px var(--diary-terapia-glow);
+.semear-modal__option--terapia:hover {
+    box-shadow: 0 14px 30px var(--semear-terapia-glow);
 }
 
-.diary-modal__option--sonhos {
+.semear-modal__option--sonhos {
     background: var(--grad-sonhos);
 }
 
-.diary-modal__option--sonhos:hover {
-    box-shadow: 0 14px 30px var(--diary-sonhos-glow);
+.semear-modal__option--sonhos:hover {
+    box-shadow: 0 14px 30px var(--semear-sonhos-glow);
 }
 
 /* Confirmação (ex.: exclusão de registro) */
-.diary-modal__text {
-    color: var(--diary-muted);
+.semear-modal__text {
+    color: var(--semear-muted);
     font-size: 0.95rem;
     line-height: 1.6;
     margin: 0 0 1.6rem;
 }
 
-.diary-modal__actions {
+.semear-modal__actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
 }
 
-.diary-modal__confirm {
+.semear-modal__confirm {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1141,17 +1141,17 @@ body {
     color: #fff;
     font-weight: 700;
     cursor: pointer;
-    background-color: var(--diary-danger);
-    box-shadow: var(--diary-shadow-sm);
+    background-color: var(--semear-danger);
+    box-shadow: var(--semear-shadow-sm);
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
 }
 
-.diary-modal__confirm:hover:not(:disabled) {
+.semear-modal__confirm:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 12px 28px rgba(240, 85, 107, 0.35);
 }
 
-.diary-modal__confirm:disabled {
+.semear-modal__confirm:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     box-shadow: none;

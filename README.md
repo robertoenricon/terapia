@@ -106,7 +106,7 @@ php artisan migrate
 ### 7. Acesse a aplicação
 
 - Login: http://localhost:8080/login
-- Diário: http://localhost:8080/diario
+- Semear: http://localhost:8080/semear
 - MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)
 
 ### Credenciais Login
@@ -120,7 +120,7 @@ ADMIN_PASSWORD=pass
 ```
 
 Altere a senha antes de usar a aplicação fora do ambiente local. O login usa
-sessão armazenada no MySQL, e as rotas do diário e da API exigem autenticação.
+sessão armazenada no MySQL, e as rotas do Semear e da API exigem autenticação.
 
 ---
 
@@ -262,11 +262,11 @@ o domínio. Garanta que as extensões usuais do Laravel estejam ativas:
 
 ### Passo 5 — Enviar os arquivos e publicar a pasta pública
 
-A ideia: o código do Laravel fica em `terapia_app/` (**fora** do `public_html`,
-por segurança) e o subdomínio, que aponta para `public_html/diario`, recebe
+A ideia: o código do Laravel fica em `semear_app/` (**fora** do `public_html`,
+por segurança) e o subdomínio, que aponta para `public_html/semear`, recebe
 apenas o conteúdo de `public/`.
 
-**5.1. Enviar o app para `terapia_app/`**
+**5.1. Enviar o app para `semear_app/`**
 
 O `vendor/` tem milhares de arquivos e o envio um a um por FTP é lento; por isso
 compacte tudo num `.zip` e extraia no servidor:
@@ -279,25 +279,25 @@ compacte tudo num `.zip` e extraia no servidor:
    `artisan`, `composer.json`, `composer.lock`, `.env`...), **menos** a pasta
    `node_modules/`. Botão direito → **Enviar para → Pasta compactada (zipada)**
    e renomeie para `deploy.zip`.
-3. No cPanel → **Gerenciador de Arquivos**, crie a pasta `terapia_app/` (fora do
+3. No cPanel → **Gerenciador de Arquivos**, crie a pasta `semear_app/` (fora do
    `public_html`), entre nela, use **"Carregar"** para subir o `deploy.zip`,
    depois botão direito → **"Extract"**. Apague o `.zip` ao final.
 
-**5.2. Publicar a pasta pública em `public_html/diario`**
+**5.2. Publicar a pasta pública em `public_html/semear`**
 
 > **Atalho:** se o painel permitir, mude o **document root** do subdomínio de
-> `public_html/diario` para `terapia_app/public`. Aí você **não copia nada** nem
+> `public_html/semear` para `semear_app/public`. Aí você **não copia nada** nem
 > edita o `index.php` — pule o restante deste passo.
 
-Caso contrário (mantendo o subdomínio em `public_html/diario`):
+Caso contrário (mantendo o subdomínio em `public_html/semear`):
 
-1. Copie **todo o conteúdo de `terapia_app/public/`** (a pasta `build/`, o
+1. Copie **todo o conteúdo de `semear_app/public/`** (a pasta `build/`, o
    `index.php`, o `.htaccess`, `favicon.ico`, `robots.txt`) para dentro de
-   `public_html/diario/`. Pelo Gerenciador de Arquivos, entre em
-   `terapia_app/public`, selecione tudo e use **"Copiar"** informando o destino
-   `/public_html/diario`.
-2. Edite `public_html/diario/index.php` e troque os caminhos `../` por
-   `../../terapia_app/` (o app está dois níveis acima). O arquivo deve ficar
+   `public_html/semear/`. Pelo Gerenciador de Arquivos, entre em
+   `semear_app/public`, selecione tudo e use **"Copiar"** informando o destino
+   `/public_html/semear`.
+2. Edite `public_html/semear/index.php` e troque os caminhos `../` por
+   `../../semear_app/` (o app está dois níveis acima). O arquivo deve ficar
    assim:
 
    ```php
@@ -309,29 +309,29 @@ Caso contrário (mantendo o subdomínio em `public_html/diario`):
    define('LARAVEL_START', microtime(true));
 
    // Determine if the application is in maintenance mode...
-   if (file_exists($maintenance = __DIR__.'/../../terapia_app/storage/framework/maintenance.php')) {
+   if (file_exists($maintenance = __DIR__.'/../../semear_app/storage/framework/maintenance.php')) {
        require $maintenance;
    }
 
    // Register the Composer autoloader...
-   require __DIR__.'/../../terapia_app/vendor/autoload.php';
+   require __DIR__.'/../../semear_app/vendor/autoload.php';
 
    // Bootstrap Laravel and handle the request...
    /** @var Application $app */
-   $app = require_once __DIR__.'/../../terapia_app/bootstrap/app.php';
+   $app = require_once __DIR__.'/../../semear_app/bootstrap/app.php';
 
    $app->handleRequest(Request::capture());
    ```
 
 > **Importante:** só o conteúdo de `public/` pode ficar exposto na web. **Nunca**
 > copie `app/`, `vendor/`, `.env` ou outras pastas do Laravel para
-> `public_html/diario` — elas permanecem em `terapia_app/`.
+> `public_html/semear` — elas permanecem em `semear_app/`.
 
 ### Passo 6 — Permissões de escrita
 
 Garanta que o Laravel possa gravar logs, cache e views compiladas. Pelo
 Gerenciador de Arquivos do cPanel ou por FTP, defina as pastas abaixo (dentro de
-`terapia_app`) como **755**:
+`semear_app`) como **755**:
 
 ```
 storage/                (e todas as subpastas)
@@ -353,7 +353,7 @@ bootstrap/cache/
 
 Acesse e verifique:
 
-- `https://diario.seu-dominio.com.br/login` → tela de login carrega com os
+- `https://semear.seu-dominio.com.br/login` → tela de login carrega com os
   estilos (se vier sem CSS, o `public/build` não foi enviado ou está em local
   errado).
 - Faça login com `ADMIN_NAME` / `ADMIN_PASSWORD`.
@@ -390,9 +390,9 @@ O que o workflow faz, na nuvem:
 
 1. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
 2. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
-   `../../terapia_app/`.
-3. Envia por FTP a aplicação para `terapia_app/` e o conteúdo público para
-   `public_html/diario/`.
+   `../../semear_app/`.
+3. Envia por FTP a aplicação para `semear_app/` e o conteúdo público para
+   `public_html/semear/`.
 
 > O `vendor/` **não** é enviado pelo workflow. Faça o upload dele manualmente
 > uma vez (no primeiro deploy) e novamente sempre que mudar o `composer.lock` —
@@ -406,7 +406,7 @@ DBaaS (Passo 3).
 
 1. **Pré-requisito manual:** o servidor já precisa ter a estrutura criada por um
    primeiro deploy manual (Passos 5 e 6), incluindo a pasta **`vendor/`** e,
-   principalmente, o **`.env` em `terapia_app/.env`**. O workflow **nunca** envia
+   principalmente, o **`.env` em `semear_app/.env`**. O workflow **nunca** envia
    o `.env` nem o `vendor/` (ambos são ignorados), para não sobrescrever as
    credenciais de produção nem ficar subindo milhares de arquivos a cada push.
 2. No GitHub, em **Settings → Secrets and variables → Actions**, crie os
@@ -419,9 +419,9 @@ DBaaS (Passo 3).
    | `FTP_PASSWORD` | senha de FTP |
 
 3. Confirme os `server-dir` no `deploy.yml`. O padrão assume que o login de FTP
-   cai na **home** do usuário (onde ficam `terapia_app/` e `public_html/`). Se o
+   cai na **home** do usuário (onde ficam `semear_app/` e `public_html/`). Se o
    seu FTP já entra dentro de `public_html`, ajuste os caminhos (ex.:
-   `../terapia_app/` e `./diario/`).
+   `../semear_app/` e `./semear/`).
 
 ### Usando
 

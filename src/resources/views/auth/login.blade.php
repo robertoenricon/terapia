@@ -14,7 +14,7 @@
                 <div class="login-card__brand">
                     <span class="login-card__logo">🌱</span>
                     <div>
-                        <h1 id="login-title" class="login-card__title">Acesse seu diário</h1>
+                        <h1 id="login-title" class="login-card__title">Acesse o Semear</h1>
                         <p class="login-card__subtitle">Entre para continuar seus registros.</p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                         Manter conectado
                     </label>
 
-                    <button type="submit" class="diary-save-btn login-form__submit">
+                    <button type="submit" class="semear-save-btn login-form__submit">
                         Entrar
                     </button>
                 </form>

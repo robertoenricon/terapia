@@ -10,9 +10,9 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_from_diary_to_login(): void
+    public function test_guest_is_redirected_from_semear_to_login(): void
     {
-        $this->get('/diario')
+        $this->get('/semear')
             ->assertRedirect('/login');
     }
 
@@ -32,7 +32,7 @@ class AuthenticationTest extends TestCase
             'name' => $user->name,
             'password' => 'senha-segura',
         ])
-            ->assertRedirect('/diario');
+            ->assertRedirect('/semear');
 
         $this->assertAuthenticatedAs($user);
     }

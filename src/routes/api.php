@@ -4,7 +4,7 @@ use App\Http\Controllers\JournalEntryController;
 use Illuminate\Support\Facades\Route;
 
 /*
-| Rotas da API do diário (acontecimentos do dia).
+| Rotas da API do Semear (acontecimentos do dia).
 | Todas respondem em JSON e ficam sob o prefixo "/api".
 */
 
