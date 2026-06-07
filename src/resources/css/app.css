@@ -16,6 +16,9 @@
     --diary-green: #22a85a;
     --diary-green-dark: #1c8f4c;
     --diary-green-soft: rgba(34, 168, 90, 0.15);
+    --diary-blue: #3b82f6;
+    --diary-blue-dark: #2563eb;
+    --diary-blue-soft: rgba(59, 130, 246, 0.15);
     --diary-danger: #f0556b;
 }
 
@@ -85,6 +88,16 @@ body {
 
 .diary-entries {
     grid-area: entries;
+}
+
+/* Sem o editor aberto, calendário e entradas ocupam uma coluna central
+   única (evita deixar a área do editor vazia à direita). */
+.diary__layout--no-editor {
+    grid-template-columns: minmax(0, 480px);
+    grid-template-areas:
+        "calendar"
+        "entries";
+    justify-content: center;
 }
 
 .diary-panel {
@@ -241,6 +254,10 @@ body {
     background-color: var(--diary-green);
 }
 
+.diary-calendar__dot--blue {
+    background-color: var(--diary-blue);
+}
+
 /* ------------------------------------------------------------------ */
 /* Lista de entradas                                                 */
 /* ------------------------------------------------------------------ */
@@ -324,9 +341,80 @@ body {
     color: var(--diary-muted);
 }
 
-.diary-entry-card__chevron {
-    color: var(--diary-faint);
-    font-size: 1.2rem;
+.diary-entry-card__badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: nowrap;
+}
+
+.diary-entry-card__badge--green {
+    color: var(--diary-green);
+    background-color: var(--diary-green-soft);
+}
+
+.diary-entry-card__badge--blue {
+    color: var(--diary-blue);
+    background-color: var(--diary-blue-soft);
+}
+
+/* Filtros de categoria ("Suas entradas") */
+.diary-categories {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.diary-category-chip {
+    border: 1px solid var(--diary-border);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.diary-category-chip--green {
+    color: var(--diary-green);
+}
+
+.diary-category-chip--green:hover,
+.diary-category-chip--green.diary-category-chip--active {
+    background-color: var(--diary-green);
+    border-color: var(--diary-green);
+    color: #fff;
+}
+
+.diary-category-chip--blue {
+    color: var(--diary-blue);
+}
+
+.diary-category-chip--blue:hover,
+.diary-category-chip--blue.diary-category-chip--active {
+    background-color: var(--diary-blue);
+    border-color: var(--diary-blue);
+    color: #fff;
+}
+
+.diary-category-clear {
+    background: transparent;
+    border: none;
+    color: var(--diary-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.diary-category-clear:hover {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
 }
 
 .diary-entries__toggle {
@@ -390,6 +478,14 @@ body {
     font-size: 1.05rem;
     font-weight: 600;
     margin-bottom: 0.85rem;
+}
+
+.diary-main__subtitle--green {
+    color: var(--diary-green);
+}
+
+.diary-main__subtitle--blue {
+    color: var(--diary-blue);
 }
 
 .diary-editor {
@@ -554,4 +650,73 @@ body {
         justify-content: center;
         white-space: nowrap;
     }
+}
+
+/* ------------------------------------------------------------------ */
+/* Modal de seleção de categoria                                     */
+/* ------------------------------------------------------------------ */
+
+.diary-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.diary-modal__card {
+    width: min(26rem, 100%);
+    background-color: var(--diary-panel);
+    border: 1px solid var(--diary-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.diary-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.diary-modal__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.diary-modal__options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+.diary-modal__option {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 1.1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.diary-modal__option--green {
+    background-color: var(--diary-green);
+}
+
+.diary-modal__option--green:hover {
+    background-color: var(--diary-green-dark);
+}
+
+.diary-modal__option--blue {
+    background-color: var(--diary-blue);
+}
+
+.diary-modal__option--blue:hover {
+    background-color: var(--diary-blue-dark);
 }

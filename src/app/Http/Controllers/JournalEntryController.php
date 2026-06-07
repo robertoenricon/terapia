@@ -40,7 +40,8 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Cria ou atualiza a entrada de uma data (uma entrada por dia).
+     * Cria ou atualiza a entrada de uma data e categoria
+     * (uma entrada por categoria em cada dia).
      *
      * @param  Request $request Requisição com a data e o conteúdo.
      * @return JsonResponse      Entrada salva com status apropriado.
@@ -49,11 +50,12 @@ class JournalEntryController extends Controller
     {
         $data = $request->validate([
             'entry_date' => ['required', 'date'],
+            'category' => ['required', 'in:terapia,sonhos'],
             'content' => ['nullable', 'string', 'max:50000'],
         ]);
 
         $entry = JournalEntry::updateOrCreate(
-            ['entry_date' => $data['entry_date']],
+            ['entry_date' => $data['entry_date'], 'category' => $data['category']],
             ['content' => $data['content'] ?? ''],
         );
 

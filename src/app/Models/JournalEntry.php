@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * Cada entrada guarda os acontecimentos, pensamentos e sentimentos
  * registrados pelo usuário em um determinado dia.
  */
-#[Fillable(['entry_date', 'content'])]
+#[Fillable(['entry_date', 'category', 'content'])]
 class JournalEntry extends Model
 {
     /** @use HasFactory<\Database\Factories\JournalEntryFactory> */

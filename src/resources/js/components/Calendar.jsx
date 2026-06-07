@@ -15,16 +15,18 @@ import {
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.viewDate - Mês atualmente exibido.
- * @param {Date} props.selectedDate - Data selecionada pelo usuário.
+ * @param {Date|null} props.selectedDate - Data selecionada pelo usuário.
  * @param {Set<string>} props.entryDates - Chaves das datas com entradas.
+ * @param {string|null} props.activeCategory - Categoria ativa (define a cor do marcador).
  * @param {Function} props.onPrev - Callback para o mês anterior.
  * @param {Function} props.onNext - Callback para o próximo mês.
  * @param {Function} props.onSelect - Callback ao selecionar um dia.
  * @returns {JSX.Element} Componente do calendário.
  */
-export default function Calendar({ viewDate, selectedDate, entryDates, onPrev, onNext, onSelect }) {
+export default function Calendar({ viewDate, selectedDate, entryDates, activeCategory, onPrev, onNext, onSelect }) {
     const days = buildCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
     const today = new Date();
+    const dotClass = activeCategory === 'sonhos' ? 'diary-calendar__dot diary-calendar__dot--blue' : 'diary-calendar__dot';
 
     return (
         <div className="diary-calendar">
@@ -49,7 +51,7 @@ export default function Calendar({ viewDate, selectedDate, entryDates, onPrev, o
             <div className="diary-calendar__grid">
                 {days.map(({ date, inMonth }) => {
                     const key = toDateKey(date);
-                    const isSelected = isSameDay(date, selectedDate);
+                    const isSelected = selectedDate && isSameDay(date, selectedDate);
                     const isToday = isSameDay(date, today);
                     const hasEntry = entryDates.has(key);
 
@@ -68,7 +70,7 @@ export default function Calendar({ viewDate, selectedDate, entryDates, onPrev, o
                             onClick={() => onSelect(date)}
                         >
                             {date.getDate()}
-                            {hasEntry && !isSelected && <span className="diary-calendar__dot" />}
+                            {hasEntry && !isSelected && <span className={dotClass} />}
                         </button>
                     );
                 })}

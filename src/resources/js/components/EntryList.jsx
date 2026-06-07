@@ -5,28 +5,67 @@ import {
     fromDateKey,
     isSameDay,
 } from '../utils/date';
+import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
 /**
  * Lista as entradas recentes do diário ("Suas entradas").
  *
- * Cada item mostra o dia, o dia da semana e a data por extenso,
- * permitindo selecionar a entrada correspondente. Exibe, por padrão,
- * apenas as entradas mais recentes, com opção de ver todas.
+ * Exibe dois filtros de categoria (Terapia e Sonhos); ao escolher um, o
+ * outro é ocultado e a lista passa a mostrar apenas aquela categoria. Cada
+ * item mostra o dia, o dia da semana, a data por extenso e um selo da
+ * categoria, permitindo selecionar a entrada correspondente.
  *
  * @param {Object} props - Propriedades do componente.
- * @param {Array} props.entries - Entradas do diário.
- * @param {Date} props.selectedDate - Data atualmente selecionada.
+ * @param {Array} props.entries - Entradas do diário (já filtradas por categoria).
+ * @param {Date|null} props.selectedDate - Data atualmente selecionada.
+ * @param {string|null} props.activeCategory - Categoria filtrada no momento.
  * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
  * @param {Function} props.onSelect - Callback ao selecionar uma entrada.
+ * @param {Function} props.onSelectCategory - Callback ao escolher uma categoria.
+ * @param {Function} props.onClearCategory - Callback ao limpar o filtro.
  * @param {Function} props.onToggleAll - Alterna entre ver todas/recentes.
  * @returns {JSX.Element} Componente da lista de entradas.
  */
-export default function EntryList({ entries, selectedDate, showAll, onSelect, onToggleAll }) {
+export default function EntryList({
+    entries,
+    selectedDate,
+    activeCategory,
+    showAll,
+    onSelect,
+    onSelectCategory,
+    onClearCategory,
+    onToggleAll,
+}) {
     const visible = showAll ? entries : entries.slice(0, 3);
 
     return (
         <div className="diary-panel diary-entries">
             <h2 className="diary-entries__title">Suas entradas</h2>
+
+            <div className="diary-categories">
+                {CATEGORY_LIST
+                    .filter((category) => !activeCategory || category.value === activeCategory)
+                    .map((category) => (
+                        <button
+                            key={category.value}
+                            type="button"
+                            className={[
+                                'diary-category-chip',
+                                `diary-category-chip--${category.color}`,
+                                activeCategory === category.value ? 'diary-category-chip--active' : '',
+                            ].filter(Boolean).join(' ')}
+                            onClick={() => onSelectCategory(category.value)}
+                        >
+                            {category.label}
+                        </button>
+                    ))}
+
+                {activeCategory && (
+                    <button type="button" className="diary-category-clear" onClick={onClearCategory}>
+                        ← Voltar
+                    </button>
+                )}
+            </div>
 
             {visible.length === 0 && (
                 <p className="diary-entries__empty">Nenhuma entrada registrada ainda.</p>
@@ -35,7 +74,10 @@ export default function EntryList({ entries, selectedDate, showAll, onSelect, on
             <ul className="diary-entries__list">
                 {visible.map((entry) => {
                     const date = fromDateKey(entry.entry_date.slice(0, 10));
-                    const isSelected = isSameDay(date, selectedDate);
+                    const isSelected = selectedDate
+                        && isSameDay(date, selectedDate)
+                        && entry.category === activeCategory;
+                    const category = CATEGORIES[entry.category];
 
                     return (
                         <li key={entry.id}>
@@ -56,7 +98,11 @@ export default function EntryList({ entries, selectedDate, showAll, onSelect, on
                                     </span>
                                     <span className="diary-entry-card__long">{formatLongDate(date)}</span>
                                 </span>
-                                <span className="diary-entry-card__chevron">›</span>
+                                {category && (
+                                    <span className={`diary-entry-card__badge diary-entry-card__badge--${category.color}`}>
+                                        {category.label}
+                                    </span>
+                                )}
                             </button>
                         </li>
                     );

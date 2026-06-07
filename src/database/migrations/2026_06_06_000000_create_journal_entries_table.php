@@ -18,11 +18,16 @@ return new class extends Migration
     {
         Schema::create('journal_entries', function (Blueprint $table) {
             $table->id();
-            // Data à qual a entrada se refere (única, uma entrada por dia).
-            $table->date('entry_date')->unique();
+            // Data à qual a entrada se refere.
+            $table->date('entry_date');
+            // Categoria da entrada: "terapia" ou "sonhos".
+            $table->string('category');
             // Conteúdo em HTML simples digitado pelo usuário.
             $table->text('content')->nullable();
             $table->timestamps();
+
+            // Uma entrada por data e categoria (ex.: Terapia e Sonhos no mesmo dia).
+            $table->unique(['entry_date', 'category']);
         });
     }
 
