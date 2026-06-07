@@ -1,4 +1,4 @@
-# terapia
+# Semear
 
 Controle sobre minhas terapias.
 
@@ -26,7 +26,7 @@ A aplicação Laravel fica no diretório `src/`, mantendo a infraestrutura Docke
 separada do código do app.
 
 ```
-terapia/
+semear/
 ├── docker/
 │   ├── php/        # Dockerfile e php.ini
 │   ├── nginx/      # default.conf
@@ -60,10 +60,6 @@ cp .env.example .env
 docker compose build
 ```
 
-```bash
-docker compose exec app bash
-```
-
 ### 3. Instale o esqueleto do Laravel (apenas na primeira vez)
 
 O diretório `src/` já contém o arquivo `.gitkeep`, então o `composer
@@ -89,14 +85,18 @@ com os do `.env` da raiz:
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
-DB_DATABASE=terapia
-DB_USERNAME=terapia
+DB_DATABASE=semear
+DB_USERNAME=semear
 DB_PASSWORD=secret
 ```
 
 > **Importante:** `DB_HOST` deve ser `db` (nome do serviço no Compose).
 
 ### 6. Gere a chave e rode as migrations
+
+```bash
+docker compose exec app bash
+```
 
 ```bash
 php artisan key:generate
@@ -107,7 +107,7 @@ php artisan migrate
 
 - Login: http://localhost:8080/login
 - Semear: http://localhost:8080/semear
-- MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)
+- MySQL: `localhost:3306` (usuário `semear`, senha `secret`)
 
 ### Credenciais Login
 
@@ -199,10 +199,10 @@ php artisan key:generate
 
 Edite o `src/.env` e preencha os campos marcados com `ALTERAR`:
 
-- `APP_URL` → o domínio final, com **https** (ex.: `https://terapia.com.br`).
+- `APP_URL` → o domínio final, com **https** (ex.: `https://semear.com.br`).
 - `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` → os dados do banco que
   você vai criar no Passo 3. Na LocalWeb o MySQL é **DBaaS (remoto)**, então o
-  host é algo como `terapia_diario.mysql.dbaas.com.br` (não `localhost`).
+  host é algo como `semeardb.mysql.dbaas.com.br` (não `localhost`).
 - `ADMIN_NAME`, `ADMIN_PASSWORD` → defina uma **senha forte** antes de semear.
 - `MAIL_*` → dados de SMTP da LocalWeb, caso vá enviar e-mails.
 
@@ -230,7 +230,7 @@ Isso gera o `vendor/` (sem pacotes de desenvolvimento) e o `public/build/`
 
 **3.1. Crie o banco no painel:** no painel da LocalWeb, em **"Bancos de Dados
 MySQL"** (DBaaS), crie um banco e um usuário com **todos os privilégios**. Anote
-o **host** (ex.: `terapia_diario.mysql.dbaas.com.br`), o nome do banco, o
+o **host** (ex.: `semeardb.mysql.dbaas.com.br`), o nome do banco, o
 usuário e a senha — vão no `.env`.
 
 **3.2. Crie a estrutura:**
@@ -238,7 +238,7 @@ usuário e a senha — vão no `.env`.
 O `.env` para o host da DBaaS. Em `src/.env`:
 
 ```dotenv
-DB_HOST=terapia_diario.mysql.dbaas.com.br
+DB_HOST=semeardb.mysql.dbaas.com.br
 DB_PORT=3306
 DB_DATABASE=seu_banco
 DB_USERNAME=seu_usuario

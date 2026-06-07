@@ -1,6 +1,6 @@
 # CODEX.md
 
-Arquivo de regras e diretrizes do projeto **terapia** — sistema para controle e acompanhamento de terapias.
+Arquivo de regras e diretrizes do projeto **semear** — sistema para controle e acompanhamento de terapias.
 
 Este documento define como o código deve ser escrito, documentado e organizado. Todas as instruções aqui valem para qualquer geração ou alteração de código no projeto.
 

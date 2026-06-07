@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------
-# Imagem PHP-FPM 8.3 para a aplicacao Laravel do projeto "terapia".
+# Imagem PHP-FPM 8.3 para a aplicacao Laravel do projeto "semear".
 # Instala as extensoes exigidas pelo Laravel 12 e o Composer.
 # ----------------------------------------------------------------------------
 FROM php:8.3-fpm-alpine
