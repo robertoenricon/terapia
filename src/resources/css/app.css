@@ -130,6 +130,57 @@ body {
     box-shadow: 0 0 0 0.2rem var(--diary-sonhos-soft);
 }
 
+/* Campo de senha com o botão de "olho" sobreposto à direita. */
+.login-form__password {
+    position: relative;
+}
+
+/* Espaço à direita para o texto não passar por baixo do botão. */
+.login-form__password .login-form__input {
+    padding-right: 2.9rem;
+}
+
+.login-form__toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.9rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--diary-muted);
+    cursor: pointer;
+    border-radius: 0 0.375rem 0.375rem 0;
+    transition: color 0.15s;
+}
+
+.login-form__toggle:hover {
+    color: var(--diary-text);
+}
+
+.login-form__toggle:focus-visible {
+    outline: 2px solid var(--diary-sonhos);
+    outline-offset: -2px;
+}
+
+/* Por padrão mostra o olho aberto; oculta o olho cortado. */
+.login-form__toggle .login-form__eye-off {
+    display: none;
+}
+
+/* Quando a senha está visível, troca para o olho cortado. */
+.login-form__toggle--visible .login-form__eye {
+    display: none;
+}
+
+.login-form__toggle--visible .login-form__eye-off {
+    display: block;
+}
+
 .login-form__remember {
     display: flex;
     align-items: center;
