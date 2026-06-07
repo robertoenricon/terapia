@@ -1,10 +1,13 @@
 # Deploy automático para a LocalWeb (hospedagem compartilhada / cPanel) via FTP.
 #
 # A cada push na branch "main" (ou disparo manual), o workflow:
-#   1. Instala as dependências PHP de produção e compila os assets (Vite).
+#   1. Compila os assets do front-end (Vite).
 #   2. Prepara a pasta pública do subdomínio com o index.php ajustado.
 #   3. Envia por FTP a aplicação para "terapia_app/" (fora do public_html) e o
 #      conteúdo público para "public_html/diario/".
+#
+# O "vendor/" NÃO é enviado pelo workflow (envie-o manualmente uma vez e a cada
+# mudança em composer.lock — a LocalWeb não tem SSH para rodar "composer").
 #
 # As migrations NÃO rodam aqui — execute-as manualmente quando necessário
 # (veja o Passo 3 do README, apontando o .env para a DBaaS).
@@ -34,17 +37,6 @@ jobs:
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
-
-      - name: Configurar PHP 8.3
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: bcmath, ctype, fileinfo, mbstring, openssl, pdo, pdo_mysql, tokenizer, xml
-          tools: composer
-
-      - name: Instalar dependências PHP (produção)
-        working-directory: src
-        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
       - name: Configurar Node 22
         uses: actions/setup-node@v4
@@ -83,6 +75,7 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
+            **/vendor/**
             **/tests/**
             .env
             .env.*

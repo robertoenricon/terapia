@@ -388,12 +388,15 @@ sozinho a cada `push` na branch **`main`**:
 
 O que o workflow faz, na nuvem:
 
-1. Instala as dependências PHP de produção (`composer install --no-dev`).
-2. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
-3. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
+1. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
+2. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
    `../../terapia_app/`.
-4. Envia por FTP a aplicação para `terapia_app/` e o conteúdo público para
+3. Envia por FTP a aplicação para `terapia_app/` e o conteúdo público para
    `public_html/diario/`.
+
+> O `vendor/` **não** é enviado pelo workflow. Faça o upload dele manualmente
+> uma vez (no primeiro deploy) e novamente sempre que mudar o `composer.lock` —
+> a LocalWeb não tem SSH para rodar `composer install` no servidor.
 
 As **migrations não rodam** no deploy (decisão de projeto). Quando houver
 mudança no banco, rode `php artisan migrate` da sua máquina apontando para a
@@ -402,9 +405,10 @@ DBaaS (Passo 3).
 ### Configuração (uma vez)
 
 1. **Pré-requisito manual:** o servidor já precisa ter a estrutura criada por um
-   primeiro deploy manual (Passos 5 e 6) e, principalmente, o **`.env` em
-   `terapia_app/.env`**. O workflow **nunca** envia o `.env` (ele é ignorado),
-   para não sobrescrever as credenciais de produção.
+   primeiro deploy manual (Passos 5 e 6), incluindo a pasta **`vendor/`** e,
+   principalmente, o **`.env` em `terapia_app/.env`**. O workflow **nunca** envia
+   o `.env` nem o `vendor/` (ambos são ignorados), para não sobrescrever as
+   credenciais de produção nem ficar subindo milhares de arquivos a cada push.
 2. No GitHub, em **Settings → Secrets and variables → Actions**, crie os
    segredos:
 
@@ -424,5 +428,5 @@ DBaaS (Passo 3).
 - **Deploy:** faça `merge`/`push` na branch `main`. Acompanhe em **Actions**.
 - **Disparo manual:** aba **Actions → Deploy LocalWeb (FTP) → Run workflow**.
 
-> O primeiro envio é mais lento (sobe o `vendor/` inteiro). Nos seguintes, a
-> action envia **apenas o que mudou**, então é rápido.
+> Como o `vendor/` não vai pelo workflow, o envio é rápido: a action sincroniza
+> **apenas o que mudou** (código da aplicação e assets compilados).
