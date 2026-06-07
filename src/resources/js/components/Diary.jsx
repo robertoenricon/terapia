@@ -3,6 +3,7 @@ import Calendar from './Calendar';
 import EntryList from './EntryList';
 import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
+import ConfirmModal from './ConfirmModal';
 import BootstrapAlert from './BootstrapAlert';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
 import { logout } from '../api/auth';
@@ -27,6 +28,7 @@ export default function Diary({ userName }) {
     const [activeCategory, setActiveCategory] = useState(null);
     const [pendingDate, setPendingDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [content, setContent] = useState('');
     const [length, setLength] = useState(0);
     const [loadingEntries, setLoadingEntries] = useState(true);
@@ -217,10 +219,28 @@ export default function Diary({ userName }) {
     };
 
     /**
-     * Exclui a entrada da data e categoria selecionadas, se existir.
+     * Abre o modal de confirmação de exclusão, se houver entrada selecionada.
      */
-    const handleDelete = async () => {
-        if (!selectedEntry || !window.confirm('Deseja realmente excluir esta entrada?')) {
+    const handleRequestDelete = () => {
+        if (!selectedEntry) {
+            return;
+        }
+        setShowDeleteModal(true);
+    };
+
+    /**
+     * Fecha o modal de confirmação de exclusão sem excluir nada.
+     */
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
+    };
+
+    /**
+     * Exclui a entrada da data e categoria selecionadas após confirmação.
+     */
+    const handleConfirmDelete = async () => {
+        if (!selectedEntry) {
+            setShowDeleteModal(false);
             return;
         }
         setDeleting(true);
@@ -230,6 +250,7 @@ export default function Diary({ userName }) {
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
             setContent('');
             setLength(0);
+            setShowDeleteModal(false);
             setAlert({
                 type: 'success',
                 message: 'Registro excluído com sucesso.',
@@ -324,7 +345,7 @@ export default function Diary({ userName }) {
                                     deleting={deleting}
                                     onChange={handleChange}
                                     onSave={handleSave}
-                                    onDelete={handleDelete}
+                                    onDelete={handleRequestDelete}
                                     onBack={handleCloseEditor}
                                 />
                             </main>
@@ -346,6 +367,18 @@ export default function Diary({ userName }) {
 
             {showModal && (
                 <CategoryModal onChoose={handleChooseCategory} onClose={handleCloseModal} />
+            )}
+
+            {showDeleteModal && (
+                <ConfirmModal
+                    title="Excluir registro"
+                    message="Deseja realmente excluir este registro? Esta ação não pode ser desfeita."
+                    confirmLabel={deleting ? 'Excluindo...' : 'Excluir'}
+                    cancelLabel="Cancelar"
+                    loading={deleting}
+                    onConfirm={handleConfirmDelete}
+                    onCancel={handleCancelDelete}
+                />
             )}
         </div>
     );

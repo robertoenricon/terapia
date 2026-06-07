@@ -1064,3 +1064,44 @@ body {
 .diary-modal__option--sonhos:hover {
     box-shadow: 0 14px 30px var(--diary-sonhos-glow);
 }
+
+/* Confirmação (ex.: exclusão de registro) */
+.diary-modal__text {
+    color: var(--diary-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 1.6rem;
+}
+
+.diary-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.diary-modal__confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1.4rem;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: var(--diary-danger);
+    box-shadow: var(--diary-shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.diary-modal__confirm:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(240, 85, 107, 0.35);
+}
+
+.diary-modal__confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
