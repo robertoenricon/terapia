@@ -21,7 +21,7 @@ return new class extends Migration
             // Data à qual a entrada se refere.
             $table->date('entry_date');
             // Categoria da entrada: "terapia" ou "sonhos".
-            $table->string('category')->after('entry_date');
+            $table->string('category');
             // Conteúdo em HTML simples digitado pelo usuário.
             $table->text('content')->nullable();
             $table->timestamps();

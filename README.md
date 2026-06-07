@@ -199,8 +199,7 @@ php artisan key:generate
 
 Edite o `src/.env` e preencha os campos marcados com `ALTERAR`:
 
-- `APP_URL` → o endereço do subdomínio, com **https** (ex.:
-  `https://diario.seu-dominio.com.br`).
+- `APP_URL` → o domínio final, com **https** (ex.: `https://terapia.com.br`).
 - `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` → os dados do banco que você vai
   criar no Passo 3 (`DB_HOST=localhost` na hospedagem compartilhada).
 - `ADMIN_NAME`, `ADMIN_PASSWORD` → defina uma **senha forte** antes de semear.
@@ -228,30 +227,30 @@ Isso gera o `vendor/` (sem pacotes de desenvolvimento) e o `public/build/`
 
 ### Passo 3 — Banco de dados MySQL
 
-**3.1. Crie o banco no painel:** no cPanel da LocalWeb, em **"Bancos de Dados
-MySQL"**, crie um banco, um usuário e associe o usuário ao banco com **todos os
-privilégios**. Anote nome do banco, usuário e senha (vão no `.env`).
+**3.1. Crie o banco no painel:** no painel da LocalWeb, em **"Bancos de Dados
+MySQL"** (DBaaS), crie um banco e um usuário com **todos os privilégios**. Anote
+o **host** (ex.: `terapia_diario.mysql.dbaas.com.br`), o nome do banco, o
+usuário e a senha — vão no `.env`.
 
-**3.2. Gere a estrutura localmente:** rode as migrations e o seeder do admin
-contra um MySQL local (o do Docker serve) para montar as tabelas e o usuário
-administrador:
+**3.2. Crie a estrutura:**
+
+O `.env` para o host da DBaaS. Em `src/.env`:
+
+```dotenv
+DB_HOST=terapia_diario.mysql.dbaas.com.br
+DB_PORT=3306
+DB_DATABASE=seu_banco
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+Depois rode:
 
 ```bash
 php artisan migrate --seed
 ```
 
-**3.3. Exporte e importe:** exporte o banco local (via phpMyAdmin local ou
-`mysqldump`) e importe no **phpMyAdmin da LocalWeb**, selecionando o banco
-criado no passo 3.1.
-
-```bash
-# exemplo de export por linha de comando (host/usuário do ambiente local)
-mysqldump -u terapia -p terapia > terapia.sql
-```
-
-> Como o hash da senha (bcrypt) **não depende da `APP_KEY`**, o admin semeado
-> localmente continua válido após a importação. Opcionalmente, limpe as linhas
-> das tabelas `sessions` e `cache` antes de exportar (são temporárias).
+Isso cria todas as tabelas e o admin direto no banco de produção — **dispensa** exportar/importar SQL. (Em um banco vazio você pode usar `migrate:fresh --seed` para garantir um estado limpo.)
 
 ### Passo 4 — Definir o PHP 8.3 no cPanel
 
@@ -262,59 +261,22 @@ o domínio. Garanta que as extensões usuais do Laravel estejam ativas:
 
 ### Passo 5 — Enviar os arquivos por FTP
 
-> **Cenário deste projeto:** um **subdomínio** apontando para a pasta
-> `public_html/diario`. O site é servido na raiz do subdomínio
-> (`https://diario.seu-dominio.com.br/`), então os assets em `/build/...`
-> funcionam sem ajuste de caminho. Use esse endereço no `APP_URL` do `.env`.
+**Como enviar o conteúdo de `src/`:**
 
-Por segurança, o código do Laravel deve ficar **fora** da área pública,
-expondo apenas o conteúdo de `public/` na pasta `diario`.
+ZIP + Gerenciador de Arquivos do cPanel (recomendada, bem mais rápida):
+o `vendor/` tem milhares de arquivos e o envio um a um por FTP é lento.
+Compacte tudo num único `.zip` e extraia no servidor.
 
-**Abordagem recomendada (mais simples e segura) — apontar o subdomínio para
-`public`:**
+1. Na sua máquina, abra a pasta `src/` no **Explorador de Arquivos**. Ative a
+   exibição de itens ocultos (aba **Exibir → Itens ocultos**) para enxergar o
+   `.env`.
 
-1. Envie **todo o conteúdo de `src/`** (incluindo `vendor/`, `public/build` e
-   `.env`, mas **sem** `node_modules/`) para uma pasta **fora** do `public_html`,
-   por exemplo `/home/SEU_USUARIO/terapia_app/`.
-2. No cPanel, em **"Domínios" / "Subdomínios"**, altere o **document root** do
-   subdomínio de `public_html/diario` para `terapia_app/public`.
-
-Pronto — nada para copiar nem editar. O código (`app/`, `vendor/`, `.env`...)
-fica inacessível pela web, e só o `public/` é servido.
-
-**Abordagem alternativa — manter o document root em `public_html/diario`:**
-
-Se preferir não mexer no apontamento do subdomínio:
-
-1. Envie todo o conteúdo de `src/` para uma pasta fora do `public_html`, ex.
-   `/home/SEU_USUARIO/terapia_app/`.
-2. Copie **o conteúdo de `terapia_app/public/`** (`index.php`, `.htaccess`,
-   `favicon.ico`, `robots.txt` e a pasta `build/`) para dentro de
-   `public_html/diario/`.
-3. Edite o `public_html/diario/index.php` apontando para a pasta da aplicação.
-   Como `diario` está **dois níveis** abaixo da home (`public_html/diario`), o
-   caminho relativo usa `../../`:
-
-   ```php
-   // de:
-   require __DIR__.'/../vendor/autoload.php';
-   (require_once __DIR__.'/../bootstrap/app.php')
-
-   // para:
-   require __DIR__.'/../../terapia_app/vendor/autoload.php';
-   (require_once __DIR__.'/../../terapia_app/bootstrap/app.php')
-   ```
-
-   Ajuste também a linha do modo de manutenção, se presente:
-   `__DIR__.'/../../terapia_app/storage/framework/maintenance.php'`.
-
-> **Evite** colocar o app dentro de `public_html/diario`: tudo sob `public_html`
-> pode ficar acessível pelo domínio principal (ex.: `seu-dominio.com.br/diario/.env`).
-> Por isso a aplicação fica em `terapia_app/`, fora do `public_html`.
-
-> Itens que **não** devem ir para o servidor: `node_modules/`, `.git/`,
-> `tests/` e os arquivos de desenvolvimento. O `vendor/` e o `public/build`
-> **devem** ir (foram gerados no Passo 2).
+2. No FTP, crie e entre em `terapia_app/` (fora do `public_html`).
+   Selecione **tudo de dentro de `src/`** (`app/`, `bootstrap/`, `config/`,
+   `database/`, `public/`, `resources/`, `routes/`, `storage/`, `vendor/`,
+   `artisan`, `composer.json`, `composer.lock`, `.env`...), **menos** a pasta
+   `node_modules/`.
+   Jogue para dentro de de `terapia_app/`
 
 ### Passo 6 — Permissões de escrita
 
@@ -377,11 +339,11 @@ alterações pelo phpMyAdmin (não há `artisan migrate` sem SSH).
 
 - [ ] `.env` de produção preenchido, com `APP_KEY` gerada e `APP_DEBUG=false`.
 - [ ] `composer install --no-dev` e `npm run build` executados localmente.
-- [ ] Banco MySQL criado no painel e estrutura importada via phpMyAdmin.
+- [ ] Banco MySQL criado no painel; estrutura criada via `migrate --seed`
+      (direto na DBaaS) ou importada por phpMyAdmin.
 - [ ] PHP 8.3 selecionado no cPanel.
-- [ ] App em `terapia_app/` (fora de `public_html`); só o `public/` exposto.
-- [ ] Subdomínio apontado para `terapia_app/public` **ou** `index.php` em
-      `public_html/diario` ajustado com `../../terapia_app`.
+- [ ] App em `terapia_app/` (fora de `public_html`); `public/` exposto.
+- [ ] `index.php` ajustado (ou document root apontado para `public`).
 - [ ] `storage/` e `bootstrap/cache/` com permissão de escrita.
 - [ ] SSL ativo e redirecionamento HTTPS no `.htaccess`.
 
