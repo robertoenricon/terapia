@@ -16,17 +16,16 @@ import {
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.viewDate - Mês atualmente exibido.
  * @param {Date|null} props.selectedDate - Data selecionada pelo usuário.
- * @param {Set<string>} props.entryDates - Chaves das datas com entradas.
- * @param {string|null} props.activeCategory - Categoria ativa (define a cor do marcador).
+ * @param {Object} props.entryThemes - Mapa "YYYY-MM-DD" → tema da entrada.
+ * @param {string|null} props.activeCategory - Categoria ativa (cor do dia selecionado sem entrada).
  * @param {Function} props.onPrev - Callback para o mês anterior.
  * @param {Function} props.onNext - Callback para o próximo mês.
  * @param {Function} props.onSelect - Callback ao selecionar um dia.
  * @returns {JSX.Element} Componente do calendário.
  */
-export default function Calendar({ viewDate, selectedDate, entryDates, activeCategory, onPrev, onNext, onSelect }) {
+export default function Calendar({ viewDate, selectedDate, entryThemes, activeCategory, onPrev, onNext, onSelect }) {
     const days = buildCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
     const today = new Date();
-    const dotClass = activeCategory === 'sonhos' ? 'diary-calendar__dot diary-calendar__dot--blue' : 'diary-calendar__dot';
 
     return (
         <div className="diary-calendar">
@@ -53,13 +52,23 @@ export default function Calendar({ viewDate, selectedDate, entryDates, activeCat
                     const key = toDateKey(date);
                     const isSelected = selectedDate && isSameDay(date, selectedDate);
                     const isToday = isSameDay(date, today);
-                    const hasEntry = entryDates.has(key);
+                    const theme = entryThemes[key];
+
+                    // Cor de preenchimento: tema da entrada; se o dia selecionado
+                    // não tiver entrada, usa a categoria ativa.
+                    let fillTheme = null;
+                    if (theme) {
+                        fillTheme = theme;
+                    } else if (isSelected) {
+                        fillTheme = activeCategory || 'terapia';
+                    }
 
                     const classes = [
                         'diary-calendar__day',
                         inMonth ? '' : 'diary-calendar__day--muted',
+                        fillTheme ? `diary-calendar__day--fill-${fillTheme}` : '',
                         isSelected ? 'diary-calendar__day--selected' : '',
-                        !isSelected && isToday ? 'diary-calendar__day--today' : '',
+                        !fillTheme && isToday ? 'diary-calendar__day--today' : '',
                     ].filter(Boolean).join(' ');
 
                     return (
@@ -70,7 +79,6 @@ export default function Calendar({ viewDate, selectedDate, entryDates, activeCat
                             onClick={() => onSelect(date)}
                         >
                             {date.getDate()}
-                            {hasEntry && !isSelected && <span className={dotClass} />}
                         </button>
                     );
                 })}

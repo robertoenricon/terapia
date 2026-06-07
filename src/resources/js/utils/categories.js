@@ -5,10 +5,15 @@
  * no editor, no calendário e no modal de seleção.
  */
 
-/** Mapa das categorias disponíveis, indexado pelo valor salvo no banco. */
+/**
+ * Mapa das categorias disponíveis, indexado pelo valor salvo no banco.
+ *
+ * O campo "theme" é usado como sufixo das classes CSS (ex.: "--terapia"),
+ * de forma independente do tom de cor escolhido na paleta.
+ */
 export const CATEGORIES = {
-    terapia: { value: 'terapia', label: 'Terapia', color: 'green' },
-    sonhos: { value: 'sonhos', label: 'Sonhos', color: 'blue' },
+    terapia: { value: 'terapia', label: 'Terapia', theme: 'terapia' },
+    sonhos: { value: 'sonhos', label: 'Sonhos', theme: 'sonhos' },
 };
 
 /** Lista ordenada das categorias para renderização (chips, modal). */

@@ -51,7 +51,7 @@ export default function EntryList({
                             type="button"
                             className={[
                                 'diary-category-chip',
-                                `diary-category-chip--${category.color}`,
+                                `diary-category-chip--${category.theme}`,
                                 activeCategory === category.value ? 'diary-category-chip--active' : '',
                             ].filter(Boolean).join(' ')}
                             onClick={() => onSelectCategory(category.value)}
@@ -87,7 +87,9 @@ export default function EntryList({
                                 onClick={() => onSelect(date)}
                             >
                                 <span className="diary-entry-card__date">
-                                    <span className="diary-entry-card__day">{date.getDate()}</span>
+                                    <span className={`diary-entry-card__day diary-entry-card__day--${entry.category}`}>
+                                        {date.getDate()}
+                                    </span>
                                     <span className="diary-entry-card__month">
                                         {MONTH_ABBREVIATIONS[date.getMonth()]}
                                     </span>
@@ -99,7 +101,7 @@ export default function EntryList({
                                     <span className="diary-entry-card__long">{formatLongDate(date)}</span>
                                 </span>
                                 {category && (
-                                    <span className={`diary-entry-card__badge diary-entry-card__badge--${category.color}`}>
+                                    <span className={`diary-entry-card__badge diary-entry-card__badge--${category.theme}`}>
                                         {category.label}
                                     </span>
                                 )}

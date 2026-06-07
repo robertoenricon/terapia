@@ -39,7 +39,7 @@ export default function CategoryModal({ onChoose, onClose }) {
                         <button
                             key={category.value}
                             type="button"
-                            className={`diary-modal__option diary-modal__option--${category.color}`}
+                            className={`diary-modal__option diary-modal__option--${category.theme}`}
                             onClick={() => onChoose(category.value)}
                         >
                             {category.label}

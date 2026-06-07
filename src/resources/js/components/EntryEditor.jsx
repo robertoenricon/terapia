@@ -41,7 +41,7 @@ export default function EntryEditor({
         <div className="diary-panel diary-main">
             <div className="diary-main__header">
                 <div className="diary-main__heading">
-                    <span className="diary-main__icon">📅</span>
+                    <span className={`diary-main__icon diary-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
                     <div>
                         <h2 className="diary-main__date">{formatLongDate(selectedDate)}</h2>
                         <p className="diary-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
@@ -58,7 +58,7 @@ export default function EntryEditor({
                 </button>
             </div>
 
-            <h3 className={`diary-main__subtitle diary-main__subtitle--${categoryInfo?.color || 'green'}`}>
+            <h3 className={`diary-main__subtitle diary-main__subtitle--${categoryInfo?.theme || 'terapia'}`}>
                 {categoryInfo?.label || 'Acontecimentos do dia'}
             </h3>
 
@@ -75,7 +75,7 @@ export default function EntryEditor({
             <div className="diary-main__actions">
                 <button
                     type="button"
-                    className="diary-save-btn"
+                    className={`diary-save-btn diary-save-btn--${categoryInfo?.theme || 'terapia'}`}
                     onClick={onSave}
                     disabled={saving || length > MAX_LENGTH}
                 >

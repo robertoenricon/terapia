@@ -46,11 +46,23 @@ export default function Diary() {
         [entries, activeCategory],
     );
 
-    /** Conjunto com as datas que já possuem entradas na categoria filtrada. */
-    const entryDates = useMemo(
-        () => new Set(filteredEntries.map((entry) => entry.entry_date.slice(0, 10))),
-        [filteredEntries],
-    );
+    /**
+     * Mapa "YYYY-MM-DD" → tema da entrada ("terapia", "sonhos" ou "mixed"
+     * quando a data tem as duas categorias). Usado para preencher os dias do
+     * calendário com a cor correspondente.
+     */
+    const entryThemes = useMemo(() => {
+        const themes = {};
+        filteredEntries.forEach((entry) => {
+            const key = entry.entry_date.slice(0, 10);
+            if (!themes[key]) {
+                themes[key] = entry.category;
+            } else if (themes[key] !== entry.category) {
+                themes[key] = 'mixed';
+            }
+        });
+        return themes;
+    }, [filteredEntries]);
 
     /** Entrada correspondente à data e categoria selecionadas, se existir. */
     const selectedEntry = useMemo(
@@ -210,7 +222,7 @@ export default function Diary() {
                         <Calendar
                             viewDate={viewDate}
                             selectedDate={selectedDate}
-                            entryDates={entryDates}
+                            entryThemes={entryThemes}
                             activeCategory={activeCategory}
                             onPrev={() => changeMonth(-1)}
                             onNext={() => changeMonth(1)}
