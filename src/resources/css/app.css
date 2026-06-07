@@ -342,6 +342,13 @@ body {
     grid-template-areas: "calendar entries";
 }
 
+/* Permite que as colunas do grid encolham abaixo do conteudo. Sem isto,
+   um texto longo sem espacos (min-width: auto) estoura a coluna e empurra
+   o calendario para fora da tela no mobile. */
+.semear__layout > * {
+    min-width: 0;
+}
+
 .semear-panel {
     background-color: var(--semear-panel-alt);
     border: 1px solid var(--semear-border);
