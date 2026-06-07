@@ -361,25 +361,6 @@ Acesse e verifique:
 
 ---
 
-### Atualizações futuras (redeploy)
-
-Para publicar uma nova versão:
-
-```bash
-# local, dentro de src/
-git pull
-composer install --no-dev --optimize-autoloader
-npm ci && npm run build
-```
-
-Depois envie por FTP apenas o que mudou — tipicamente `app/`, `resources/`,
-`routes/`, `public/build/` e, se houve atualização de dependências, o
-`vendor/`. Se houver novas migrations, rode `php artisan migrate` da sua máquina
-com o `.env` apontando para a DBaaS (mesmo esquema do Passo 3) — não precisa de
-SSH no servidor.
-
----
-
 ## Deploy automático (GitHub Actions + FTP)
 
 Em vez de buildar e enviar à mão, o repositório traz um workflow que faz isso
@@ -430,3 +411,19 @@ DBaaS (Passo 3).
 
 > Como o `vendor/` não vai pelo workflow, o envio é rápido: a action sincroniza
 > **apenas o que mudou** (código da aplicação e assets compilados).
+
+---
+
+### Atualizações futuras
+
+Para publicar uma nova versão:
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+```
+
+Subir migration banco (verificar .env está apontando pra prod)
+```bash
+php artisan migrate --seed
+```
