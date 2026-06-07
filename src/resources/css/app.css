@@ -1211,6 +1211,77 @@ body {
     box-shadow: 0 14px 30px var(--semear-evento-glow);
 }
 
+/* Lista de registros do dia (modal exibido ao clicar em uma data com
+   registros). Permite escolher qual alterar ou criar um novo. */
+.semear-day-entries {
+    list-style: none;
+    margin: 0 0 0.85rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.semear-day-entry {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    text-align: left;
+    background: var(--semear-surface);
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.85rem;
+    padding: 0.85rem 1rem;
+    color: var(--semear-text);
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.semear-day-entry:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+}
+
+.semear-day-entry__text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.semear-day-entry__action {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.semear-day-entry--terapia:hover {
+    box-shadow: 0 8px 20px var(--semear-terapia-glow);
+}
+
+.semear-day-entry--terapia .semear-day-entry__action {
+    color: var(--semear-terapia);
+}
+
+.semear-day-entry--sonhos:hover {
+    box-shadow: 0 8px 20px var(--semear-sonhos-glow);
+}
+
+.semear-day-entry--sonhos .semear-day-entry__action {
+    color: var(--semear-sonhos);
+}
+
+.semear-day-entry--evento:hover {
+    box-shadow: 0 8px 20px var(--semear-evento-glow);
+}
+
+.semear-day-entry--evento .semear-day-entry__action {
+    color: var(--semear-evento);
+}
+
 /* Confirmação (ex.: exclusão de registro) */
 .semear-modal__text {
     color: var(--semear-muted);
