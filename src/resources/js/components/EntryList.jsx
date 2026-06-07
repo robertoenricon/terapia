@@ -37,7 +37,14 @@ export default function EntryList({
     onToggleAll,
 }) {
     const [expandedEntryId, setExpandedEntryId] = useState(null);
-    const visible = showAll ? entries : entries.slice(0, 3);
+    const [search, setSearch] = useState('');
+
+    // Filtra os registros pelo título (busca sem diferenciar maiúsculas).
+    const query = search.trim().toLowerCase();
+    const matched = query
+        ? entries.filter((entry) => (entry.title || '').toLowerCase().includes(query))
+        : entries;
+    const visible = showAll ? matched : matched.slice(0, 3);
 
     const getPlainText = (html) => {
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
@@ -73,8 +80,24 @@ export default function EntryList({
                 )}
             </div>
 
+            <div className="semear-entries__search">
+                <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
+                <input
+                    type="search"
+                    className="semear-entries__search-input"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder="Buscar por título..."
+                    aria-label="Buscar registros por título"
+                />
+            </div>
+
             {visible.length === 0 && (
-                <p className="semear-entries__empty">Nenhuma entrada registrada ainda.</p>
+                <p className="semear-entries__empty">
+                    {query
+                        ? 'Nenhum registro encontrado para esta busca.'
+                        : 'Nenhuma entrada registrada ainda.'}
+                </p>
             )}
 
             <ul className="semear-entries__list">
@@ -143,7 +166,7 @@ export default function EntryList({
                 })}
             </ul>
 
-            {entries.length > 3 && (
+            {matched.length > 3 && (
                 <button type="button" className="semear-entries__toggle" onClick={onToggleAll}>
                     {showAll ? 'Ver menos' : 'Ver todas as entradas'}
                 </button>
