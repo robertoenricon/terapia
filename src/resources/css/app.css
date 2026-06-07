@@ -39,6 +39,13 @@
     --semear-sonhos-glow: rgba(14, 165, 233, 0.32);
     --grad-sonhos: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
 
+    /* Evento — vermelho */
+    --semear-evento: #f87171;
+    --semear-evento-dark: #ef4444;
+    --semear-evento-soft: rgba(248, 113, 113, 0.16);
+    --semear-evento-glow: rgba(239, 68, 68, 0.32);
+    --grad-evento: linear-gradient(135deg, #fb7185 0%, #dc2626 100%);
+
     /* Marca: combinação das duas categorias */
     --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
 
@@ -432,6 +439,14 @@ body {
     box-shadow: 0 12px 28px var(--semear-sonhos-glow);
 }
 
+.semear-save-btn--evento {
+    background: var(--grad-evento);
+}
+
+.semear-save-btn--evento:hover:not(:disabled) {
+    box-shadow: 0 12px 28px var(--semear-evento-glow);
+}
+
 .semear-back-btn {
     background-color: var(--semear-border);
     color: var(--semear-text);
@@ -540,7 +555,7 @@ body {
 }
 
 /* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
-   categoria correspondente. "mixed" = data com Terapia e Sonhos. */
+   categoria correspondente. "mixed" = data com categorias diferentes. */
 .semear-calendar__day--fill-terapia {
     background: var(--grad-terapia);
     color: #fff;
@@ -549,6 +564,12 @@ body {
 
 .semear-calendar__day--fill-sonhos {
     background: var(--grad-sonhos);
+    color: #fff;
+    font-weight: 700;
+}
+
+.semear-calendar__day--fill-evento {
+    background: var(--grad-evento);
     color: #fff;
     font-weight: 700;
 }
@@ -654,6 +675,10 @@ body {
     color: var(--semear-sonhos);
 }
 
+.semear-entry-card__day--evento {
+    color: var(--semear-evento);
+}
+
 .semear-entry-card__month {
     font-size: 0.65rem;
     color: var(--semear-muted);
@@ -701,6 +726,10 @@ body {
     background: var(--grad-sonhos);
 }
 
+.semear-entry-card__badge--evento {
+    background: var(--grad-evento);
+}
+
 .semear-entry-card__edit {
     align-self: center;
     margin-right: 0.75rem;
@@ -720,6 +749,10 @@ body {
 
 .semear-entry-card__edit--sonhos {
     color: var(--semear-sonhos);
+}
+
+.semear-entry-card__edit--evento {
+    color: var(--semear-evento);
 }
 
 .semear-entry-card__edit:hover {
@@ -778,6 +811,18 @@ body {
     border-color: transparent;
     color: #fff;
     box-shadow: 0 8px 20px var(--semear-sonhos-glow);
+}
+
+.semear-category-chip--evento {
+    color: var(--semear-evento);
+}
+
+.semear-category-chip--evento:hover,
+.semear-category-chip--evento.semear-category-chip--active {
+    background: var(--grad-evento);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px var(--semear-evento-glow);
 }
 
 .semear-category-clear {
@@ -874,6 +919,10 @@ body {
 
 .semear-main__subtitle--sonhos {
     color: var(--semear-sonhos);
+}
+
+.semear-main__subtitle--evento {
+    color: var(--semear-evento);
 }
 
 .semear-editor {
@@ -1152,6 +1201,14 @@ body {
 
 .semear-modal__option--sonhos:hover {
     box-shadow: 0 14px 30px var(--semear-sonhos-glow);
+}
+
+.semear-modal__option--evento {
+    background: var(--grad-evento);
+}
+
+.semear-modal__option--evento:hover {
+    box-shadow: 0 14px 30px var(--semear-evento-glow);
 }
 
 /* Confirmação (ex.: exclusão de registro) */
