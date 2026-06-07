@@ -47,6 +47,12 @@
     --semear-shadow-sm: 0 8px 24px rgba(2, 12, 10, 0.35);
 }
 
+/* Cor de base no elemento raiz: cobre a área segura (notch/barra de status)
+   e a faixa de overscroll no mobile, evitando que apareça branco no topo. */
+html {
+    background-color: var(--semear-bg);
+}
+
 body {
     min-height: 100vh;
     color: var(--semear-text);
