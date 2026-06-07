@@ -555,9 +555,9 @@ body {
     font-weight: 700;
 }
 
-/* Dias com uma única categoria (e o dia selecionado) ficam preenchidos na
-   cor da categoria correspondente. Dias com mais de uma categoria usam os
-   pontos coloridos (.semear-calendar__dots) em vez do preenchimento. */
+/* Preenchimento do dia selecionado sem registro: destaca, na cor da
+   categoria ativa, onde a nova entrada será criada. Dias com registro não
+   são preenchidos; eles usam os pontos coloridos (.semear-calendar__dots). */
 .semear-calendar__day--fill-terapia {
     background: var(--grad-terapia);
     color: #fff;
@@ -581,8 +581,8 @@ body {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
-/* Dias com mais de uma categoria mostram um ponto por registro, abaixo do
-   número, cada um na cor da sua categoria (em vez do preenchimento misto). */
+/* Todo dia com registro mostra um ponto por categoria, abaixo do número,
+   cada um na cor da sua categoria (uma bolinha por registro daquele dia). */
 .semear-calendar__dots {
     position: absolute;
     left: 0;

@@ -54,16 +54,14 @@ export default function Calendar({ viewDate, selectedDate, entryCategories, acti
                     const isToday = isSameDay(date, today);
                     const categories = entryCategories[key] || [];
 
-                    // Dias com várias categorias mostram um ponto por registro;
-                    // os demais são preenchidos com a cor da categoria.
-                    const hasDots = categories.length > 1;
+                    // Todo dia com registro exibe um ponto por categoria abaixo
+                    // do número (uma bolinha por registro daquele dia).
+                    const hasDots = categories.length > 0;
 
-                    // Cor de preenchimento: única categoria do dia; se o dia
-                    // selecionado não tiver entrada, usa a categoria ativa.
+                    // Sem registro, o dia selecionado é preenchido com a cor da
+                    // categoria ativa para destacar onde a entrada será criada.
                     let fillTheme = null;
-                    if (!hasDots && categories.length === 1) {
-                        fillTheme = categories[0];
-                    } else if (categories.length === 0 && isSelected) {
+                    if (!hasDots && isSelected) {
                         fillTheme = activeCategory || 'terapia';
                     }
 
