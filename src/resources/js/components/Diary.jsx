@@ -2,50 +2,93 @@ import { useEffect, useMemo, useState } from 'react';
 import Calendar from './Calendar';
 import EntryList from './EntryList';
 import EntryEditor from './EntryEditor';
+import CategoryModal from './CategoryModal';
+import ConfirmModal from './ConfirmModal';
+import BootstrapAlert from './BootstrapAlert';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
-import { toDateKey } from '../utils/date';
+import { logout } from '../api/auth';
+import { fromDateKey, toDateKey } from '../utils/date';
 
 /**
  * Tela principal do Diário.
  *
  * Coordena o calendário, a lista de entradas e o editor, gerenciando o
- * estado da data selecionada e a comunicação com a API para carregar,
- * salvar e excluir os registros do dia.
+ * estado da data e da categoria selecionadas e a comunicação com a API
+ * para carregar, salvar e excluir os registros.
+ *
+ * O editor só é exibido após o usuário escolher uma data; quando nenhuma
+ * categoria está ativa, um modal pergunta entre Terapia e Sonhos.
  *
  * @returns {JSX.Element} Componente do Diário.
  */
-export default function Diary() {
+export default function Diary({ userName }) {
     const [entries, setEntries] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(null);
     const [viewDate, setViewDate] = useState(new Date());
+    const [activeCategory, setActiveCategory] = useState(null);
+    const [pendingDate, setPendingDate] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [content, setContent] = useState('');
     const [length, setLength] = useState(0);
+    const [loadingEntries, setLoadingEntries] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [loggingOut, setLoggingOut] = useState(false);
     const [showAll, setShowAll] = useState(false);
+    const [alert, setAlert] = useState(null);
 
     // Carrega as entradas existentes ao montar o componente.
     useEffect(() => {
         fetchEntries()
             .then(setEntries)
-            .catch(() => setEntries([]));
+            .catch((error) => {
+                setEntries([]);
+                setAlert({
+                    type: 'danger',
+                    message: error.message,
+                });
+            })
+            .finally(() => setLoadingEntries(false));
     }, []);
 
-    /** Chave da data atualmente selecionada. */
-    const selectedKey = toDateKey(selectedDate);
+    /** Chave da data atualmente selecionada (ou nulo se o editor está oculto). */
+    const selectedKey = selectedDate ? toDateKey(selectedDate) : null;
 
-    /** Conjunto com as datas que já possuem entradas. */
-    const entryDates = useMemo(
-        () => new Set(entries.map((entry) => entry.entry_date.slice(0, 10))),
-        [entries],
+    /** Entradas visíveis conforme a categoria ativa (todas se nenhuma). */
+    const filteredEntries = useMemo(
+        () => (activeCategory ? entries.filter((entry) => entry.category === activeCategory) : entries),
+        [entries, activeCategory],
     );
 
-    /** Entrada correspondente à data selecionada, se existir. */
+    /**
+     * Mapa "YYYY-MM-DD" → tema da entrada ("terapia", "sonhos" ou "mixed"
+     * quando a data tem as duas categorias). Usado para preencher os dias do
+     * calendário com a cor correspondente.
+     */
+    const entryThemes = useMemo(() => {
+        const themes = {};
+        filteredEntries.forEach((entry) => {
+            const key = entry.entry_date.slice(0, 10);
+            if (!themes[key]) {
+                themes[key] = entry.category;
+            } else if (themes[key] !== entry.category) {
+                themes[key] = 'mixed';
+            }
+        });
+        return themes;
+    }, [filteredEntries]);
+
+    /** Entrada correspondente à data e categoria selecionadas, se existir. */
     const selectedEntry = useMemo(
-        () => entries.find((entry) => entry.entry_date.slice(0, 10) === selectedKey) || null,
-        [entries, selectedKey],
+        () => entries.find(
+            (entry) => entry.entry_date.slice(0, 10) === selectedKey
+                && entry.category === activeCategory,
+        ) || null,
+        [entries, selectedKey, activeCategory],
     );
 
-    // Atualiza o conteúdo do editor sempre que a data selecionada muda.
+    // Atualiza o conteúdo do editor sempre que a entrada selecionada muda.
     useEffect(() => {
         const html = selectedEntry?.content || '';
         setContent(html);
@@ -54,11 +97,72 @@ export default function Diary() {
     }, [selectedEntry]);
 
     /**
-     * Seleciona uma data e ajusta o mês exibido no calendário.
+     * Abre o editor para a data informada na categoria ativa. Se nenhuma
+     * categoria estiver selecionada, guarda a data e abre o modal.
      *
      * @param {Date} date - Data escolhida.
      */
     const handleSelectDate = (date) => {
+        setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
+        if (activeCategory) {
+            setSelectedDate(date);
+        } else {
+            setPendingDate(date);
+            setShowModal(true);
+        }
+    };
+
+    /**
+     * Define a categoria escolhida no modal e abre o editor na data pendente.
+     *
+     * @param {string} category - Categoria selecionada ("terapia" ou "sonhos").
+     */
+    const handleChooseCategory = (category) => {
+        const date = pendingDate || new Date();
+        setActiveCategory(category);
+        setSelectedDate(date);
+        setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
+        setPendingDate(null);
+        setShowModal(false);
+    };
+
+    /**
+     * Fecha o modal de categoria sem escolher nenhuma opção.
+     */
+    const handleCloseModal = () => {
+        setPendingDate(null);
+        setShowModal(false);
+    };
+
+    /**
+     * Seleciona uma categoria como filtro ativo (lista e calendário).
+     *
+     * @param {string} category - Categoria a ser filtrada.
+     */
+    const handleSelectCategory = (category) => {
+        setActiveCategory(category);
+    };
+
+    /**
+     * Limpa o filtro de categoria e oculta o editor (volta ao estado inicial).
+     */
+    const handleClearCategory = () => {
+        setActiveCategory(null);
+        setSelectedDate(null);
+    };
+
+    const handleCloseEditor = () => {
+        setSelectedDate(null);
+    };
+
+    /**
+     * Abre no editor a entrada escolhida na lista.
+     *
+     * @param {Object} entry - Entrada que será alterada.
+     */
+    const handleEditEntry = (entry) => {
+        const date = fromDateKey(entry.entry_date.slice(0, 10));
+        setActiveCategory(entry.category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
     };
@@ -84,37 +188,96 @@ export default function Diary() {
     };
 
     /**
-     * Salva (cria ou atualiza) a entrada da data selecionada.
+     * Salva (cria ou atualiza) a entrada da data e categoria selecionadas.
      */
     const handleSave = async () => {
+        const isEditing = Boolean(selectedEntry);
         setSaving(true);
+        setAlert(null);
         try {
-            const saved = await saveEntry(selectedKey, content);
+            const saved = await saveEntry(selectedKey, content, activeCategory);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
             });
+            setAlert({
+                type: 'success',
+                message: isEditing
+                    ? 'Registro alterado com sucesso.'
+                    : 'Registro salvo com sucesso.',
+            });
         } catch (error) {
-            window.alert(error.message);
+            setAlert({
+                type: 'danger',
+                message: isEditing
+                    ? `Não foi possível alterar o registro. ${error.message}`
+                    : error.message,
+            });
         } finally {
             setSaving(false);
         }
     };
 
     /**
-     * Exclui a entrada da data selecionada, se existir.
+     * Abre o modal de confirmação de exclusão, se houver entrada selecionada.
      */
-    const handleDelete = async () => {
-        if (!selectedEntry || !window.confirm('Deseja realmente excluir esta entrada?')) {
+    const handleRequestDelete = () => {
+        if (!selectedEntry) {
             return;
         }
+        setShowDeleteModal(true);
+    };
+
+    /**
+     * Fecha o modal de confirmação de exclusão sem excluir nada.
+     */
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
+    };
+
+    /**
+     * Exclui a entrada da data e categoria selecionadas após confirmação.
+     */
+    const handleConfirmDelete = async () => {
+        if (!selectedEntry) {
+            setShowDeleteModal(false);
+            return;
+        }
+        setDeleting(true);
+        setAlert(null);
         try {
             await deleteEntry(selectedEntry.id);
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
             setContent('');
             setLength(0);
+            setShowDeleteModal(false);
+            setAlert({
+                type: 'success',
+                message: 'Registro excluído com sucesso.',
+            });
         } catch (error) {
-            window.alert(error.message);
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
+        } finally {
+            setDeleting(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        setLoggingOut(true);
+        setAlert(null);
+
+        try {
+            await logout();
+            window.location.assign('/login');
+        } catch (error) {
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
+            setLoggingOut(false);
         }
     };
 
@@ -127,49 +290,96 @@ export default function Diary() {
                             <span className="diary__logo">🌱</span> Diário
                         </h1>
                     </div>
-                    <button
-                        type="button"
-                        className="diary-save-btn diary__new"
-                        onClick={() => handleSelectDate(new Date())}
-                    >
-                        ＋
-                    </button>
+                    <div className="diary-user">
+                        <span className="diary-user__name">{userName}</span>
+                        <button
+                            type="button"
+                            className="diary-logout-btn"
+                            onClick={handleLogout}
+                            disabled={loggingOut}
+                        >
+                            {loggingOut && (
+                                <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                            )}
+                            {loggingOut ? 'Saindo...' : 'Sair'}
+                        </button>
+                    </div>
                 </header>
 
-                <div className="diary__layout">
-                    <div className="diary-panel diary__calendar">
-                        <Calendar
-                            viewDate={viewDate}
+                {alert && (
+                    <BootstrapAlert
+                        type={alert.type}
+                        message={alert.message}
+                        onClose={() => setAlert(null)}
+                    />
+                )}
+
+                {loadingEntries ? (
+                    <div className="diary-panel diary-loading" role="status" aria-live="polite">
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                        <span>Carregando entradas...</span>
+                    </div>
+                ) : (
+                    <div className={`diary__layout ${selectedDate && activeCategory ? '' : 'diary__layout--no-editor'}`}>
+                        <div className="diary-panel diary__calendar">
+                            <Calendar
+                                viewDate={viewDate}
+                                selectedDate={selectedDate}
+                                entryThemes={entryThemes}
+                                activeCategory={activeCategory}
+                                onPrev={() => changeMonth(-1)}
+                                onNext={() => changeMonth(1)}
+                                onSelect={handleSelectDate}
+                            />
+                        </div>
+
+                        {selectedDate && activeCategory && (
+                            <main className="diary__content">
+                                <EntryEditor
+                                    selectedDate={selectedDate}
+                                    category={activeCategory}
+                                    content={content}
+                                    length={length}
+                                    canDelete={Boolean(selectedEntry)}
+                                    saving={saving}
+                                    deleting={deleting}
+                                    onChange={handleChange}
+                                    onSave={handleSave}
+                                    onDelete={handleRequestDelete}
+                                    onBack={handleCloseEditor}
+                                />
+                            </main>
+                        )}
+
+                        <EntryList
+                            entries={filteredEntries}
                             selectedDate={selectedDate}
-                            entryDates={entryDates}
-                            onPrev={() => changeMonth(-1)}
-                            onNext={() => changeMonth(1)}
-                            onSelect={handleSelectDate}
+                            activeCategory={activeCategory}
+                            showAll={showAll}
+                            onEdit={handleEditEntry}
+                            onSelectCategory={handleSelectCategory}
+                            onClearCategory={handleClearCategory}
+                            onToggleAll={() => setShowAll((open) => !open)}
                         />
                     </div>
-
-                    <main className="diary__content">
-                        <EntryEditor
-                            selectedDate={selectedDate}
-                            content={content}
-                            length={length}
-                            canDelete={Boolean(selectedEntry)}
-                            saving={saving}
-                            onChange={handleChange}
-                            onSave={handleSave}
-                            onDelete={handleDelete}
-                        />
-                    </main>
-
-                    <EntryList
-                        entries={entries}
-                        selectedDate={selectedDate}
-                        showAll={showAll}
-                        onSelect={handleSelectDate}
-                        onToggleAll={() => setShowAll((open) => !open)}
-                    />
-                </div>
+                )}
             </div>
+
+            {showModal && (
+                <CategoryModal onChoose={handleChooseCategory} onClose={handleCloseModal} />
+            )}
+
+            {showDeleteModal && (
+                <ConfirmModal
+                    title="Excluir registro"
+                    message="Deseja realmente excluir este registro? Esta ação não pode ser desfeita."
+                    confirmLabel={deleting ? 'Excluindo...' : 'Excluir'}
+                    cancelLabel="Cancelar"
+                    loading={deleting}
+                    onConfirm={handleConfirmDelete}
+                    onCancel={handleCancelDelete}
+                />
+            )}
         </div>
     );
 }

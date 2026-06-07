@@ -19,9 +19,12 @@ class JournalEntryController extends Controller
      *
      * @return JsonResponse Coleção de entradas registradas.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $entries = JournalEntry::orderByDesc('entry_date')->get();
+        $entries = $request->user()
+            ->journalEntries()
+            ->orderByDesc('entry_date')
+            ->get();
 
         return response()->json($entries);
     }
@@ -32,15 +35,19 @@ class JournalEntryController extends Controller
      * @param  string $date Data no formato Y-m-d.
      * @return JsonResponse  Entrada encontrada ou objeto nulo.
      */
-    public function showByDate(string $date): JsonResponse
+    public function showByDate(Request $request, string $date): JsonResponse
     {
-        $entry = JournalEntry::whereDate('entry_date', $date)->first();
+        $entry = $request->user()
+            ->journalEntries()
+            ->whereDate('entry_date', $date)
+            ->first();
 
         return response()->json($entry);
     }
 
     /**
-     * Cria ou atualiza a entrada de uma data (uma entrada por dia).
+     * Cria ou atualiza a entrada de uma data e categoria
+     * (uma entrada por categoria em cada dia).
      *
      * @param  Request $request Requisição com a data e o conteúdo.
      * @return JsonResponse      Entrada salva com status apropriado.
@@ -49,13 +56,25 @@ class JournalEntryController extends Controller
     {
         $data = $request->validate([
             'entry_date' => ['required', 'date'],
+            'category' => ['required', 'in:terapia,sonhos'],
             'content' => ['nullable', 'string', 'max:50000'],
         ]);
 
-        $entry = JournalEntry::updateOrCreate(
-            ['entry_date' => $data['entry_date']],
-            ['content' => $data['content'] ?? ''],
-        );
+        $entry = $request->user()
+            ->journalEntries()
+            ->whereDate('entry_date', $data['entry_date'])
+            ->where('category', $data['category'])
+            ->first();
+
+        if ($entry === null) {
+            $entry = $request->user()->journalEntries()->make([
+                'entry_date' => $data['entry_date'],
+                'category' => $data['category'],
+            ]);
+        }
+
+        $entry->content = $data['content'] ?? '';
+        $entry->save();
 
         return response()->json($entry, $entry->wasRecentlyCreated ? 201 : 200);
     }
@@ -66,8 +85,10 @@ class JournalEntryController extends Controller
      * @param  JournalEntry $journalEntry Entrada a ser removida.
      * @return JsonResponse                Resposta vazia de confirmação.
      */
-    public function destroy(JournalEntry $journalEntry): JsonResponse
+    public function destroy(Request $request, JournalEntry $journalEntry): JsonResponse
     {
+        abort_unless($journalEntry->user_id === $request->user()->id, 404);
+
         $journalEntry->delete();
 
         return response()->json(null, 204);

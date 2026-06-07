@@ -105,8 +105,22 @@ php artisan migrate
 
 ### 7. Acesse a aplicação
 
-- Aplicação: http://localhost:8080
+- Login: http://localhost:8080/login
+- Diário: http://localhost:8080/diario
 - MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)
+
+### Credenciais Login
+
+Ao executar `php artisan migrate --seed`, uma conta administrativa é criada
+com os valores definidos no `.env` do Laravel:
+
+```dotenv
+ADMIN_NAME=admin
+ADMIN_PASSWORD=pass
+```
+
+Altere a senha antes de usar a aplicação fora do ambiente local. O login usa
+sessão armazenada no MySQL, e as rotas do diário e da API exigem autenticação.
 
 ---
 
@@ -147,3 +161,268 @@ composer dev
 ```
 
 Para o build final de produção, use `npm run build`.
+
+---
+
+## Deploy na LocalWeb (Hospedagem compartilhada / cPanel)
+
+Guia para publicar o sistema em um plano de **Hospedagem de Sites** da LocalWeb
+(cPanel), enviando os arquivos por **FTP** com o build feito **localmente na sua máquina**. Nesse tipo de plano não há acesso root e o `vendor/` e o
+`public/build` precisam ser compilados antes do envio (eles não vão no Git).
+
+### Visão geral do processo
+
+1. Configurar o `.env` de produção e gerar a `APP_KEY` (local).
+2. Instalar dependências e compilar o frontend (local).
+3. Criar o banco MySQL no painel e importar a estrutura (via phpMyAdmin).
+4. Definir o PHP 8.3 no cPanel.
+5. Enviar os arquivos por FTP, com o Laravel **fora** da pasta pública.
+6. Ajustar permissões, HTTPS e validar.
+
+### Pré-requisitos locais
+
+- PHP 8.3+, Composer e Node.js instalados na sua máquina (ou rode os comandos
+  pelo container Docker: `docker compose exec app bash`).
+- Cliente FTP (FileZilla) ou o **Gerenciador de Arquivos** do cPanel.
+- Acesso ao painel da LocalWeb (cPanel, phpMyAdmin e dados de FTP).
+
+---
+
+### Passo 1 — Configurar o `.env` de produção (local)
+
+Dentro de `src/`, crie o `.env` a partir do modelo de produção e gere a chave:
+
+```bash
+cp .env.production.example .env
+php artisan key:generate
+```
+
+Edite o `src/.env` e preencha os campos marcados com `ALTERAR`:
+
+- `APP_URL` → o domínio final, com **https** (ex.: `https://terapia.com.br`).
+- `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` → os dados do banco que
+  você vai criar no Passo 3. Na LocalWeb o MySQL é **DBaaS (remoto)**, então o
+  host é algo como `terapia_diario.mysql.dbaas.com.br` (não `localhost`).
+- `ADMIN_NAME`, `ADMIN_PASSWORD` → defina uma **senha forte** antes de semear.
+- `MAIL_*` → dados de SMTP da LocalWeb, caso vá enviar e-mails.
+
+> O `.env` **nunca** é versionado nem enviado por Git, mas precisa ser enviado
+> por FTP junto com a aplicação (veja o Passo 5).
+
+### Passo 2 — Build local (dependências + frontend)
+
+Ainda em `src/`, instale as dependências de produção e compile os assets:
+
+```bash
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
+```
+
+Isso gera o `vendor/` (sem pacotes de desenvolvimento) e o `public/build/`
+(JS/CSS compilados + `manifest.json`). Ambos serão enviados por FTP.
+
+> **Não** rode `php artisan config:cache` localmente: o cache grava caminhos
+> absolutos da sua máquina e quebra no servidor. Deixe o cache desligado nesse
+> fluxo por FTP (a aplicação funciona normalmente sem ele).
+
+### Passo 3 — Banco de dados MySQL
+
+**3.1. Crie o banco no painel:** no painel da LocalWeb, em **"Bancos de Dados
+MySQL"** (DBaaS), crie um banco e um usuário com **todos os privilégios**. Anote
+o **host** (ex.: `terapia_diario.mysql.dbaas.com.br`), o nome do banco, o
+usuário e a senha — vão no `.env`.
+
+**3.2. Crie a estrutura:**
+
+O `.env` para o host da DBaaS. Em `src/.env`:
+
+```dotenv
+DB_HOST=terapia_diario.mysql.dbaas.com.br
+DB_PORT=3306
+DB_DATABASE=seu_banco
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+Depois rode:
+
+```bash
+php artisan migrate --seed
+```
+
+Isso cria todas as tabelas e o admin direto no banco de produção — **dispensa** exportar/importar SQL. (Em um banco vazio você pode usar `migrate:fresh --seed` para garantir um estado limpo.)
+
+### Passo 4 — Definir o PHP 8.3 no cPanel
+
+Em **"Selecionar versão do PHP"** (MultiPHP Manager), selecione **PHP 8.3** para
+o domínio. Garanta que as extensões usuais do Laravel estejam ativas:
+`bcmath`, `ctype`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo`,
+`pdo_mysql`, `tokenizer`, `xml`.
+
+### Passo 5 — Enviar os arquivos e publicar a pasta pública
+
+A ideia: o código do Laravel fica em `terapia_app/` (**fora** do `public_html`,
+por segurança) e o subdomínio, que aponta para `public_html/diario`, recebe
+apenas o conteúdo de `public/`.
+
+**5.1. Enviar o app para `terapia_app/`**
+
+O `vendor/` tem milhares de arquivos e o envio um a um por FTP é lento; por isso
+compacte tudo num `.zip` e extraia no servidor:
+
+1. Na sua máquina, abra a pasta `src/` no **Explorador de Arquivos** e ative a
+   exibição de itens ocultos (aba **Exibir → Itens ocultos**) para enxergar o
+   `.env`.
+2. Selecione **tudo de dentro de `src/`** (`app/`, `bootstrap/`, `config/`,
+   `database/`, `public/`, `resources/`, `routes/`, `storage/`, `vendor/`,
+   `artisan`, `composer.json`, `composer.lock`, `.env`...), **menos** a pasta
+   `node_modules/`. Botão direito → **Enviar para → Pasta compactada (zipada)**
+   e renomeie para `deploy.zip`.
+3. No cPanel → **Gerenciador de Arquivos**, crie a pasta `terapia_app/` (fora do
+   `public_html`), entre nela, use **"Carregar"** para subir o `deploy.zip`,
+   depois botão direito → **"Extract"**. Apague o `.zip` ao final.
+
+**5.2. Publicar a pasta pública em `public_html/diario`**
+
+> **Atalho:** se o painel permitir, mude o **document root** do subdomínio de
+> `public_html/diario` para `terapia_app/public`. Aí você **não copia nada** nem
+> edita o `index.php` — pule o restante deste passo.
+
+Caso contrário (mantendo o subdomínio em `public_html/diario`):
+
+1. Copie **todo o conteúdo de `terapia_app/public/`** (a pasta `build/`, o
+   `index.php`, o `.htaccess`, `favicon.ico`, `robots.txt`) para dentro de
+   `public_html/diario/`. Pelo Gerenciador de Arquivos, entre em
+   `terapia_app/public`, selecione tudo e use **"Copiar"** informando o destino
+   `/public_html/diario`.
+2. Edite `public_html/diario/index.php` e troque os caminhos `../` por
+   `../../terapia_app/` (o app está dois níveis acima). O arquivo deve ficar
+   assim:
+
+   ```php
+   <?php
+
+   use Illuminate\Foundation\Application;
+   use Illuminate\Http\Request;
+
+   define('LARAVEL_START', microtime(true));
+
+   // Determine if the application is in maintenance mode...
+   if (file_exists($maintenance = __DIR__.'/../../terapia_app/storage/framework/maintenance.php')) {
+       require $maintenance;
+   }
+
+   // Register the Composer autoloader...
+   require __DIR__.'/../../terapia_app/vendor/autoload.php';
+
+   // Bootstrap Laravel and handle the request...
+   /** @var Application $app */
+   $app = require_once __DIR__.'/../../terapia_app/bootstrap/app.php';
+
+   $app->handleRequest(Request::capture());
+   ```
+
+> **Importante:** só o conteúdo de `public/` pode ficar exposto na web. **Nunca**
+> copie `app/`, `vendor/`, `.env` ou outras pastas do Laravel para
+> `public_html/diario` — elas permanecem em `terapia_app/`.
+
+### Passo 6 — Permissões de escrita
+
+Garanta que o Laravel possa gravar logs, cache e views compiladas. Pelo
+Gerenciador de Arquivos do cPanel ou por FTP, defina as pastas abaixo (dentro de
+`terapia_app`) como **755**:
+
+```
+storage/                (e todas as subpastas)
+bootstrap/cache/
+```
+
+### Passo 7 — HTTPS e segurança
+
+1. Ative o **certificado SSL** do subdomínio no painel da LocalWeb (AutoSSL/Let's
+   Encrypt). **Faça isso antes** de testar, senão o redirecionamento abaixo
+   aponta para um `https://` sem certificado e o navegador bloqueia.
+2. O redirecionamento de http para https **já está incluído** no `.htaccess` do
+   projeto (`public/.htaccess`), então vai junto na cópia do Passo 5 — não
+   precisa editar nada à mão.
+3. Confirme que `APP_DEBUG=false` no `.env` (já vem assim no modelo de
+   produção) para não expor detalhes de erro.
+
+### Passo 8 — Validação pós-deploy
+
+Acesse e verifique:
+
+- `https://diario.seu-dominio.com.br/login` → tela de login carrega com os
+  estilos (se vier sem CSS, o `public/build` não foi enviado ou está em local
+  errado).
+- Faça login com `ADMIN_NAME` / `ADMIN_PASSWORD`.
+- Crie e exclua um registro para validar banco e sessão.
+
+---
+
+### Atualizações futuras (redeploy)
+
+Para publicar uma nova versão:
+
+```bash
+# local, dentro de src/
+git pull
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+```
+
+Depois envie por FTP apenas o que mudou — tipicamente `app/`, `resources/`,
+`routes/`, `public/build/` e, se houve atualização de dependências, o
+`vendor/`. Se houver novas migrations, rode `php artisan migrate` da sua máquina
+com o `.env` apontando para a DBaaS (mesmo esquema do Passo 3) — não precisa de
+SSH no servidor.
+
+---
+
+## Deploy automático (GitHub Actions + FTP)
+
+Em vez de buildar e enviar à mão, o repositório traz um workflow que faz isso
+sozinho a cada `push` na branch **`main`**:
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+
+O que o workflow faz, na nuvem:
+
+1. Instala as dependências PHP de produção (`composer install --no-dev`).
+2. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
+3. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
+   `../../terapia_app/`.
+4. Envia por FTP a aplicação para `terapia_app/` e o conteúdo público para
+   `public_html/diario/`.
+
+As **migrations não rodam** no deploy (decisão de projeto). Quando houver
+mudança no banco, rode `php artisan migrate` da sua máquina apontando para a
+DBaaS (Passo 3).
+
+### Configuração (uma vez)
+
+1. **Pré-requisito manual:** o servidor já precisa ter a estrutura criada por um
+   primeiro deploy manual (Passos 5 e 6) e, principalmente, o **`.env` em
+   `terapia_app/.env`**. O workflow **nunca** envia o `.env` (ele é ignorado),
+   para não sobrescrever as credenciais de produção.
+2. No GitHub, em **Settings → Secrets and variables → Actions**, crie os
+   segredos:
+
+   | Segredo | Valor |
+   |---|---|
+   | `FTP_SERVER` | host de FTP da LocalWeb (ex.: `ftp.seu-dominio.com.br`) |
+   | `FTP_USERNAME` | usuário de FTP |
+   | `FTP_PASSWORD` | senha de FTP |
+
+3. Confirme os `server-dir` no `deploy.yml`. O padrão assume que o login de FTP
+   cai na **home** do usuário (onde ficam `terapia_app/` e `public_html/`). Se o
+   seu FTP já entra dentro de `public_html`, ajuste os caminhos (ex.:
+   `../terapia_app/` e `./diario/`).
+
+### Usando
+
+- **Deploy:** faça `merge`/`push` na branch `main`. Acompanhe em **Actions**.
+- **Disparo manual:** aba **Actions → Deploy LocalWeb (FTP) → Run workflow**.
+
+> O primeiro envio é mais lento (sobe o `vendor/` inteiro). Nos seguintes, a
+> action envia **apenas o que mudou**, então é rápido.

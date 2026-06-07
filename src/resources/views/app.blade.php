@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Terapia') }}</title>
 
@@ -11,6 +12,9 @@
     </head>
     <body>
         <!-- Elemento raiz onde a aplicação React é montada -->
-        <div id="app"></div>
+        <div
+            id="app"
+            data-user-name="{{ auth()->user()->name }}"
+        ></div>
     </body>
 </html>

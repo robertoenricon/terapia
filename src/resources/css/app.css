@@ -2,27 +2,146 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* ------------------------------------------------------------------ */
-/* Tema escuro do Diário                                              */
+/* Tema do Diário — paleta "Verde-menta & Azul-mar"                   */
+/*                                                                    */
+/* Terapia = verde esmeralda/lima (cura, natureza, serenidade).       */
+/* Sonhos  = ciano/azul-mar (profundidade, calma, sonho).             */
+/* Fundo em gradiente escuro esverdeado com brilhos ambientes das     */
+/* duas cores, painéis em vidro (glass) para um visual profissional.  */
+/*                                                                    */
+/* Os modificadores de cor são nomeados pela categoria (--terapia /   */
+/* --sonhos), não pelo tom, para não quebrarem ao mudar a paleta.     */
 /* ------------------------------------------------------------------ */
 
 :root {
-    --diary-bg: #0a0e16;
-    --diary-panel: #11161f;
-    --diary-panel-alt: #161c27;
-    --diary-border: #232a36;
-    --diary-text: #e6edf3;
-    --diary-muted: #8b97a7;
-    --diary-faint: #5b6573;
-    --diary-green: #22a85a;
-    --diary-green-dark: #1c8f4c;
-    --diary-green-soft: rgba(34, 168, 90, 0.15);
+    /* Base escura levemente esverdeada */
+    --diary-bg: #0a1014;
+    --diary-panel: rgba(16, 26, 28, 0.72);
+    --diary-panel-alt: rgba(255, 255, 255, 0.04);
+    --diary-surface: rgba(255, 255, 255, 0.025);
+    --diary-border: rgba(255, 255, 255, 0.08);
+    --diary-border-strong: rgba(255, 255, 255, 0.16);
+    --diary-text: #eafaf4;
+    --diary-muted: #93b1aa;
+    --diary-faint: #5d7872;
+
+    /* Terapia — verde esmeralda/lima */
+    --diary-terapia: #34d399;
+    --diary-terapia-dark: #10b981;
+    --diary-terapia-soft: rgba(52, 211, 153, 0.16);
+    --diary-terapia-glow: rgba(52, 211, 153, 0.32);
+    --grad-terapia: linear-gradient(135deg, #34d399 0%, #a3e635 100%);
+
+    /* Sonhos — ciano/azul-mar */
+    --diary-sonhos: #38bdf8;
+    --diary-sonhos-dark: #0ea5e9;
+    --diary-sonhos-soft: rgba(56, 189, 248, 0.16);
+    --diary-sonhos-glow: rgba(14, 165, 233, 0.32);
+    --grad-sonhos: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
+
+    /* Marca: combinação das duas categorias */
+    --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
+
     --diary-danger: #f0556b;
+    --diary-shadow: 0 20px 55px rgba(2, 12, 10, 0.55);
+    --diary-shadow-sm: 0 8px 24px rgba(2, 12, 10, 0.35);
 }
 
 body {
     min-height: 100vh;
-    background-color: var(--diary-bg);
     color: var(--diary-text);
+    background:
+        radial-gradient(900px 520px at 10% -10%, rgba(52, 211, 153, 0.16), transparent 60%),
+        radial-gradient(950px 540px at 100% -5%, rgba(14, 165, 233, 0.18), transparent 58%),
+        radial-gradient(800px 800px at 50% 120%, rgba(34, 211, 238, 0.12), transparent 60%),
+        linear-gradient(160deg, #0c1418 0%, #0a1014 55%);
+    background-attachment: fixed;
+}
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 1.25rem;
+}
+
+.login-card {
+    width: min(28rem, 100%);
+    padding: 2rem;
+    background-color: var(--diary-panel);
+    border: 1px solid var(--diary-border);
+    border-radius: 1.35rem;
+    box-shadow: var(--diary-shadow);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+}
+
+.login-card__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.75rem;
+}
+
+.login-card__logo {
+    font-size: 2rem;
+}
+
+.login-card__title {
+    margin: 0;
+    font-size: 1.55rem;
+    font-weight: 800;
+}
+
+.login-card__subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--diary-muted);
+}
+
+.login-card__alert {
+    border: 0;
+    color: #ffe4e6;
+    background-color: rgba(240, 85, 107, 0.18);
+}
+
+.login-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.login-form__label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--diary-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.login-form__input {
+    border-color: var(--diary-border-strong);
+    color: var(--diary-text);
+    background-color: var(--diary-surface);
+}
+
+.login-form__input:focus {
+    border-color: var(--diary-sonhos);
+    color: var(--diary-text);
+    background-color: var(--diary-surface);
+    box-shadow: 0 0 0 0.2rem var(--diary-sonhos-soft);
+}
+
+.login-form__remember {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--diary-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.login-form__submit {
+    width: 100%;
+    margin-top: 0.4rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -31,8 +150,8 @@ body {
 
 .diary {
     min-height: 100vh;
-    background-color: var(--diary-bg);
-    padding: 2rem 1rem;
+    background: transparent;
+    padding: 2.5rem 1rem;
 }
 
 .diary__container {
@@ -40,29 +159,108 @@ body {
     margin: 0 auto;
     background-color: var(--diary-panel);
     border: 1px solid var(--diary-border);
-    border-radius: 1.25rem;
+    border-radius: 1.5rem;
     padding: 2rem;
+    box-shadow: var(--diary-shadow);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
 }
 
 .diary__header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1.75rem;
 }
 
+.diary-alert {
+    margin: -0.5rem 0 1.5rem;
+    border: 0;
+    border-radius: 0.85rem;
+    box-shadow: var(--diary-shadow-sm);
+}
+
+.diary-alert.alert-success {
+    color: #d1fae5;
+    background-color: rgba(16, 185, 129, 0.18);
+}
+
+.diary-alert.alert-danger {
+    color: #ffe4e6;
+    background-color: rgba(240, 85, 107, 0.18);
+}
+
+.diary-alert .btn-close {
+    filter: invert(1) grayscale(1);
+}
+
+.diary-loading {
+    min-height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    color: var(--diary-muted);
+    font-weight: 600;
+}
+
+.diary-loading .spinner-border {
+    color: var(--diary-sonhos);
+}
+
 .diary__title {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.7rem;
+}
+
+.diary-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.diary-user__name {
+    color: var(--diary-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.diary-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border: 1px solid var(--diary-border-strong);
+    border-radius: 0.7rem;
+    padding: 0.5rem 0.8rem;
+    color: var(--diary-text);
+    background: transparent;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.diary-logout-btn:hover:not(:disabled) {
+    border-color: var(--diary-danger);
+    background-color: rgba(240, 85, 107, 0.12);
+}
+
+.diary-logout-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .diary__logo {
-    color: var(--diary-green);
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.6rem;
+    line-height: 1;
 }
 
 .diary__layout {
@@ -87,11 +285,17 @@ body {
     grid-area: entries;
 }
 
+/* Sem o editor aberto, calendário e entradas ficam lado a lado. */
+.diary__layout--no-editor {
+    grid-template-columns: 360px minmax(0, 1fr);
+    grid-template-areas: "calendar entries";
+}
+
 .diary-panel {
     background-color: var(--diary-panel-alt);
     border: 1px solid var(--diary-border);
-    border-radius: 1rem;
-    padding: 1.25rem;
+    border-radius: 1.1rem;
+    padding: 1.35rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -104,9 +308,9 @@ body {
     color: var(--diary-muted);
     font-size: 1.4rem;
     line-height: 1;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.5rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 0.6rem;
     cursor: pointer;
     transition: background-color 0.15s, color 0.15s;
 }
@@ -117,34 +321,67 @@ body {
 }
 
 .diary-save-btn {
-    background-color: var(--diary-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    background: var(--grad-terapia);
     color: #fff;
     border: none;
-    border-radius: 0.65rem;
+    border-radius: 0.75rem;
     padding: 0.7rem 1.4rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.15s;
+    box-shadow: var(--diary-shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
 }
 
 .diary-save-btn:hover:not(:disabled) {
-    background-color: var(--diary-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px var(--diary-terapia-glow);
 }
 
 .diary-save-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-.diary__new {
-    white-space: nowrap;
+/* Variações por categoria */
+.diary-save-btn--sonhos {
+    background: var(--grad-sonhos);
+}
+
+.diary-save-btn--sonhos:hover:not(:disabled) {
+    box-shadow: 0 12px 28px var(--diary-sonhos-glow);
+}
+
+.diary-back-btn {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
+    border: 1px solid var(--diary-border);
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.diary-back-btn:hover {
+    background-color: var(--diary-border-strong);
+    border-color: var(--diary-border-strong);
+}
+
+.diary-back-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .diary-delete-btn {
     background: transparent;
     border: 1px solid var(--diary-border);
     color: var(--diary-danger);
-    border-radius: 0.6rem;
+    border-radius: 0.7rem;
     width: 2.6rem;
     height: 2.6rem;
     font-size: 1.1rem;
@@ -174,7 +411,8 @@ body {
 }
 
 .diary-calendar__title {
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .diary-calendar__grid {
@@ -189,7 +427,10 @@ body {
 
 .diary-calendar__weekday {
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     color: var(--diary-faint);
     padding: 0.25rem 0;
 }
@@ -206,7 +447,7 @@ body {
     color: var(--diary-text);
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
+    transition: background-color 0.15s, color 0.15s, transform 0.15s;
 }
 
 .diary-calendar__day:hover {
@@ -218,27 +459,33 @@ body {
 }
 
 .diary-calendar__day--today {
-    color: var(--diary-green);
+    color: #a78bfa;
     font-weight: 700;
 }
 
-.diary-calendar__day--selected {
-    background-color: var(--diary-green);
+/* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
+   categoria correspondente. "mixed" = data com Terapia e Sonhos. */
+.diary-calendar__day--fill-terapia {
+    background: var(--grad-terapia);
     color: #fff;
     font-weight: 700;
 }
 
-.diary-calendar__day--selected:hover {
-    background-color: var(--diary-green-dark);
+.diary-calendar__day--fill-sonhos {
+    background: var(--grad-sonhos);
+    color: #fff;
+    font-weight: 700;
 }
 
-.diary-calendar__dot {
-    position: absolute;
-    bottom: 0.3rem;
-    width: 0.3rem;
-    height: 0.3rem;
-    border-radius: 50%;
-    background-color: var(--diary-green);
+.diary-calendar__day--fill-mixed {
+    background: var(--grad-brand);
+    color: #fff;
+    font-weight: 700;
+}
+
+/* Anel branco interno destaca o dia atualmente selecionado. */
+.diary-calendar__day--selected {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
 /* ------------------------------------------------------------------ */
@@ -247,7 +494,7 @@ body {
 
 .diary-entries__title {
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 1rem;
 }
 
@@ -267,25 +514,46 @@ body {
 
 .diary-entry-card {
     width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    background-color: var(--diary-panel);
+    background-color: var(--diary-surface);
     border: 1px solid var(--diary-border);
-    border-radius: 0.75rem;
-    padding: 0.7rem 0.85rem;
-    cursor: pointer;
-    text-align: left;
-    transition: border-color 0.15s, background-color 0.15s;
+    border-radius: 0.85rem;
+    transition: border-color 0.15s, background-color 0.15s, transform 0.15s;
+    overflow: hidden;
 }
 
 .diary-entry-card:hover {
-    border-color: var(--diary-green);
+    border-color: var(--diary-border-strong);
+    transform: translateY(-1px);
 }
 
 .diary-entry-card--selected {
-    border-color: var(--diary-green);
-    background-color: var(--diary-green-soft);
+    border-color: var(--diary-terapia);
+    background-color: var(--diary-terapia-soft);
+}
+
+.diary-entry-card__top {
+    display: flex;
+    align-items: stretch;
+}
+
+.diary-entry-card__summary {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0.85rem;
+    color: var(--diary-text);
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.diary-entry-card__summary:focus-visible,
+.diary-entry-card__edit:focus-visible {
+    outline: 2px solid var(--diary-sonhos);
+    outline-offset: -2px;
 }
 
 .diary-entry-card__date {
@@ -297,9 +565,17 @@ body {
 }
 
 .diary-entry-card__day {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     line-height: 1;
+}
+
+.diary-entry-card__day--terapia {
+    color: var(--diary-terapia);
+}
+
+.diary-entry-card__day--sonhos {
+    color: var(--diary-sonhos);
 }
 
 .diary-entry-card__month {
@@ -317,6 +593,7 @@ body {
 
 .diary-entry-card__weekday {
     font-weight: 600;
+    color: var(--diary-muted);
 }
 
 .diary-entry-card__long {
@@ -324,26 +601,135 @@ body {
     color: var(--diary-muted);
 }
 
-.diary-entry-card__chevron {
-    color: var(--diary-faint);
-    font-size: 1.2rem;
+.diary-entry-card__badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: #fff;
+}
+
+.diary-entry-card__badge--terapia {
+    background: var(--grad-terapia);
+}
+
+.diary-entry-card__badge--sonhos {
+    background: var(--grad-sonhos);
+}
+
+.diary-entry-card__edit {
+    align-self: center;
+    margin-right: 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 0.65rem;
+    padding: 0.45rem 0.7rem;
+    background: transparent;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.diary-entry-card__edit--terapia {
+    color: var(--diary-terapia);
+}
+
+.diary-entry-card__edit--sonhos {
+    color: var(--diary-sonhos);
+}
+
+.diary-entry-card__edit:hover {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
+}
+
+.diary-entry-card__description {
+    padding: 0.9rem 1rem 1rem;
+    border-top: 1px solid var(--diary-border);
+    color: var(--diary-text);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Filtros de categoria ("Registros") */
+.diary-categories {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.1rem;
+}
+
+.diary-category-chip {
+    border: 1px solid var(--diary-border-strong);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.45rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.diary-category-chip--terapia {
+    color: var(--diary-terapia);
+}
+
+.diary-category-chip--terapia:hover,
+.diary-category-chip--terapia.diary-category-chip--active {
+    background: var(--grad-terapia);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px var(--diary-terapia-glow);
+}
+
+.diary-category-chip--sonhos {
+    color: var(--diary-sonhos);
+}
+
+.diary-category-chip--sonhos:hover,
+.diary-category-chip--sonhos.diary-category-chip--active {
+    background: var(--grad-sonhos);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px var(--diary-sonhos-glow);
+}
+
+.diary-category-clear {
+    background: transparent;
+    border: none;
+    color: var(--diary-muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.6rem;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.diary-category-clear:hover {
+    background-color: var(--diary-border);
+    color: var(--diary-text);
 }
 
 .diary-entries__toggle {
     width: 100%;
     margin-top: 1rem;
     background: transparent;
-    border: 1px solid var(--diary-border);
-    border-radius: 0.75rem;
-    color: var(--diary-green);
+    border: 1px solid var(--diary-border-strong);
+    border-radius: 0.85rem;
+    color: var(--diary-text);
     padding: 0.7rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.15s;
+    transition: background-color 0.15s, border-color 0.15s;
 }
 
 .diary-entries__toggle:hover {
-    background-color: var(--diary-green-soft);
+    background-color: var(--diary-surface);
+    border-color: var(--diary-border-strong);
 }
 
 /* ------------------------------------------------------------------ */
@@ -364,20 +750,17 @@ body {
 }
 
 .diary-main__icon {
-    background-color: var(--diary-green-soft);
-    color: var(--diary-green);
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
+    line-height: 1;
 }
 
 .diary-main__date {
     font-size: 1.4rem;
-    font-weight: 700;
+    font-weight: 800;
+    letter-spacing: -0.01em;
     margin: 0;
 }
 
@@ -388,15 +771,34 @@ body {
 
 .diary-main__subtitle {
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.diary-main__subtitle::before {
+    content: "";
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.diary-main__subtitle--terapia {
+    color: var(--diary-terapia);
+}
+
+.diary-main__subtitle--sonhos {
+    color: var(--diary-sonhos);
 }
 
 .diary-editor {
     position: relative;
     border: 1px solid var(--diary-border);
-    border-radius: 0.85rem;
-    background-color: var(--diary-panel);
+    border-radius: 0.95rem;
+    background-color: var(--diary-surface);
 }
 
 .diary-editor__toolbar {
@@ -405,8 +807,8 @@ body {
     gap: 0.35rem;
     padding: 0.6rem 0.75rem;
     border-bottom: 1px solid var(--diary-border);
-    border-top-left-radius: 0.85rem;
-    border-top-right-radius: 0.85rem;
+    border-top-left-radius: 0.95rem;
+    border-top-right-radius: 0.95rem;
 }
 
 .diary-tool {
@@ -449,12 +851,13 @@ body {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 0.15rem;
-    background-color: var(--diary-panel-alt);
-    border: 1px solid var(--diary-border);
+    background-color: #111d1e;
+    border: 1px solid var(--diary-border-strong);
     border-radius: 0.6rem;
     padding: 0.5rem;
     max-width: 18rem;
     box-sizing: border-box;
+    box-shadow: var(--diary-shadow-sm);
 }
 
 .diary-emoji__item {
@@ -497,6 +900,7 @@ body {
 .diary-main__actions {
     display: flex;
     justify-content: flex-end;
+    gap: 0.75rem;
     margin-top: 1.25rem;
 }
 
@@ -511,7 +915,7 @@ body {
 
     .diary__container {
         padding: 1.25rem;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
     }
 
     .diary__layout {
@@ -519,6 +923,13 @@ body {
         grid-template-areas:
             "calendar"
             "content"
+            "entries";
+    }
+
+    .diary__layout--no-editor {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "calendar"
             "entries";
     }
 
@@ -535,23 +946,162 @@ body {
     }
 
     .diary__title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
 
-    .diary-main__actions .diary-save-btn,
-    .diary__new {
+    .diary-main__actions .diary-save-btn {
         padding: 0.65rem 1rem;
     }
 }
 
 @media (max-width: 575px) {
+    .diary-user__name {
+        display: none;
+    }
+
+    .diary-entry-card__top {
+        align-items: center;
+    }
+
+    .diary-entry-card__summary {
+        gap: 0.6rem;
+        padding-right: 0.5rem;
+    }
+
+    .diary-entry-card__badge {
+        display: none;
+    }
+
     .diary-main__actions {
         justify-content: stretch;
     }
 
-    .diary-save-btn {
+    .diary-main__actions .diary-save-btn {
         width: 100%;
         justify-content: center;
         white-space: nowrap;
     }
+
+    .diary-main__actions .diary-back-btn {
+        white-space: nowrap;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Modal de seleção de categoria                                     */
+/* ------------------------------------------------------------------ */
+
+.diary-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(5, 8, 18, 0.7);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.diary-modal__card {
+    width: min(26rem, 100%);
+    background-color: #0f1a1c;
+    border: 1px solid var(--diary-border-strong);
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    box-shadow: var(--diary-shadow);
+}
+
+.diary-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.4rem;
+}
+
+.diary-modal__title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.diary-modal__options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+.diary-modal__option {
+    border: none;
+    border-radius: 0.9rem;
+    padding: 1.4rem 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: var(--diary-shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.diary-modal__option:hover {
+    transform: translateY(-2px);
+}
+
+.diary-modal__option--terapia {
+    background: var(--grad-terapia);
+}
+
+.diary-modal__option--terapia:hover {
+    box-shadow: 0 14px 30px var(--diary-terapia-glow);
+}
+
+.diary-modal__option--sonhos {
+    background: var(--grad-sonhos);
+}
+
+.diary-modal__option--sonhos:hover {
+    box-shadow: 0 14px 30px var(--diary-sonhos-glow);
+}
+
+/* Confirmação (ex.: exclusão de registro) */
+.diary-modal__text {
+    color: var(--diary-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 1.6rem;
+}
+
+.diary-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.diary-modal__confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1.4rem;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: var(--diary-danger);
+    box-shadow: var(--diary-shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.diary-modal__confirm:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(240, 85, 107, 0.35);
+}
+
+.diary-modal__confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
 }

@@ -1,5 +1,6 @@
 import RichTextEditor from './RichTextEditor';
 import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
+import { CATEGORIES } from '../utils/categories';
 
 /** Limite máximo de caracteres do conteúdo de uma entrada. */
 const MAX_LENGTH = 5000;
@@ -7,36 +8,44 @@ const MAX_LENGTH = 5000;
 /**
  * Painel principal de edição da entrada do dia.
  *
- * Mostra a data selecionada, permite escrever os acontecimentos com
- * formatação básica, exibe a contagem de caracteres e oferece as ações
- * de salvar e excluir a entrada.
+ * Mostra a data e a categoria selecionadas, permite escrever os
+ * acontecimentos com formatação básica, exibe a contagem de caracteres e
+ * oferece as ações de salvar e excluir a entrada.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
+ * @param {string} props.category - Categoria da entrada ("terapia" ou "sonhos").
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
+ * @param {boolean} props.deleting - Indica se a exclusão está em curso.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
+ * @param {Function} props.onBack - Callback para fechar o editor.
  * @returns {JSX.Element} Componente do editor de entrada.
  */
 export default function EntryEditor({
     selectedDate,
+    category,
     content,
     length,
     canDelete,
     saving,
+    deleting,
     onChange,
     onSave,
     onDelete,
+    onBack,
 }) {
+    const categoryInfo = CATEGORIES[category];
+
     return (
         <div className="diary-panel diary-main">
             <div className="diary-main__header">
                 <div className="diary-main__heading">
-                    <span className="diary-main__icon">📅</span>
+                    <span className={`diary-main__icon diary-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
                     <div>
                         <h2 className="diary-main__date">{formatLongDate(selectedDate)}</h2>
                         <p className="diary-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
@@ -46,14 +55,18 @@ export default function EntryEditor({
                     type="button"
                     className="diary-delete-btn"
                     onClick={onDelete}
-                    disabled={!canDelete}
+                    disabled={!canDelete || saving || deleting}
                     aria-label="Excluir entrada"
                 >
-                    🗑
+                    {deleting ? (
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                    ) : '🗑'}
                 </button>
             </div>
 
-            <h3 className="diary-main__subtitle">Acontecimentos do dia</h3>
+            <h3 className={`diary-main__subtitle diary-main__subtitle--${categoryInfo?.theme || 'terapia'}`}>
+                {categoryInfo?.label || 'Acontecimentos do dia'}
+            </h3>
 
             <RichTextEditor
                 value={content}
@@ -68,10 +81,21 @@ export default function EntryEditor({
             <div className="diary-main__actions">
                 <button
                     type="button"
-                    className="diary-save-btn"
-                    onClick={onSave}
-                    disabled={saving || length > MAX_LENGTH}
+                    className="diary-back-btn"
+                    onClick={onBack}
+                    disabled={saving || deleting}
                 >
+                    &larr; Voltar
+                </button>
+                <button
+                    type="button"
+                    className={`diary-save-btn diary-save-btn--${categoryInfo?.theme || 'terapia'}`}
+                    onClick={onSave}
+                    disabled={saving || deleting || length > MAX_LENGTH}
+                >
+                    {saving && (
+                        <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                    )}
                     {saving ? 'Salvando...' : 'Salvar registro'}
                 </button>
             </div>

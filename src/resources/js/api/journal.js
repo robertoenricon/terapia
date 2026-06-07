@@ -17,6 +17,7 @@ function jsonHeaders() {
     return {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
     };
 }
 
@@ -26,7 +27,10 @@ function jsonHeaders() {
  * @returns {Promise<Array>} Lista de entradas registradas.
  */
 export async function fetchEntries() {
-    const response = await fetch(BASE_URL, { headers: jsonHeaders() });
+    const response = await fetch(BASE_URL, {
+        credentials: 'same-origin',
+        headers: jsonHeaders(),
+    });
     if (!response.ok) {
         throw new Error('Não foi possível carregar as entradas.');
     }
@@ -34,17 +38,19 @@ export async function fetchEntries() {
 }
 
 /**
- * Cria ou atualiza a entrada de uma data.
+ * Cria ou atualiza a entrada de uma data e categoria.
  *
  * @param {string} entryDate - Data no formato "YYYY-MM-DD".
  * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
+ * @param {string} category - Categoria da entrada ("terapia" ou "sonhos").
  * @returns {Promise<Object>} Entrada salva.
  */
-export async function saveEntry(entryDate, content) {
+export async function saveEntry(entryDate, content, category) {
     const response = await fetch(BASE_URL, {
         method: 'POST',
+        credentials: 'same-origin',
         headers: jsonHeaders(),
-        body: JSON.stringify({ entry_date: entryDate, content }),
+        body: JSON.stringify({ entry_date: entryDate, category, content }),
     });
     if (!response.ok) {
         throw new Error('Não foi possível salvar a entrada.');
@@ -61,6 +67,7 @@ export async function saveEntry(entryDate, content) {
 export async function deleteEntry(id) {
     const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'DELETE',
+        credentials: 'same-origin',
         headers: jsonHeaders(),
     });
     if (!response.ok) {
