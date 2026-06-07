@@ -16,14 +16,14 @@ import {
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.viewDate - Mês atualmente exibido.
  * @param {Date|null} props.selectedDate - Data selecionada pelo usuário.
- * @param {Object} props.entryThemes - Mapa "YYYY-MM-DD" → tema da entrada.
+ * @param {Object} props.entryCategories - Mapa "YYYY-MM-DD" → lista de categorias com registro.
  * @param {string|null} props.activeCategory - Categoria ativa (cor do dia selecionado sem entrada).
  * @param {Function} props.onPrev - Callback para o mês anterior.
  * @param {Function} props.onNext - Callback para o próximo mês.
  * @param {Function} props.onSelect - Callback ao selecionar um dia.
  * @returns {JSX.Element} Componente do calendário.
  */
-export default function Calendar({ viewDate, selectedDate, entryThemes, activeCategory, onPrev, onNext, onSelect }) {
+export default function Calendar({ viewDate, selectedDate, entryCategories, activeCategory, onPrev, onNext, onSelect }) {
     const days = buildCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
     const today = new Date();
 
@@ -52,14 +52,18 @@ export default function Calendar({ viewDate, selectedDate, entryThemes, activeCa
                     const key = toDateKey(date);
                     const isSelected = selectedDate && isSameDay(date, selectedDate);
                     const isToday = isSameDay(date, today);
-                    const theme = entryThemes[key];
+                    const categories = entryCategories[key] || [];
 
-                    // Cor de preenchimento: tema da entrada; se o dia selecionado
-                    // não tiver entrada, usa a categoria ativa.
+                    // Dias com várias categorias mostram um ponto por registro;
+                    // os demais são preenchidos com a cor da categoria.
+                    const hasDots = categories.length > 1;
+
+                    // Cor de preenchimento: única categoria do dia; se o dia
+                    // selecionado não tiver entrada, usa a categoria ativa.
                     let fillTheme = null;
-                    if (theme) {
-                        fillTheme = theme;
-                    } else if (isSelected) {
+                    if (!hasDots && categories.length === 1) {
+                        fillTheme = categories[0];
+                    } else if (categories.length === 0 && isSelected) {
                         fillTheme = activeCategory || 'terapia';
                     }
 
@@ -79,6 +83,16 @@ export default function Calendar({ viewDate, selectedDate, entryThemes, activeCa
                             onClick={() => onSelect(date)}
                         >
                             {date.getDate()}
+                            {hasDots && (
+                                <span className="semear-calendar__dots">
+                                    {categories.map((category) => (
+                                        <span
+                                            key={category}
+                                            className={`semear-calendar__dot semear-calendar__dot--${category}`}
+                                        />
+                                    ))}
+                                </span>
+                            )}
                         </button>
                     );
                 })}

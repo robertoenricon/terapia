@@ -8,6 +8,12 @@ import BootstrapAlert from './BootstrapAlert';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
+import { CATEGORY_LIST } from '../utils/categories';
+
+/** Índice de ordenação das categorias (cor estável dos pontos do calendário). */
+const CATEGORY_ORDER = Object.fromEntries(
+    CATEGORY_LIST.map((category, index) => [category.value, index]),
+);
 
 /**
  * Tela principal do Semear.
@@ -62,21 +68,26 @@ export default function Semear({ userName }) {
     );
 
     /**
-     * Mapa "YYYY-MM-DD" → tema da entrada ("terapia", "sonhos" ou "mixed"
-     * quando a data tem as duas categorias). Usado para preencher os dias do
-     * calendário com a cor correspondente.
+     * Mapa "YYYY-MM-DD" → lista de categorias com registro naquela data
+     * (ordenada para manter a cor dos pontos estável). Dias com uma única
+     * categoria são preenchidos com a cor dela; dias com duas ou mais exibem
+     * um ponto por categoria abaixo do número.
      */
-    const entryThemes = useMemo(() => {
-        const themes = {};
+    const entryCategories = useMemo(() => {
+        const map = {};
         filteredEntries.forEach((entry) => {
             const key = entry.entry_date.slice(0, 10);
-            if (!themes[key]) {
-                themes[key] = entry.category;
-            } else if (themes[key] !== entry.category) {
-                themes[key] = 'mixed';
+            if (!map[key]) {
+                map[key] = [];
+            }
+            if (!map[key].includes(entry.category)) {
+                map[key].push(entry.category);
             }
         });
-        return themes;
+        Object.values(map).forEach((categories) => {
+            categories.sort((a, b) => CATEGORY_ORDER[a] - CATEGORY_ORDER[b]);
+        });
+        return map;
     }, [filteredEntries]);
 
     /** Entrada correspondente à data e categoria selecionadas, se existir. */
@@ -325,7 +336,7 @@ export default function Semear({ userName }) {
                             <Calendar
                                 viewDate={viewDate}
                                 selectedDate={selectedDate}
-                                entryThemes={entryThemes}
+                                entryCategories={entryCategories}
                                 activeCategory={activeCategory}
                                 onPrev={() => changeMonth(-1)}
                                 onNext={() => changeMonth(1)}

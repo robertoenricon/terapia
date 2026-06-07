@@ -555,8 +555,9 @@ body {
     font-weight: 700;
 }
 
-/* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
-   categoria correspondente. "mixed" = data com Terapia e Sonhos. */
+/* Dias com uma única categoria (e o dia selecionado) ficam preenchidos na
+   cor da categoria correspondente. Dias com mais de uma categoria usam os
+   pontos coloridos (.semear-calendar__dots) em vez do preenchimento. */
 .semear-calendar__day--fill-terapia {
     background: var(--grad-terapia);
     color: #fff;
@@ -575,15 +576,40 @@ body {
     font-weight: 700;
 }
 
-.semear-calendar__day--fill-mixed {
-    background: var(--grad-brand);
-    color: #fff;
-    font-weight: 700;
-}
-
 /* Anel branco interno destaca o dia atualmente selecionado. */
 .semear-calendar__day--selected {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+/* Dias com mais de uma categoria mostram um ponto por registro, abaixo do
+   número, cada um na cor da sua categoria (em vez do preenchimento misto). */
+.semear-calendar__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.28rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.16rem;
+    pointer-events: none;
+}
+
+.semear-calendar__dot {
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 50%;
+}
+
+.semear-calendar__dot--terapia {
+    background: var(--semear-terapia);
+}
+
+.semear-calendar__dot--sonhos {
+    background: var(--semear-sonhos);
+}
+
+.semear-calendar__dot--evento {
+    background: var(--semear-evento);
 }
 
 /* ------------------------------------------------------------------ */
