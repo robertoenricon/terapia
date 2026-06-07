@@ -5,57 +5,29 @@ namespace Tests\Feature;
 use App\Models\JournalEntry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class JournalEntryTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_creates_a_new_entry(): void
+    public function test_it_updates_an_entry_whose_date_contains_a_time(): void
     {
         $user = User::factory()->create();
+
+        DB::table('journal_entries')->insert([
+            'user_id' => $user->id,
+            'entry_date' => '2026-06-17 00:00:00',
+            'category' => 'sonhos',
+            'content' => 'Conteúdo antigo',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $response = $this->actingAs($user)->postJson('/api/journal-entries', [
             'entry_date' => '2026-06-17',
-            'category' => 'evento',
-            'content' => 'ProcessMind - Dia 01',
-        ]);
-
-        $response
-            ->assertCreated()
-            ->assertJsonPath('content', 'ProcessMind - Dia 01');
-
-        $this->assertDatabaseCount('journal_entries', 1);
-    }
-
-    public function test_it_allows_multiple_entries_on_the_same_day_and_category(): void
-    {
-        $user = User::factory()->create();
-
-        $this->actingAs($user)->postJson('/api/journal-entries', [
-            'entry_date' => '2026-06-17',
-            'category' => 'evento',
-            'content' => 'ProcessMind - Dia 01',
-        ])->assertCreated();
-
-        $this->actingAs($user)->postJson('/api/journal-entries', [
-            'entry_date' => '2026-06-17',
-            'category' => 'evento',
-            'content' => 'ProcessMind - Dia 02',
-        ])->assertCreated();
-
-        $this->assertDatabaseCount('journal_entries', 2);
-    }
-
-    public function test_it_updates_an_entry_by_id(): void
-    {
-        $user = User::factory()->create();
-        $entry = JournalEntry::factory()->for($user)->create([
             'category' => 'sonhos',
-            'content' => 'Conteúdo antigo',
-        ]);
-
-        $response = $this->actingAs($user)->putJson("/api/journal-entries/{$entry->id}", [
             'content' => 'Conteúdo alterado',
         ]);
 
@@ -65,27 +37,9 @@ class JournalEntryTest extends TestCase
 
         $this->assertDatabaseCount('journal_entries', 1);
         $this->assertDatabaseHas('journal_entries', [
-            'id' => $entry->id,
+            'user_id' => $user->id,
+            'category' => 'sonhos',
             'content' => 'Conteúdo alterado',
-        ]);
-    }
-
-    public function test_user_cannot_update_another_users_entry(): void
-    {
-        $user = User::factory()->create();
-        $otherEntry = JournalEntry::factory()
-            ->for(User::factory())
-            ->create(['category' => 'terapia', 'content' => 'Original']);
-
-        $this->actingAs($user)
-            ->putJson("/api/journal-entries/{$otherEntry->id}", [
-                'content' => 'Invasão',
-            ])
-            ->assertNotFound();
-
-        $this->assertDatabaseHas('journal_entries', [
-            'id' => $otherEntry->id,
-            'content' => 'Original',
         ]);
     }
 

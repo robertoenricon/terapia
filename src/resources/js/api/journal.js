@@ -38,42 +38,19 @@ export async function fetchEntries() {
 }
 
 /**
- * Cria uma nova entrada para uma data e categoria.
- *
- * Permite vários registros na mesma data e categoria (ex.: dois eventos
- * no mesmo dia); cada chamada cria um registro independente.
+ * Cria ou atualiza a entrada de uma data e categoria.
  *
  * @param {string} entryDate - Data no formato "YYYY-MM-DD".
  * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
- * @param {string} category - Categoria da entrada ("terapia", "sonhos" ou "evento").
- * @returns {Promise<Object>} Entrada criada.
+ * @param {string} category - Categoria da entrada ("terapia" ou "sonhos").
+ * @returns {Promise<Object>} Entrada salva.
  */
-export async function createEntry(entryDate, content, category) {
+export async function saveEntry(entryDate, content, category) {
     const response = await fetch(BASE_URL, {
         method: 'POST',
         credentials: 'same-origin',
         headers: jsonHeaders(),
         body: JSON.stringify({ entry_date: entryDate, category, content }),
-    });
-    if (!response.ok) {
-        throw new Error('Não foi possível salvar a entrada.');
-    }
-    return response.json();
-}
-
-/**
- * Atualiza o conteúdo de uma entrada existente.
- *
- * @param {number} id - Identificador da entrada.
- * @param {string} content - Novo conteúdo (HTML) da entrada.
- * @returns {Promise<Object>} Entrada atualizada.
- */
-export async function updateEntry(id, content) {
-    const response = await fetch(`${BASE_URL}/${id}`, {
-        method: 'PUT',
-        credentials: 'same-origin',
-        headers: jsonHeaders(),
-        body: JSON.stringify({ content }),
     });
     if (!response.ok) {
         throw new Error('Não foi possível salvar a entrada.');
