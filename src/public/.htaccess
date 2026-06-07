@@ -3,6 +3,11 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    # Tipo MIME correto para o manifesto do PWA (evita "application/octet-stream").
+    <IfModule mod_mime.c>
+        AddType application/manifest+json .webmanifest
+    </IfModule>
+
     RewriteEngine On
 
     # Força HTTPS em produção (redireciona qualquer acesso http para https).

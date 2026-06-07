@@ -14,6 +14,11 @@
         <!-- Favicon: emoji 🌱 desenhado via SVG inline (sem arquivo de imagem) -->
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%B1</text></svg>">
 
+        <!-- PWA: manifesto e icone do app (instalacao na tela inicial) -->
+        <link rel="manifest" href="/manifest.webmanifest">
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+        <meta name="apple-mobile-web-app-title" content="Semear">
+
         <title>{{ config('app.name', 'Terapia') }}</title>
 
         <!-- Estilos e scripts compilados pelo Vite (React + Bootstrap 5) -->
