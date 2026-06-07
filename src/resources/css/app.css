@@ -68,7 +68,13 @@ body {
     min-height: 100vh;
     display: grid;
     place-items: center;
-    padding: 1.25rem;
+    /* Respeita a area segura do dispositivo (notch/barra de status) para o
+       conteudo nao ficar colado no horario/bateria do celular. */
+    padding:
+        max(1.25rem, env(safe-area-inset-top))
+        max(1.25rem, env(safe-area-inset-right))
+        max(1.25rem, env(safe-area-inset-bottom))
+        max(1.25rem, env(safe-area-inset-left));
 }
 
 .login-card {
@@ -208,7 +214,13 @@ body {
 .semear {
     min-height: 100vh;
     background: transparent;
-    padding: 2.5rem 1rem;
+    /* Respeita a area segura do dispositivo (notch/barra de status) para o
+       cabecalho nao ficar colado no horario/bateria do celular. */
+    padding:
+        max(2.5rem, env(safe-area-inset-top))
+        max(1rem, env(safe-area-inset-right))
+        max(2.5rem, env(safe-area-inset-bottom))
+        max(1rem, env(safe-area-inset-left));
 }
 
 .semear__container {
@@ -983,7 +995,11 @@ body {
 
 @media (max-width: 991px) {
     .semear {
-        padding: 1rem 0.5rem;
+        padding:
+            max(1rem, env(safe-area-inset-top))
+            max(0.5rem, env(safe-area-inset-right))
+            max(1rem, env(safe-area-inset-bottom))
+            max(0.5rem, env(safe-area-inset-left));
     }
 
     .semear__container {
