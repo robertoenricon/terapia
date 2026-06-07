@@ -200,8 +200,9 @@ php artisan key:generate
 Edite o `src/.env` e preencha os campos marcados com `ALTERAR`:
 
 - `APP_URL` → o domínio final, com **https** (ex.: `https://terapia.com.br`).
-- `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` → os dados do banco que você vai
-  criar no Passo 3 (`DB_HOST=localhost` na hospedagem compartilhada).
+- `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` → os dados do banco que
+  você vai criar no Passo 3. Na LocalWeb o MySQL é **DBaaS (remoto)**, então o
+  host é algo como `terapia_diario.mysql.dbaas.com.br` (não `localhost`).
 - `ADMIN_NAME`, `ADMIN_PASSWORD` → defina uma **senha forte** antes de semear.
 - `MAIL_*` → dados de SMTP da LocalWeb, caso vá enviar e-mails.
 
@@ -259,24 +260,72 @@ o domínio. Garanta que as extensões usuais do Laravel estejam ativas:
 `bcmath`, `ctype`, `fileinfo`, `json`, `mbstring`, `openssl`, `pdo`,
 `pdo_mysql`, `tokenizer`, `xml`.
 
-### Passo 5 — Enviar os arquivos por FTP
+### Passo 5 — Enviar os arquivos e publicar a pasta pública
 
-**Como enviar o conteúdo de `src/`:**
+A ideia: o código do Laravel fica em `terapia_app/` (**fora** do `public_html`,
+por segurança) e o subdomínio, que aponta para `public_html/diario`, recebe
+apenas o conteúdo de `public/`.
 
-ZIP + Gerenciador de Arquivos do cPanel (recomendada, bem mais rápida):
-o `vendor/` tem milhares de arquivos e o envio um a um por FTP é lento.
-Compacte tudo num único `.zip` e extraia no servidor.
+**5.1. Enviar o app para `terapia_app/`**
 
-1. Na sua máquina, abra a pasta `src/` no **Explorador de Arquivos**. Ative a
+O `vendor/` tem milhares de arquivos e o envio um a um por FTP é lento; por isso
+compacte tudo num `.zip` e extraia no servidor:
+
+1. Na sua máquina, abra a pasta `src/` no **Explorador de Arquivos** e ative a
    exibição de itens ocultos (aba **Exibir → Itens ocultos**) para enxergar o
    `.env`.
-
-2. No FTP, crie e entre em `terapia_app/` (fora do `public_html`).
-   Selecione **tudo de dentro de `src/`** (`app/`, `bootstrap/`, `config/`,
+2. Selecione **tudo de dentro de `src/`** (`app/`, `bootstrap/`, `config/`,
    `database/`, `public/`, `resources/`, `routes/`, `storage/`, `vendor/`,
    `artisan`, `composer.json`, `composer.lock`, `.env`...), **menos** a pasta
-   `node_modules/`.
-   Jogue para dentro de de `terapia_app/`
+   `node_modules/`. Botão direito → **Enviar para → Pasta compactada (zipada)**
+   e renomeie para `deploy.zip`.
+3. No cPanel → **Gerenciador de Arquivos**, crie a pasta `terapia_app/` (fora do
+   `public_html`), entre nela, use **"Carregar"** para subir o `deploy.zip`,
+   depois botão direito → **"Extract"**. Apague o `.zip` ao final.
+
+**5.2. Publicar a pasta pública em `public_html/diario`**
+
+> **Atalho:** se o painel permitir, mude o **document root** do subdomínio de
+> `public_html/diario` para `terapia_app/public`. Aí você **não copia nada** nem
+> edita o `index.php` — pule o restante deste passo.
+
+Caso contrário (mantendo o subdomínio em `public_html/diario`):
+
+1. Copie **todo o conteúdo de `terapia_app/public/`** (a pasta `build/`, o
+   `index.php`, o `.htaccess`, `favicon.ico`, `robots.txt`) para dentro de
+   `public_html/diario/`. Pelo Gerenciador de Arquivos, entre em
+   `terapia_app/public`, selecione tudo e use **"Copiar"** informando o destino
+   `/public_html/diario`.
+2. Edite `public_html/diario/index.php` e troque os caminhos `../` por
+   `../../terapia_app/` (o app está dois níveis acima). O arquivo deve ficar
+   assim:
+
+   ```php
+   <?php
+
+   use Illuminate\Foundation\Application;
+   use Illuminate\Http\Request;
+
+   define('LARAVEL_START', microtime(true));
+
+   // Determine if the application is in maintenance mode...
+   if (file_exists($maintenance = __DIR__.'/../../terapia_app/storage/framework/maintenance.php')) {
+       require $maintenance;
+   }
+
+   // Register the Composer autoloader...
+   require __DIR__.'/../../terapia_app/vendor/autoload.php';
+
+   // Bootstrap Laravel and handle the request...
+   /** @var Application $app */
+   $app = require_once __DIR__.'/../../terapia_app/bootstrap/app.php';
+
+   $app->handleRequest(Request::capture());
+   ```
+
+> **Importante:** só o conteúdo de `public/` pode ficar exposto na web. **Nunca**
+> copie `app/`, `vendor/`, `.env` ou outras pastas do Laravel para
+> `public_html/diario` — elas permanecem em `terapia_app/`.
 
 ### Passo 6 — Permissões de escrita
 
@@ -291,19 +340,12 @@ bootstrap/cache/
 
 ### Passo 7 — HTTPS e segurança
 
-1. Ative o **certificado SSL** do domínio no painel da LocalWeb (AutoSSL/Let's
-   Encrypt).
-2. Force o redirecionamento para https adicionando ao `.htaccess` da pasta
-   pública servida pelo subdomínio (`terapia_app/public/.htaccess` na abordagem
-   recomendada, ou `public_html/diario/.htaccess` na alternativa), logo após
-   `RewriteEngine On`:
-
-   ```apache
-   # Força HTTPS em produção
-   RewriteCond %{HTTPS} off
-   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-   ```
-
+1. Ative o **certificado SSL** do subdomínio no painel da LocalWeb (AutoSSL/Let's
+   Encrypt). **Faça isso antes** de testar, senão o redirecionamento abaixo
+   aponta para um `https://` sem certificado e o navegador bloqueia.
+2. O redirecionamento de http para https **já está incluído** no `.htaccess` do
+   projeto (`public/.htaccess`), então vai junto na cópia do Passo 5 — não
+   precisa editar nada à mão.
 3. Confirme que `APP_DEBUG=false` no `.env` (já vem assim no modelo de
    produção) para não expor detalhes de erro.
 
@@ -332,27 +374,6 @@ npm ci && npm run build
 
 Depois envie por FTP apenas o que mudou — tipicamente `app/`, `resources/`,
 `routes/`, `public/build/` e, se houve atualização de dependências, o
-`vendor/`. Se houver novas migrations, gere o SQL localmente e importe as
-alterações pelo phpMyAdmin (não há `artisan migrate` sem SSH).
-
-### Checklist rápido
-
-- [ ] `.env` de produção preenchido, com `APP_KEY` gerada e `APP_DEBUG=false`.
-- [ ] `composer install --no-dev` e `npm run build` executados localmente.
-- [ ] Banco MySQL criado no painel; estrutura criada via `migrate --seed`
-      (direto na DBaaS) ou importada por phpMyAdmin.
-- [ ] PHP 8.3 selecionado no cPanel.
-- [ ] App em `terapia_app/` (fora de `public_html`); `public/` exposto.
-- [ ] `index.php` ajustado (ou document root apontado para `public`).
-- [ ] `storage/` e `bootstrap/cache/` com permissão de escrita.
-- [ ] SSL ativo e redirecionamento HTTPS no `.htaccess`.
-
-### Problemas comuns
-
-| Sintoma | Causa provável | Solução |
-|---|---|---|
-| Página sem CSS/JS | `public/build` ausente ou em pasta errada | Reenvie `public/build` para a pasta pública e confirme o `manifest.json` |
-| Erro 500 em branco | Permissão de `storage/` ou `.env` ausente | Defina `storage/` como 755 e confirme o envio do `.env` |
-| `ViteManifestNotFoundException` | `npm run build` não foi rodado | Rode o build local e reenvie `public/build` |
-| Erro de conexão com banco | Dados de `DB_*` errados | Confira banco/usuário/senha e `DB_HOST=localhost` |
-| `No application encryption key` | `APP_KEY` vazia | Rode `php artisan key:generate` local e reenvie o `.env` |
+`vendor/`. Se houver novas migrations, rode `php artisan migrate` da sua máquina
+com o `.env` apontando para a DBaaS (mesmo esquema do Passo 3) — não precisa de
+SSH no servidor.
