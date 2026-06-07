@@ -158,8 +158,12 @@ body {
     transition: color 0.15s;
 }
 
+.login-form__toggle {
+    color: var(--diary-terapia);
+}
+
 .login-form__toggle:hover {
-    color: var(--diary-text);
+    color: var(--diary-terapia-dark);
 }
 
 .login-form__toggle:focus-visible {
