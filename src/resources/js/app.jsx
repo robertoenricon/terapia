@@ -11,5 +11,7 @@ import Diary from './components/Diary';
 const container = document.getElementById('app');
 
 if (container) {
-    createRoot(container).render(<Diary />);
+    createRoot(container).render(
+        <Diary userName={container.dataset.userName || 'Usuário'} />,
+    );
 }

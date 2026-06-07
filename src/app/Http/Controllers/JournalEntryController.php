@@ -19,9 +19,12 @@ class JournalEntryController extends Controller
      *
      * @return JsonResponse Coleção de entradas registradas.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $entries = JournalEntry::orderByDesc('entry_date')->get();
+        $entries = $request->user()
+            ->journalEntries()
+            ->orderByDesc('entry_date')
+            ->get();
 
         return response()->json($entries);
     }
@@ -32,9 +35,12 @@ class JournalEntryController extends Controller
      * @param  string $date Data no formato Y-m-d.
      * @return JsonResponse  Entrada encontrada ou objeto nulo.
      */
-    public function showByDate(string $date): JsonResponse
+    public function showByDate(Request $request, string $date): JsonResponse
     {
-        $entry = JournalEntry::whereDate('entry_date', $date)->first();
+        $entry = $request->user()
+            ->journalEntries()
+            ->whereDate('entry_date', $date)
+            ->first();
 
         return response()->json($entry);
     }
@@ -54,13 +60,14 @@ class JournalEntryController extends Controller
             'content' => ['nullable', 'string', 'max:50000'],
         ]);
 
-        $entry = JournalEntry::query()
+        $entry = $request->user()
+            ->journalEntries()
             ->whereDate('entry_date', $data['entry_date'])
             ->where('category', $data['category'])
             ->first();
 
         if ($entry === null) {
-            $entry = new JournalEntry([
+            $entry = $request->user()->journalEntries()->make([
                 'entry_date' => $data['entry_date'],
                 'category' => $data['category'],
             ]);
@@ -78,8 +85,10 @@ class JournalEntryController extends Controller
      * @param  JournalEntry $journalEntry Entrada a ser removida.
      * @return JsonResponse                Resposta vazia de confirmação.
      */
-    public function destroy(JournalEntry $journalEntry): JsonResponse
+    public function destroy(Request $request, JournalEntry $journalEntry): JsonResponse
     {
+        abort_unless($journalEntry->user_id === $request->user()->id, 404);
+
         $journalEntry->delete();
 
         return response()->json(null, 204);

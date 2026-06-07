@@ -105,8 +105,22 @@ php artisan migrate
 
 ### 7. Acesse a aplicação
 
-- Aplicação: http://localhost:8080
+- Login: http://localhost:8080/login
+- Diário: http://localhost:8080/diario
 - MySQL: `localhost:3306` (usuário `terapia`, senha `secret`)
+
+### Credenciais Login
+
+Ao executar `php artisan migrate --seed`, uma conta administrativa é criada
+com os valores definidos no `.env` do Laravel:
+
+```dotenv
+ADMIN_NAME=admin
+ADMIN_PASSWORD=pass
+```
+
+Altere a senha antes de usar a aplicação fora do ambiente local. O login usa
+sessão armazenada no MySQL, e as rotas do diário e da API exigem autenticação.
 
 ---
 

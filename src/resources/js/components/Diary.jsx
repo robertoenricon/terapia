@@ -5,6 +5,7 @@ import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
 import BootstrapAlert from './BootstrapAlert';
 import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
+import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 
 /**
@@ -19,7 +20,7 @@ import { fromDateKey, toDateKey } from '../utils/date';
  *
  * @returns {JSX.Element} Componente do Diário.
  */
-export default function Diary() {
+export default function Diary({ userName }) {
     const [entries, setEntries] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [viewDate, setViewDate] = useState(new Date());
@@ -31,6 +32,7 @@ export default function Diary() {
     const [loadingEntries, setLoadingEntries] = useState(true);
     const [saving, setSaving] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [loggingOut, setLoggingOut] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const [alert, setAlert] = useState(null);
 
@@ -242,6 +244,22 @@ export default function Diary() {
         }
     };
 
+    const handleLogout = async () => {
+        setLoggingOut(true);
+        setAlert(null);
+
+        try {
+            await logout();
+            window.location.assign('/login');
+        } catch (error) {
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
+            setLoggingOut(false);
+        }
+    };
+
     return (
         <div className="diary">
             <div className="diary__container">
@@ -250,6 +268,20 @@ export default function Diary() {
                         <h1 className="diary__title">
                             <span className="diary__logo">🌱</span> Diário
                         </h1>
+                    </div>
+                    <div className="diary-user">
+                        <span className="diary-user__name">{userName}</span>
+                        <button
+                            type="button"
+                            className="diary-logout-btn"
+                            onClick={handleLogout}
+                            disabled={loggingOut}
+                        >
+                            {loggingOut && (
+                                <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                            )}
+                            {loggingOut ? 'Saindo...' : 'Sair'}
+                        </button>
                     </div>
                 </header>
 
