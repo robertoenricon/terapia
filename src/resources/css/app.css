@@ -648,8 +648,14 @@ body {
 }
 
 .semear-entry-card__long {
+    display: block;
+    max-width: 100%;
     font-size: 0.82rem;
     color: var(--semear-muted);
+    /* Mantem a descricao em uma unica linha; o que nao couber vira "...". */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .semear-entry-card__badge {
@@ -934,6 +940,9 @@ body {
     color: var(--semear-text);
     outline: none;
     overflow-y: auto;
+    /* Quebra textos longos sem espacos (ex.: "1111...") em vez de estourar. */
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .semear-editor__area:empty::before {

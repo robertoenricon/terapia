@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
-    formatLongDate,
     fromDateKey,
     isSameDay,
 } from '../utils/date';
@@ -112,7 +111,9 @@ export default function EntryList({
                                         <span className="semear-entry-card__weekday">
                                             {WEEKDAY_NAMES[date.getDay()]}
                                         </span>
-                                        <span className="semear-entry-card__long">{formatLongDate(date)}</span>
+                                        <span className="semear-entry-card__long">
+                                            {getPlainText(entry.content) || 'Sem descrição'}
+                                        </span>
                                     </span>
                                     {category && (
                                         <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
