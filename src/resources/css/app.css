@@ -554,35 +554,46 @@ body {
     font-weight: 700;
 }
 
-/* Dias com entrada (e o dia selecionado) ficam preenchidos na cor da
-   categoria correspondente. "mixed" = data com categorias diferentes. */
-.semear-calendar__day--fill-terapia {
-    background: var(--grad-terapia);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__day-num {
+    line-height: 1;
 }
 
-.semear-calendar__day--fill-sonhos {
-    background: var(--grad-sonhos);
-    color: #fff;
-    font-weight: 700;
+/* Bolinhas abaixo do número do dia: uma para cada registro, na cor da
+   categoria. Vários registros no mesmo dia exibem várias bolinhas. */
+.semear-calendar__dots {
+    position: absolute;
+    bottom: 0.22rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    pointer-events: none;
 }
 
-.semear-calendar__day--fill-evento {
-    background: var(--grad-evento);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--semear-muted);
 }
 
-.semear-calendar__day--fill-mixed {
-    background: var(--grad-brand);
-    color: #fff;
-    font-weight: 700;
+.semear-calendar__dot--terapia {
+    background: var(--semear-terapia);
 }
 
-/* Anel branco interno destaca o dia atualmente selecionado. */
+.semear-calendar__dot--sonhos {
+    background: var(--semear-sonhos);
+}
+
+.semear-calendar__dot--evento {
+    background: var(--semear-evento);
+}
+
+/* Fundo sutil e anel interno destacam o dia atualmente selecionado. */
 .semear-calendar__day--selected {
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
+    background-color: var(--semear-border);
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1209,6 +1220,77 @@ body {
 
 .semear-modal__option--evento:hover {
     box-shadow: 0 14px 30px var(--semear-evento-glow);
+}
+
+/* Lista de registros do dia (modal exibido ao clicar em uma data com
+   registros). Permite escolher qual alterar ou criar um novo. */
+.semear-day-entries {
+    list-style: none;
+    margin: 0 0 0.85rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.semear-day-entry {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem;
+    text-align: left;
+    background: var(--semear-surface);
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.85rem;
+    padding: 0.85rem 1rem;
+    color: var(--semear-text);
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.semear-day-entry:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+}
+
+.semear-day-entry__text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.semear-day-entry__action {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.semear-day-entry--terapia:hover {
+    box-shadow: 0 8px 20px var(--semear-terapia-glow);
+}
+
+.semear-day-entry--terapia .semear-day-entry__action {
+    color: var(--semear-terapia);
+}
+
+.semear-day-entry--sonhos:hover {
+    box-shadow: 0 8px 20px var(--semear-sonhos-glow);
+}
+
+.semear-day-entry--sonhos .semear-day-entry__action {
+    color: var(--semear-sonhos);
+}
+
+.semear-day-entry--evento:hover {
+    box-shadow: 0 8px 20px var(--semear-evento-glow);
+}
+
+.semear-day-entry--evento .semear-day-entry__action {
+    color: var(--semear-evento);
 }
 
 /* Confirmação (ex.: exclusão de registro) */

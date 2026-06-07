@@ -3,9 +3,10 @@ import Calendar from './Calendar';
 import EntryList from './EntryList';
 import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
+import DayEntriesModal from './DayEntriesModal';
 import ConfirmModal from './ConfirmModal';
 import BootstrapAlert from './BootstrapAlert';
-import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
+import { createEntry, deleteEntry, fetchEntries, updateEntry } from '../api/journal';
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 
@@ -17,17 +18,20 @@ import { fromDateKey, toDateKey } from '../utils/date';
  * para carregar, salvar e excluir os registros.
  *
  * O editor só é exibido após o usuário escolher uma data; quando nenhuma
- * categoria está ativa, um modal pergunta entre Terapia e Sonhos.
+ * categoria está ativa, um modal pergunta a categoria. Uma mesma data pode
+ * ter vários registros da mesma categoria (ex.: dois eventos no mesmo dia).
  *
  * @returns {JSX.Element} Componente do Semear.
  */
 export default function Semear({ userName }) {
     const [entries, setEntries] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedEntryId, setSelectedEntryId] = useState(null);
     const [viewDate, setViewDate] = useState(new Date());
     const [activeCategory, setActiveCategory] = useState(null);
     const [pendingDate, setPendingDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [dayModalDate, setDayModalDate] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [content, setContent] = useState('');
     const [length, setLength] = useState(0);
@@ -62,30 +66,28 @@ export default function Semear({ userName }) {
     );
 
     /**
-     * Mapa "YYYY-MM-DD" → tema da entrada ("terapia", "sonhos" ou "mixed"
-     * quando a data tem as duas categorias). Usado para preencher os dias do
-     * calendário com a cor correspondente.
+     * Mapa "YYYY-MM-DD" → lista das categorias dos registros daquele dia.
+     * Cada categoria vira uma bolinha no calendário, permitindo identificar
+     * vários registros no mesmo dia (ex.: dois eventos).
      */
-    const entryThemes = useMemo(() => {
-        const themes = {};
+    const entryMarks = useMemo(() => {
+        const marks = {};
         filteredEntries.forEach((entry) => {
             const key = entry.entry_date.slice(0, 10);
-            if (!themes[key]) {
-                themes[key] = entry.category;
-            } else if (themes[key] !== entry.category) {
-                themes[key] = 'mixed';
+            if (!marks[key]) {
+                marks[key] = [];
             }
+            marks[key].push(entry.category);
         });
-        return themes;
+        return marks;
     }, [filteredEntries]);
 
-    /** Entrada correspondente à data e categoria selecionadas, se existir. */
+    /** Entrada atualmente em edição (nula quando é um novo registro). */
     const selectedEntry = useMemo(
-        () => entries.find(
-            (entry) => entry.entry_date.slice(0, 10) === selectedKey
-                && entry.category === activeCategory,
-        ) || null,
-        [entries, selectedKey, activeCategory],
+        () => (selectedEntryId
+            ? entries.find((entry) => entry.id === selectedEntryId) || null
+            : null),
+        [entries, selectedEntryId],
     );
 
     // Atualiza o conteúdo do editor sempre que a entrada selecionada muda.
@@ -97,15 +99,36 @@ export default function Semear({ userName }) {
     }, [selectedEntry]);
 
     /**
-     * Abre o editor para a data informada na categoria ativa. Se nenhuma
-     * categoria estiver selecionada, guarda a data e abre o modal.
+     * Abre o editor de um novo registro quando a data ainda não tem
+     * registros da categoria; caso já existam, exibe o modal com a lista
+     * para escolher qual alterar ou adicionar um novo.
+     *
+     * @param {Date} date - Data escolhida.
+     * @param {string} category - Categoria ativa.
+     */
+    const openDayOrEditor = (date, category) => {
+        const key = toDateKey(date);
+        const dayEntries = entries.filter(
+            (entry) => entry.entry_date.slice(0, 10) === key && entry.category === category,
+        );
+        if (dayEntries.length === 0) {
+            setSelectedEntryId(null);
+            setSelectedDate(date);
+        } else {
+            setDayModalDate(date);
+        }
+    };
+
+    /**
+     * Trata o clique em uma data do calendário. Se nenhuma categoria
+     * estiver selecionada, guarda a data e abre o modal de categorias.
      *
      * @param {Date} date - Data escolhida.
      */
     const handleSelectDate = (date) => {
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
         if (activeCategory) {
-            setSelectedDate(date);
+            openDayOrEditor(date, activeCategory);
         } else {
             setPendingDate(date);
             setShowModal(true);
@@ -113,17 +136,45 @@ export default function Semear({ userName }) {
     };
 
     /**
-     * Define a categoria escolhida no modal e abre o editor na data pendente.
+     * Define a categoria escolhida no modal e segue para o editor (ou para
+     * a lista de registros, caso a data já tenha registros) na data pendente.
      *
-     * @param {string} category - Categoria selecionada ("terapia" ou "sonhos").
+     * @param {string} category - Categoria selecionada ("terapia", "sonhos" ou "evento").
      */
     const handleChooseCategory = (category) => {
         const date = pendingDate || new Date();
         setActiveCategory(category);
-        setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
         setPendingDate(null);
         setShowModal(false);
+        openDayOrEditor(date, category);
+    };
+
+    /**
+     * Abre o editor para alterar o registro escolhido no modal do dia.
+     *
+     * @param {Object} entry - Registro selecionado para alteração.
+     */
+    const handleEditDayEntry = (entry) => {
+        setSelectedEntryId(entry.id);
+        setSelectedDate(dayModalDate);
+        setDayModalDate(null);
+    };
+
+    /**
+     * Abre o editor de um novo registro a partir do modal do dia.
+     */
+    const handleNewDayEntry = () => {
+        setSelectedEntryId(null);
+        setSelectedDate(dayModalDate);
+        setDayModalDate(null);
+    };
+
+    /**
+     * Fecha o modal de registros do dia sem escolher nenhuma opção.
+     */
+    const handleCloseDayModal = () => {
+        setDayModalDate(null);
     };
 
     /**
@@ -153,6 +204,7 @@ export default function Semear({ userName }) {
 
     const handleCloseEditor = () => {
         setSelectedDate(null);
+        setSelectedEntryId(null);
     };
 
     /**
@@ -163,6 +215,7 @@ export default function Semear({ userName }) {
     const handleEditEntry = (entry) => {
         const date = fromDateKey(entry.entry_date.slice(0, 10));
         setActiveCategory(entry.category);
+        setSelectedEntryId(entry.id);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
     };
@@ -188,18 +241,24 @@ export default function Semear({ userName }) {
     };
 
     /**
-     * Salva (cria ou atualiza) a entrada da data e categoria selecionadas.
+     * Salva o registro em edição: cria um novo quando não há registro
+     * selecionado ou atualiza o conteúdo do registro existente.
      */
     const handleSave = async () => {
-        const isEditing = Boolean(selectedEntry);
+        const isEditing = Boolean(selectedEntryId);
         setSaving(true);
         setAlert(null);
         try {
-            const saved = await saveEntry(selectedKey, content, activeCategory);
+            const saved = isEditing
+                ? await updateEntry(selectedEntryId, content)
+                : await createEntry(selectedKey, content, activeCategory);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
-                return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
+                return [saved, ...others].sort(
+                    (a, b) => b.entry_date.localeCompare(a.entry_date) || b.id - a.id,
+                );
             });
+            setSelectedEntryId(saved.id);
             setAlert({
                 type: 'success',
                 message: isEditing
@@ -250,6 +309,8 @@ export default function Semear({ userName }) {
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
             setContent('');
             setLength(0);
+            setSelectedEntryId(null);
+            setSelectedDate(null);
             setShowDeleteModal(false);
             setAlert({
                 type: 'success',
@@ -325,8 +386,7 @@ export default function Semear({ userName }) {
                             <Calendar
                                 viewDate={viewDate}
                                 selectedDate={selectedDate}
-                                entryThemes={entryThemes}
-                                activeCategory={activeCategory}
+                                entryMarks={entryMarks}
                                 onPrev={() => changeMonth(-1)}
                                 onNext={() => changeMonth(1)}
                                 onSelect={handleSelectDate}
@@ -353,7 +413,7 @@ export default function Semear({ userName }) {
 
                         <EntryList
                             entries={filteredEntries}
-                            selectedDate={selectedDate}
+                            selectedEntryId={selectedEntryId}
                             activeCategory={activeCategory}
                             showAll={showAll}
                             onEdit={handleEditEntry}
@@ -367,6 +427,20 @@ export default function Semear({ userName }) {
 
             {showModal && (
                 <CategoryModal onChoose={handleChooseCategory} onClose={handleCloseModal} />
+            )}
+
+            {dayModalDate && (
+                <DayEntriesModal
+                    date={dayModalDate}
+                    category={activeCategory}
+                    entries={entries.filter(
+                        (entry) => entry.entry_date.slice(0, 10) === toDateKey(dayModalDate)
+                            && entry.category === activeCategory,
+                    )}
+                    onEdit={handleEditDayEntry}
+                    onNew={handleNewDayEntry}
+                    onClose={handleCloseDayModal}
+                />
             )}
 
             {showDeleteModal && (

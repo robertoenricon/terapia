@@ -3,7 +3,6 @@ import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
     fromDateKey,
-    isSameDay,
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
@@ -17,7 +16,7 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
- * @param {Date|null} props.selectedDate - Data atualmente selecionada.
+ * @param {number|null} props.selectedEntryId - Identificador da entrada em edição.
  * @param {string|null} props.activeCategory - Categoria filtrada no momento.
  * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
  * @param {Function} props.onEdit - Callback ao alterar uma entrada.
@@ -28,7 +27,7 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
  */
 export default function EntryList({
     entries,
-    selectedDate,
+    selectedEntryId,
     activeCategory,
     showAll,
     onEdit,
@@ -80,9 +79,7 @@ export default function EntryList({
             <ul className="semear-entries__list">
                 {visible.map((entry) => {
                     const date = fromDateKey(entry.entry_date.slice(0, 10));
-                    const isSelected = selectedDate
-                        && isSameDay(date, selectedDate)
-                        && entry.category === activeCategory;
+                    const isSelected = entry.id === selectedEntryId;
                     const category = CATEGORIES[entry.category];
                     const isExpanded = expandedEntryId === entry.id;
 
