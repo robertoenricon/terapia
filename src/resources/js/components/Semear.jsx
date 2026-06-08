@@ -5,7 +5,7 @@ import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
 import ConfirmModal from './ConfirmModal';
 import BootstrapAlert from './BootstrapAlert';
-import { deleteEntry, fetchEntries, saveEntry } from '../api/journal';
+import { deleteEntry, fetchEntries, saveEntry, togglePin } from '../api/journal';
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 import { CATEGORY_LIST } from '../utils/categories';
@@ -246,6 +246,28 @@ export default function Semear({ userName }) {
     };
 
     /**
+     * Fixa ou desafixa uma entrada diretamente na listagem.
+     *
+     * Atualiza o estado local com a entrada retornada pela API, mantendo as
+     * fixadas em destaque no topo da lista.
+     *
+     * @param {Object} entry - Entrada que terá a fixação alternada.
+     */
+    const handleTogglePin = async (entry) => {
+        try {
+            const updated = await togglePin(entry.id, !entry.pinned);
+            setEntries((current) => current.map(
+                (item) => (item.id === updated.id ? updated : item),
+            ));
+        } catch (error) {
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
+        }
+    };
+
+    /**
      * Abre o modal de confirmação de exclusão, se houver entrada selecionada.
      */
     const handleRequestDelete = () => {
@@ -374,6 +396,7 @@ export default function Semear({ userName }) {
                             activeCategory={activeCategory}
                             showAll={showAll}
                             onEdit={handleEditEntry}
+                            onTogglePin={handleTogglePin}
                             onSelectCategory={handleSelectCategory}
                             onClearCategory={handleClearCategory}
                             onToggleAll={() => setShowAll((open) => !open)}

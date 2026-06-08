@@ -62,6 +62,28 @@ export async function saveEntry(entryDate, content, category, type, title, feedb
 }
 
 /**
+ * Alterna a fixação de uma entrada do Semear.
+ *
+ * Entradas fixadas são destacadas e exibidas no topo da listagem.
+ *
+ * @param {number} id - Identificador da entrada.
+ * @param {boolean} pinned - Novo estado de fixação desejado.
+ * @returns {Promise<Object>} Entrada atualizada.
+ */
+export async function togglePin(id, pinned) {
+    const response = await fetch(`${BASE_URL}/${id}/pin`, {
+        method: 'PATCH',
+        credentials: 'same-origin',
+        headers: jsonHeaders(),
+        body: JSON.stringify({ pinned }),
+    });
+    if (!response.ok) {
+        throw new Error('Não foi possível fixar a entrada.');
+    }
+    return response.json();
+}
+
+/**
  * Remove uma entrada do Semear pelo seu identificador.
  *
  * @param {number} id - Identificador da entrada.

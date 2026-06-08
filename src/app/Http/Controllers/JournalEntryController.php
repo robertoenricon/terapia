@@ -23,6 +23,7 @@ class JournalEntryController extends Controller
     {
         $entries = $request->user()
             ->journalEntries()
+            ->orderByDesc('pinned')
             ->orderByDesc('entry_date')
             ->get();
 
@@ -83,6 +84,29 @@ class JournalEntryController extends Controller
         $entry->save();
 
         return response()->json($entry, $entry->wasRecentlyCreated ? 201 : 200);
+    }
+
+    /**
+     * Alterna o estado de fixação da entrada informada.
+     *
+     * Entradas fixadas são exibidas em destaque no topo da listagem.
+     *
+     * @param  Request      $request      Requisição com o novo estado de fixação.
+     * @param  JournalEntry $journalEntry Entrada cuja fixação será alterada.
+     * @return JsonResponse                Entrada atualizada.
+     */
+    public function togglePin(Request $request, JournalEntry $journalEntry): JsonResponse
+    {
+        abort_unless($journalEntry->user_id === $request->user()->id, 404);
+
+        $data = $request->validate([
+            'pinned' => ['required', 'boolean'],
+        ]);
+
+        $journalEntry->pinned = $data['pinned'];
+        $journalEntry->save();
+
+        return response()->json($journalEntry);
     }
 
     /**

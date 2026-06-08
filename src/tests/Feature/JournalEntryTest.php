@@ -84,6 +84,68 @@ class JournalEntryTest extends TestCase
             ->assertJsonPath('0.user_id', $user->id);
     }
 
+    public function test_it_pins_and_unpins_an_entry(): void
+    {
+        $user = User::factory()->create();
+        $entry = JournalEntry::factory()->for($user)->create([
+            'category' => 'terapia',
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$entry->id}/pin", ['pinned' => true])
+            ->assertOk()
+            ->assertJsonPath('pinned', true);
+
+        $this->assertDatabaseHas('journal_entries', [
+            'id' => $entry->id,
+            'pinned' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$entry->id}/pin", ['pinned' => false])
+            ->assertOk()
+            ->assertJsonPath('pinned', false);
+    }
+
+    public function test_pinned_entries_are_listed_first(): void
+    {
+        $user = User::factory()->create();
+
+        JournalEntry::factory()->for($user)->create([
+            'entry_date' => '2026-06-20',
+            'category' => 'terapia',
+            'pinned' => false,
+        ]);
+        $pinned = JournalEntry::factory()->for($user)->create([
+            'entry_date' => '2026-06-01',
+            'category' => 'sonhos',
+            'pinned' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->getJson('/api/journal-entries')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonPath('0.id', $pinned->id);
+    }
+
+    public function test_user_cannot_pin_another_users_entry(): void
+    {
+        $user = User::factory()->create();
+        $otherEntry = JournalEntry::factory()
+            ->for(User::factory())
+            ->create(['category' => 'terapia']);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$otherEntry->id}/pin", ['pinned' => true])
+            ->assertNotFound();
+
+        $this->assertDatabaseHas('journal_entries', [
+            'id' => $otherEntry->id,
+            'pinned' => false,
+        ]);
+    }
+
     public function test_user_cannot_delete_another_users_entry(): void
     {
         $user = User::factory()->create();
