@@ -370,18 +370,23 @@ sozinho a cada `push` na branch **`main`**:
 O que o workflow faz, na nuvem:
 
 1. Instala o Node 22 e compila os assets (`npm ci && npm run build`).
-2. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
+2. Instala o PHP 8.3 + dependências (Composer) e roda as **migrations** direto
+   no banco de produção (`php artisan migrate --force`).
+3. Gera a pasta pública do subdomínio já com o `index.php` ajustado para
    `../../semear_app/`.
-3. Envia por FTP a aplicação para `semear_app/` e o conteúdo público para
+4. Envia por FTP a aplicação para `semear_app/` e o conteúdo público para
    `public_html/semear/`.
 
 > O `vendor/` **não** é enviado pelo workflow. Faça o upload dele manualmente
 > uma vez (no primeiro deploy) e novamente sempre que mudar o `composer.lock` —
 > a LocalWeb não tem SSH para rodar `composer install` no servidor.
 
-As **migrations não rodam** no deploy (decisão de projeto). Quando houver
-mudança no banco, rode `php artisan migrate` da sua máquina apontando para a
-DBaaS (Passo 3).
+As **migrations rodam automaticamente** no deploy, conectando à DBaaS de
+produção a partir do runner do GitHub Actions (não no servidor de arquivos, que
+não tem SSH). Se a migration falhar, o envio por FTP é abortado, evitando
+publicar código sem o banco atualizado. Para isso, o banco precisa **aceitar
+conexões externas** dos IPs do GitHub Actions e os segredos do banco precisam
+estar configurados (veja abaixo).
 
 ### Configuração (uma vez)
 
@@ -398,6 +403,12 @@ DBaaS (Passo 3).
    | `FTP_SERVER` | host de FTP da LocalWeb (ex.: `ftp.seu-dominio.com.br`) |
    | `FTP_USERNAME` | usuário de FTP |
    | `FTP_PASSWORD` | senha de FTP |
+   | `DB_HOST` | host do banco de produção (DBaaS) |
+   | `DB_DATABASE` | nome do banco de produção |
+   | `DB_USERNAME` | usuário do banco de produção |
+   | `DB_PASSWORD` | senha do banco de produção |
+   | `DB_PORT` | porta do banco (opcional; padrão `3306`) |
+   | `APP_KEY` | chave da aplicação (opcional; usada ao bootar o `artisan`) |
 
 3. Confirme os `server-dir` no `deploy.yml`. O padrão assume que o login de FTP
    cai na **home** do usuário (onde ficam `semear_app/` e `public_html/`). Se o
