@@ -883,12 +883,12 @@ body {
     overflow-wrap: anywhere;
 }
 
-/* Barra de filtros + busca dos registros (mesma linha; quebra no mobile) */
+/* Barra de busca + filtros dos registros (busca acima, categorias abaixo) */
 .semear-entries__toolbar {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: 0.75rem;
-    flex-wrap: wrap;
     margin-bottom: 1.1rem;
 }
 
