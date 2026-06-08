@@ -1265,6 +1265,14 @@ body {
     box-shadow: var(--semear-shadow);
 }
 
+/* Card mais largo para o editor de registro; rola quando o conteúdo
+   (título + texto) ultrapassa a altura da tela. */
+.semear-modal__card--editor {
+    width: min(42rem, 100%);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+}
+
 .semear-modal__header {
     display: flex;
     align-items: center;

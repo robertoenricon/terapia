@@ -6,9 +6,10 @@ import { CATEGORIES } from '../utils/categories';
 const MAX_LENGTH = 5000;
 
 /**
- * Painel principal de edição da entrada do dia.
+ * Modal de edição da entrada do dia.
  *
- * Mostra a data e a categoria selecionadas, permite escrever os
+ * Abre sobre a tela após a escolha da data e da categoria. Mostra a data e a
+ * categoria selecionadas, permite preencher o título e descrever os
  * acontecimentos com formatação básica, exibe a contagem de caracteres e
  * oferece as ações de salvar e excluir a entrada.
  *
@@ -46,7 +47,13 @@ export default function EntryEditor({
     const categoryInfo = CATEGORIES[category];
 
     return (
-        <div className="semear-panel semear-main">
+        <div className="semear-modal" role="presentation">
+            <div
+                className="semear-modal__card semear-modal__card--editor semear-main"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Editor de registro"
+            >
             <div className="semear-main__header">
                 <div className="semear-main__heading">
                     <span className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
@@ -115,6 +122,7 @@ export default function EntryEditor({
                     )}
                     {saving ? 'Salvando...' : 'Salvar registro'}
                 </button>
+            </div>
             </div>
         </div>
     );

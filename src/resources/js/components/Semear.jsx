@@ -32,6 +32,7 @@ export default function Semear({ userName }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [viewDate, setViewDate] = useState(new Date());
     const [activeCategory, setActiveCategory] = useState(null);
+    const [editingCategory, setEditingCategory] = useState(null);
     const [pendingDate, setPendingDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -91,13 +92,13 @@ export default function Semear({ userName }) {
         return map;
     }, [filteredEntries]);
 
-    /** Entrada correspondente à data e categoria selecionadas, se existir. */
+    /** Entrada correspondente à data e categoria em edição, se existir. */
     const selectedEntry = useMemo(
         () => entries.find(
             (entry) => entry.entry_date.slice(0, 10) === selectedKey
-                && entry.category === activeCategory,
+                && entry.category === editingCategory,
         ) || null,
-        [entries, selectedKey, activeCategory],
+        [entries, selectedKey, editingCategory],
     );
 
     // Atualiza o título e o conteúdo do editor sempre que a entrada muda.
@@ -110,14 +111,16 @@ export default function Semear({ userName }) {
     }, [selectedEntry]);
 
     /**
-     * Abre o editor para a data informada na categoria ativa. Se nenhuma
-     * categoria estiver selecionada, guarda a data e abre o modal.
+     * Abre o editor para a data informada. Se um filtro de categoria estiver
+     * ativo, edita diretamente nessa categoria; caso contrário, guarda a data
+     * e abre o modal para o usuário escolher a categoria do registro.
      *
      * @param {Date} date - Data escolhida.
      */
     const handleSelectDate = (date) => {
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
         if (activeCategory) {
+            setEditingCategory(activeCategory);
             setSelectedDate(date);
         } else {
             setPendingDate(date);
@@ -127,12 +130,14 @@ export default function Semear({ userName }) {
 
     /**
      * Define a categoria escolhida no modal e abre o editor na data pendente.
+     * A escolha define apenas a categoria do registro em edição; o filtro da
+     * lista e do calendário permanece como estava.
      *
      * @param {string} category - Categoria selecionada ("terapia" ou "sonhos").
      */
     const handleChooseCategory = (category) => {
         const date = pendingDate || new Date();
-        setActiveCategory(category);
+        setEditingCategory(category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
         setPendingDate(null);
@@ -157,25 +162,25 @@ export default function Semear({ userName }) {
     };
 
     /**
-     * Limpa o filtro de categoria e oculta o editor (volta ao estado inicial).
+     * Limpa o filtro de categoria da lista e do calendário.
      */
     const handleClearCategory = () => {
         setActiveCategory(null);
-        setSelectedDate(null);
     };
 
     const handleCloseEditor = () => {
         setSelectedDate(null);
+        setEditingCategory(null);
     };
 
     /**
-     * Abre no editor a entrada escolhida na lista.
+     * Abre no editor a entrada escolhida na lista, sem alterar o filtro ativo.
      *
      * @param {Object} entry - Entrada que será alterada.
      */
     const handleEditEntry = (entry) => {
         const date = fromDateKey(entry.entry_date.slice(0, 10));
-        setActiveCategory(entry.category);
+        setEditingCategory(entry.category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
     };
@@ -208,11 +213,13 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            const saved = await saveEntry(selectedKey, content, activeCategory, title);
+            const saved = await saveEntry(selectedKey, content, editingCategory, title);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
             });
+            setSelectedDate(null);
+            setEditingCategory(null);
             setAlert({
                 type: 'success',
                 message: isEditing
@@ -265,6 +272,8 @@ export default function Semear({ userName }) {
             setContent('');
             setLength(0);
             setShowDeleteModal(false);
+            setSelectedDate(null);
+            setEditingCategory(null);
             setAlert({
                 type: 'success',
                 message: 'Registro excluído com sucesso.',
@@ -334,38 +343,18 @@ export default function Semear({ userName }) {
                         <span>Carregando entradas...</span>
                     </div>
                 ) : (
-                    <div className={`semear__layout ${selectedDate && activeCategory ? '' : 'semear__layout--no-editor'}`}>
+                    <div className="semear__layout semear__layout--no-editor">
                         <div className="semear-panel semear__calendar">
                             <Calendar
                                 viewDate={viewDate}
                                 selectedDate={selectedDate}
                                 entryCategories={entryCategories}
-                                activeCategory={activeCategory}
+                                activeCategory={editingCategory || activeCategory}
                                 onPrev={() => changeMonth(-1)}
                                 onNext={() => changeMonth(1)}
                                 onSelect={handleSelectDate}
                             />
                         </div>
-
-                        {selectedDate && activeCategory && (
-                            <main className="semear__content">
-                                <EntryEditor
-                                    selectedDate={selectedDate}
-                                    category={activeCategory}
-                                    title={title}
-                                    content={content}
-                                    length={length}
-                                    canDelete={Boolean(selectedEntry)}
-                                    saving={saving}
-                                    deleting={deleting}
-                                    onTitleChange={setTitle}
-                                    onChange={handleChange}
-                                    onSave={handleSave}
-                                    onDelete={handleRequestDelete}
-                                    onBack={handleCloseEditor}
-                                />
-                            </main>
-                        )}
 
                         <EntryList
                             entries={filteredEntries}
@@ -383,6 +372,24 @@ export default function Semear({ userName }) {
 
             {showModal && (
                 <CategoryModal onChoose={handleChooseCategory} onClose={handleCloseModal} />
+            )}
+
+            {selectedDate && editingCategory && (
+                <EntryEditor
+                    selectedDate={selectedDate}
+                    category={editingCategory}
+                    title={title}
+                    content={content}
+                    length={length}
+                    canDelete={Boolean(selectedEntry)}
+                    saving={saving}
+                    deleting={deleting}
+                    onTitleChange={setTitle}
+                    onChange={handleChange}
+                    onSave={handleSave}
+                    onDelete={handleRequestDelete}
+                    onBack={handleCloseEditor}
+                />
             )}
 
             {showDeleteModal && (
