@@ -6,13 +6,15 @@
  * na listagem dos registros.
  *
  * O campo "theme" é usado como sufixo das classes CSS (ex.: "--pesadelo"),
- * mantendo a cor independente do valor salvo no banco.
+ * mantendo a cor independente do valor salvo no banco. O campo "color"
+ * aponta para a mesma variável CSS da paleta, garantindo que gráficos e
+ * legendas usem exatamente a cor definida para cada tipo.
  */
 export const ENTRY_TYPES = {
-    pesadelo: { value: 'pesadelo', label: 'Pesadelo', theme: 'pesadelo' },
-    medio: { value: 'medio', label: 'Médio', theme: 'medio' },
-    bom: { value: 'bom', label: 'Bom', theme: 'bom' },
-    otimo: { value: 'otimo', label: 'Ótimo', theme: 'otimo' },
+    pesadelo: { value: 'pesadelo', label: 'Pesadelo', theme: 'pesadelo', color: 'var(--semear-pesadelo)' },
+    medio: { value: 'medio', label: 'Médio', theme: 'medio', color: 'var(--semear-medio)' },
+    bom: { value: 'bom', label: 'Bom', theme: 'bom', color: 'var(--semear-bom)' },
+    otimo: { value: 'otimo', label: 'Ótimo', theme: 'otimo', color: 'var(--semear-otimo)' },
 };
 
 /** Lista ordenada dos tipos para renderização (seletor, etiquetas). */

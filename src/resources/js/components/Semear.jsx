@@ -324,6 +324,9 @@ export default function Semear({ userName }) {
                     </div>
                     <div className="semear-user">
                         <span className="semear-user__name">{userName}</span>
+                        <a className="semear-nav-link" href="/dashboard">
+                            Dashboard
+                        </a>
                         <button
                             type="button"
                             className="semear-logout-btn"

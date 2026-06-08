@@ -343,6 +343,25 @@ body {
     cursor: not-allowed;
 }
 
+/* Link de navegação entre telas (ex.: Semear ↔ Dashboard). */
+.semear-nav-link {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.7rem;
+    padding: 0.5rem 0.8rem;
+    color: var(--semear-text);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.semear-nav-link:hover {
+    border-color: var(--semear-sonhos);
+    background-color: var(--semear-sonhos-soft);
+    color: var(--semear-text);
+}
+
 .semear__logo {
     display: inline-flex;
     align-items: center;
@@ -391,6 +410,76 @@ body {
     border: 1px solid var(--semear-border);
     border-radius: 1.1rem;
     padding: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Dashboard — box de indicadores e gráfico de pizza                  */
+/* ------------------------------------------------------------------ */
+
+.semear-dashboard {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.semear-box {
+    padding: 1.5rem;
+}
+
+.semear-box__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    color: var(--semear-text);
+}
+
+.semear-box__empty {
+    color: var(--semear-muted);
+    margin: 0;
+}
+
+.semear-pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+}
+
+.semear-pie__svg {
+    flex: 0 0 auto;
+    border-radius: 50%;
+    box-shadow: var(--semear-shadow-sm);
+}
+
+.semear-pie__legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+    min-width: 12rem;
+}
+
+.semear-pie__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 600;
+}
+
+.semear-pie__legend-dot {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    flex: 0 0 auto;
+}
+
+.semear-pie__legend-label {
+    color: var(--semear-text);
+}
+
+.semear-pie__legend-value {
+    margin-left: auto;
+    color: var(--semear-muted);
 }
 
 /* ------------------------------------------------------------------ */
