@@ -777,6 +777,19 @@ body {
     flex-wrap: wrap;
 }
 
+/* O titulo do registro recebe a cor da categoria correspondente. */
+.semear-entry-card__weekday--terapia {
+    color: var(--semear-terapia);
+}
+
+.semear-entry-card__weekday--sonhos {
+    color: var(--semear-sonhos);
+}
+
+.semear-entry-card__weekday--evento {
+    color: var(--semear-evento);
+}
+
 /* Etiqueta do tipo, concatenada ao título na listagem dos registros. */
 .semear-entry-type-tag {
     font-size: 0.62rem;
