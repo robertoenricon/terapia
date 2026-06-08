@@ -1,9 +1,9 @@
 /**
  * Tipos das entradas do Semear.
  *
- * Classificam o registro pela sua natureza ("Pesadelo", "Médio", "Bom" ou
- * "Ótimo"). Centraliza o rótulo e a cor de cada tipo para reuso no editor e
- * na listagem dos registros.
+ * Classificam o registro pela sua natureza ("Pesadelo", "Ruim", "Médio",
+ * "Bom" ou "Ótimo"). Centraliza o rótulo e a cor de cada tipo para reuso no
+ * editor e na listagem dos registros.
  *
  * O campo "theme" é usado como sufixo das classes CSS (ex.: "--pesadelo"),
  * mantendo a cor independente do valor salvo no banco. O campo "color"
@@ -12,6 +12,7 @@
  */
 export const ENTRY_TYPES = {
     pesadelo: { value: 'pesadelo', label: 'Pesadelo', theme: 'pesadelo', color: 'var(--semear-pesadelo)' },
+    ruim: { value: 'ruim', label: 'Ruim', theme: 'ruim', color: 'var(--semear-ruim)' },
     medio: { value: 'medio', label: 'Médio', theme: 'medio', color: 'var(--semear-medio)' },
     bom: { value: 'bom', label: 'Bom', theme: 'bom', color: 'var(--semear-bom)' },
     otimo: { value: 'otimo', label: 'Ótimo', theme: 'otimo', color: 'var(--semear-otimo)' },
@@ -20,6 +21,7 @@ export const ENTRY_TYPES = {
 /** Lista ordenada dos tipos para renderização (seletor, etiquetas). */
 export const ENTRY_TYPE_LIST = [
     ENTRY_TYPES.pesadelo,
+    ENTRY_TYPES.ruim,
     ENTRY_TYPES.medio,
     ENTRY_TYPES.bom,
     ENTRY_TYPES.otimo,

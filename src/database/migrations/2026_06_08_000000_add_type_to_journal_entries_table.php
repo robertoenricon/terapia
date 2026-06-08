@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Adiciona a coluna de tipo às entradas do Semear.
  *
- * O tipo classifica o registro pela sua natureza ("pesadelo", "medio",
- * "bom" ou "otimo") e é opcional, exibido junto ao título na listagem.
+ * O tipo classifica o registro pela sua natureza ("pesadelo", "ruim",
+ * "medio", "bom" ou "otimo") e é opcional, exibido junto ao título na listagem.
  */
 return new class extends Migration
 {
@@ -18,7 +18,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('journal_entries', function (Blueprint $table) {
-            // Tipo do registro: "pesadelo", "medio", "bom" ou "otimo".
+            // Tipo do registro: "pesadelo", "ruim", "medio", "bom" ou "otimo".
             $table->string('type')->nullable()->after('category');
         });
     }

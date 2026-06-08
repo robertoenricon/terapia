@@ -50,6 +50,8 @@
     /* Tipos de registro — escala de humor (pior → melhor) */
     --semear-pesadelo: #fb7185;        /* Pesadelo — vermelho/rosa */
     --semear-pesadelo-soft: rgba(251, 113, 133, 0.16);
+    --semear-ruim: #de5d1e;            /* Ruim — laranja */
+    --semear-ruim-soft: rgba(222, 93, 30, 0.16);
     --semear-medio: #fbbf24;           /* Médio — âmbar */
     --semear-medio-soft: rgba(251, 191, 36, 0.16);
     --semear-bom: #00f2ff;             /* Bom — ciano vibrante */
@@ -942,6 +944,10 @@ body {
     color: var(--semear-pesadelo);
 }
 
+.semear-entry-type-tag--ruim {
+    color: var(--semear-ruim);
+}
+
 .semear-entry-type-tag--medio {
     color: var(--semear-medio);
 }
@@ -1345,6 +1351,13 @@ body {
     background: var(--semear-pesadelo);
     border-color: var(--semear-pesadelo);
     box-shadow: 0 0 0 0.18rem var(--semear-pesadelo-soft);
+}
+
+.semear-type-chip--ruim.semear-type-chip--active {
+    color: #0a1014;
+    background: var(--semear-ruim);
+    border-color: var(--semear-ruim);
+    box-shadow: 0 0 0 0.18rem var(--semear-ruim-soft);
 }
 
 .semear-type-chip--medio.semear-type-chip--active {
