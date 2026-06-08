@@ -7,6 +7,9 @@ import {
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
+// Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
+const MAX_PREVIEW_LENGTH = 50;
+
 /**
  * Lista as entradas recentes do Semear ("Registros").
  *
@@ -50,6 +53,11 @@ export default function EntryList({
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
         return parsed.body.textContent || '';
     };
+
+    // Limita o texto ao máximo de caracteres definido, acrescentando reticências.
+    const truncate = (text, limit = MAX_PREVIEW_LENGTH) => (
+        text.length > limit ? `${text.slice(0, limit)}…` : text
+    );
 
     return (
         <div className="semear-panel semear-entries">
@@ -137,7 +145,7 @@ export default function EntryList({
                                             {entry.title || WEEKDAY_NAMES[date.getDay()]}
                                         </span>
                                         <span className="semear-entry-card__long">
-                                            {getPlainText(entry.content) || 'Sem descrição'}
+                                            {truncate(getPlainText(entry.content)) || 'Sem descrição'}
                                         </span>
                                     </span>
                                     {category && (
