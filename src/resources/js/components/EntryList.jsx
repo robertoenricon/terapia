@@ -220,7 +220,7 @@ export default function EntryList({
                                         </span>
                                     </span>
                                     <span className="semear-entry-card__info">
-                                        <span className="semear-entry-card__weekday">
+                                        <span className={`semear-entry-card__weekday${category ? ` semear-entry-card__weekday--${category.theme}` : ''}`}>
                                             {entry.title || WEEKDAY_NAMES[date.getDay()]}
                                             {entryType && (
                                                 <span
