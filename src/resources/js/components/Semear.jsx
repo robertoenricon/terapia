@@ -36,6 +36,7 @@ export default function Semear({ userName }) {
     const [pendingDate, setPendingDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [type, setType] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [length, setLength] = useState(0);
@@ -101,8 +102,9 @@ export default function Semear({ userName }) {
         [entries, selectedKey, editingCategory],
     );
 
-    // Atualiza o título e o conteúdo do editor sempre que a entrada muda.
+    // Atualiza o tipo, o título e o conteúdo do editor sempre que a entrada muda.
     useEffect(() => {
+        setType(selectedEntry?.type || null);
         setTitle(selectedEntry?.title || '');
         const html = selectedEntry?.content || '';
         setContent(html);
@@ -213,7 +215,7 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            const saved = await saveEntry(selectedKey, content, editingCategory, title);
+            const saved = await saveEntry(selectedKey, content, editingCategory, type, title);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
@@ -268,6 +270,7 @@ export default function Semear({ userName }) {
         try {
             await deleteEntry(selectedEntry.id);
             setEntries((current) => current.filter((entry) => entry.id !== selectedEntry.id));
+            setType(null);
             setTitle('');
             setContent('');
             setLength(0);
@@ -378,12 +381,14 @@ export default function Semear({ userName }) {
                 <EntryEditor
                     selectedDate={selectedDate}
                     category={editingCategory}
+                    type={type}
                     title={title}
                     content={content}
                     length={length}
                     canDelete={Boolean(selectedEntry)}
                     saving={saving}
                     deleting={deleting}
+                    onTypeChange={setType}
                     onTitleChange={setTitle}
                     onChange={handleChange}
                     onSave={handleSave}

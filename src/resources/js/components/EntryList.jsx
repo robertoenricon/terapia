@@ -6,6 +6,7 @@ import {
     isSameDay,
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
+import { ENTRY_TYPES } from '../utils/entryTypes';
 
 // Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
 const MAX_PREVIEW_LENGTH = 50;
@@ -137,6 +138,7 @@ export default function EntryList({
                         && isSameDay(date, selectedDate)
                         && entry.category === activeCategory;
                     const category = CATEGORIES[entry.category];
+                    const entryType = ENTRY_TYPES[entry.type];
                     const isExpanded = expandedEntryId === entry.id;
 
                     return (
@@ -163,6 +165,13 @@ export default function EntryList({
                                     <span className="semear-entry-card__info">
                                         <span className="semear-entry-card__weekday">
                                             {entry.title || WEEKDAY_NAMES[date.getDay()]}
+                                            {entryType && (
+                                                <span
+                                                    className={`semear-entry-type-tag semear-entry-type-tag--${entryType.theme}`}
+                                                >
+                                                    {entryType.label}
+                                                </span>
+                                            )}
                                         </span>
                                         <span className="semear-entry-card__long">
                                             {truncate(getPlainText(entry.content)) || 'Sem descrição'}

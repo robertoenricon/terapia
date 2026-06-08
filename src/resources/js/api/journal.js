@@ -43,15 +43,16 @@ export async function fetchEntries() {
  * @param {string} entryDate - Data no formato "YYYY-MM-DD".
  * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
  * @param {string} category - Categoria da entrada ("terapia", "sonhos" ou "evento").
+ * @param {string|null} type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} title - Título curto e opcional da entrada.
  * @returns {Promise<Object>} Entrada salva.
  */
-export async function saveEntry(entryDate, content, category, title) {
+export async function saveEntry(entryDate, content, category, type, title) {
     const response = await fetch(BASE_URL, {
         method: 'POST',
         credentials: 'same-origin',
         headers: jsonHeaders(),
-        body: JSON.stringify({ entry_date: entryDate, category, title, content }),
+        body: JSON.stringify({ entry_date: entryDate, category, type, title, content }),
     });
     if (!response.ok) {
         throw new Error('Não foi possível salvar a entrada.');

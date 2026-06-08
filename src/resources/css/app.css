@@ -47,6 +47,16 @@
     --semear-evento-glow: rgba(239, 68, 68, 0.32);
     --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
 
+    /* Tipos de registro — escala de humor (pior → melhor) */
+    --semear-pesadelo: #fb7185;        /* Pesadelo — vermelho/rosa */
+    --semear-pesadelo-soft: rgba(251, 113, 133, 0.16);
+    --semear-medio: #fbbf24;           /* Médio — âmbar */
+    --semear-medio-soft: rgba(251, 191, 36, 0.16);
+    --semear-bom: #60a5fa;             /* Bom — azul */
+    --semear-bom-soft: rgba(96, 165, 250, 0.16);
+    --semear-otimo: #4ade80;           /* Ótimo — verde */
+    --semear-otimo-soft: rgba(74, 222, 128, 0.16);
+
     /* Marca: combinação das duas categorias */
     --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
 
@@ -237,7 +247,7 @@ body {
     background-color: var(--semear-panel);
     border: 1px solid var(--semear-border);
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1.25rem;
     box-shadow: var(--semear-shadow);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
@@ -380,7 +390,7 @@ body {
     background-color: var(--semear-panel-alt);
     border: 1px solid var(--semear-border);
     border-radius: 1.1rem;
-    padding: 1.35rem;
+    padding: 1rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -761,6 +771,38 @@ body {
 .semear-entry-card__weekday {
     font-weight: 600;
     color: var(--semear-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+/* Etiqueta do tipo, concatenada ao título na listagem dos registros. */
+.semear-entry-type-tag {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: #0a1014;
+}
+
+.semear-entry-type-tag--pesadelo {
+    background: var(--semear-pesadelo);
+}
+
+.semear-entry-type-tag--medio {
+    background: var(--semear-medio);
+}
+
+.semear-entry-type-tag--bom {
+    background: var(--semear-bom);
+}
+
+.semear-entry-type-tag--otimo {
+    background: var(--semear-otimo);
 }
 
 .semear-entry-card__long {
@@ -946,7 +988,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .semear-main__heading {
@@ -978,7 +1020,7 @@ body {
 .semear-main__subtitle {
     font-size: 1.05rem;
     font-weight: 700;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.6rem;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -1007,7 +1049,7 @@ body {
 .semear-main__field {
     display: grid;
     gap: 0.4rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .semear-main__label {
@@ -1037,6 +1079,59 @@ body {
     outline: none;
     border-color: var(--semear-border-strong);
     box-shadow: 0 0 0 0.2rem var(--semear-border);
+}
+
+/* Seletor de tipo do registro (chips coloridos no editor). */
+.semear-type-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.semear-type-chip {
+    border: 1px solid var(--semear-border-strong);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.4rem 0.95rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--semear-muted);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.semear-type-chip:hover {
+    color: var(--semear-text);
+    border-color: var(--semear-text);
+}
+
+/* Cada tipo assume sua cor quando ativo. */
+.semear-type-chip--pesadelo.semear-type-chip--active {
+    color: #0a1014;
+    background: var(--semear-pesadelo);
+    border-color: var(--semear-pesadelo);
+    box-shadow: 0 0 0 0.18rem var(--semear-pesadelo-soft);
+}
+
+.semear-type-chip--medio.semear-type-chip--active {
+    color: #0a1014;
+    background: var(--semear-medio);
+    border-color: var(--semear-medio);
+    box-shadow: 0 0 0 0.18rem var(--semear-medio-soft);
+}
+
+.semear-type-chip--bom.semear-type-chip--active {
+    color: #0a1014;
+    background: var(--semear-bom);
+    border-color: var(--semear-bom);
+    box-shadow: 0 0 0 0.18rem var(--semear-bom-soft);
+}
+
+.semear-type-chip--otimo.semear-type-chip--active {
+    color: #0a1014;
+    background: var(--semear-otimo);
+    border-color: var(--semear-otimo);
+    box-shadow: 0 0 0 0.18rem var(--semear-otimo-soft);
 }
 
 .semear-editor {
@@ -1271,6 +1366,7 @@ body {
     width: min(42rem, 100%);
     max-height: calc(100vh - 2rem);
     overflow-y: auto;
+    padding: 1.25rem;
 }
 
 .semear-modal__header {
