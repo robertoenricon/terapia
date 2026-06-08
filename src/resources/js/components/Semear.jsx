@@ -215,7 +215,9 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            const saved = await saveEntry(selectedKey, content, editingCategory, type, title);
+            // O tipo pertence apenas à categoria "Sonhos"; nas demais é descartado.
+            const entryType = editingCategory === 'sonhos' ? type : null;
+            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));

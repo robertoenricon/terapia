@@ -84,27 +84,29 @@ export default function EntryEditor({
                 {categoryInfo?.label || 'Acontecimentos do dia'}
             </h3>
 
-            <div className="semear-main__field">
-                <span className="semear-main__label">Tipo</span>
-                <div className="semear-type-options" role="group" aria-label="Tipo do registro">
-                    {ENTRY_TYPE_LIST.map((entryType) => (
-                        <button
-                            key={entryType.value}
-                            type="button"
-                            className={[
-                                'semear-type-chip',
-                                `semear-type-chip--${entryType.theme}`,
-                                type === entryType.value ? 'semear-type-chip--active' : '',
-                            ].filter(Boolean).join(' ')}
-                            aria-pressed={type === entryType.value}
-                            // Permite alternar: clicar no tipo ativo limpa a seleção.
-                            onClick={() => onTypeChange(type === entryType.value ? null : entryType.value)}
-                        >
-                            {entryType.label}
-                        </button>
-                    ))}
+            {category === 'sonhos' && (
+                <div className="semear-main__field">
+                    <span className="semear-main__label">Tipo</span>
+                    <div className="semear-type-options" role="group" aria-label="Tipo do registro">
+                        {ENTRY_TYPE_LIST.map((entryType) => (
+                            <button
+                                key={entryType.value}
+                                type="button"
+                                className={[
+                                    'semear-type-chip',
+                                    `semear-type-chip--${entryType.theme}`,
+                                    type === entryType.value ? 'semear-type-chip--active' : '',
+                                ].filter(Boolean).join(' ')}
+                                aria-pressed={type === entryType.value}
+                                // Permite alternar: clicar no tipo ativo limpa a seleção.
+                                onClick={() => onTypeChange(type === entryType.value ? null : entryType.value)}
+                            >
+                                {entryType.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div className="semear-main__field">
                 <label className="semear-main__label" htmlFor="entry-title">Título</label>

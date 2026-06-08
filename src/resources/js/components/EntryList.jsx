@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
@@ -6,7 +6,7 @@ import {
     isSameDay,
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
-import { ENTRY_TYPES } from '../utils/entryTypes';
+import { ENTRY_TYPES, ENTRY_TYPE_LIST } from '../utils/entryTypes';
 
 // Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
 const MAX_PREVIEW_LENGTH = 150;
@@ -14,10 +14,11 @@ const MAX_PREVIEW_LENGTH = 150;
 /**
  * Lista as entradas recentes do Semear ("Registros").
  *
- * Exibe dois filtros de categoria (Terapia e Sonhos); ao escolher um, o
- * outro é ocultado e a lista passa a mostrar apenas aquela categoria. Cada
- * item mostra o dia, a data e a categoria, permitindo expandir a descrição
- * completa ou abrir a entrada correspondente para alteração.
+ * Exibe os filtros de categoria; ao escolher um, os demais são ocultados e a
+ * lista passa a mostrar apenas aquela categoria. Quando "Sonhos" está ativo,
+ * também exibe os tipos (Pesadelo, Médio, Bom e Ótimo) para refinar o filtro.
+ * Cada item mostra o dia, a data e a categoria, permitindo expandir a
+ * descrição completa ou abrir a entrada correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -42,13 +43,23 @@ export default function EntryList({
 }) {
     const [expandedEntryId, setExpandedEntryId] = useState(null);
     const [search, setSearch] = useState('');
+    const [activeType, setActiveType] = useState(null);
+
+    // Os tipos pertencem apenas a "Sonhos"; ao trocar de categoria, limpa o filtro.
+    useEffect(() => {
+        setActiveType(null);
+    }, [activeCategory]);
 
     // Filtra os registros pelo título (busca sem diferenciar maiúsculas).
     const query = search.trim().toLowerCase();
     const matched = query
         ? entries.filter((entry) => (entry.title || '').toLowerCase().includes(query))
         : entries;
-    const visible = showAll ? matched : matched.slice(0, 3);
+    // Refina por tipo quando "Sonhos" está ativo e um tipo foi selecionado.
+    const filtered = activeType
+        ? matched.filter((entry) => entry.type === activeType)
+        : matched;
+    const visible = showAll ? filtered : filtered.slice(0, 3);
 
     const getPlainText = (html) => {
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
@@ -109,9 +120,19 @@ export default function EntryList({
 
     return (
         <div className="semear-panel semear-entries">
-            <h2 className="semear-entries__title">Registros</h2>
-
             <div className="semear-entries__toolbar">
+                <div className="semear-entries__search">
+                    <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
+                    <input
+                        type="search"
+                        className="semear-entries__search-input"
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Buscar por título..."
+                        aria-label="Buscar registros por título"
+                    />
+                </div>
+
                 <div className="semear-categories">
                     {CATEGORY_LIST
                         .filter((category) => !activeCategory || category.value === activeCategory)
@@ -137,22 +158,31 @@ export default function EntryList({
                     )}
                 </div>
 
-                <div className="semear-entries__search">
-                    <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
-                    <input
-                        type="search"
-                        className="semear-entries__search-input"
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Buscar por título..."
-                        aria-label="Buscar registros por título"
-                    />
-                </div>
+                {activeCategory === 'sonhos' && (
+                    <div className="semear-type-options" role="group" aria-label="Filtrar por tipo">
+                        {ENTRY_TYPE_LIST.map((entryType) => (
+                            <button
+                                key={entryType.value}
+                                type="button"
+                                className={[
+                                    'semear-type-chip',
+                                    `semear-type-chip--${entryType.theme}`,
+                                    activeType === entryType.value ? 'semear-type-chip--active' : '',
+                                ].filter(Boolean).join(' ')}
+                                aria-pressed={activeType === entryType.value}
+                                // Permite alternar: clicar no tipo ativo limpa o filtro.
+                                onClick={() => setActiveType(activeType === entryType.value ? null : entryType.value)}
+                            >
+                                {entryType.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {visible.length === 0 && (
                 <p className="semear-entries__empty">
-                    {query
+                    {query || activeType
                         ? 'Nenhum registro encontrado para esta busca.'
                         : 'Nenhuma entrada registrada ainda.'}
                 </p>
@@ -242,7 +272,7 @@ export default function EntryList({
                 })}
             </ul>
 
-            {matched.length > 3 && (
+            {filtered.length > 3 && (
                 <button type="button" className="semear-entries__toggle" onClick={onToggleAll}>
                     {showAll ? 'Ver menos' : 'Ver todas as entradas'}
                 </button>
