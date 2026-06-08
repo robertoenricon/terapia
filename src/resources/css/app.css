@@ -771,10 +771,6 @@ body {
 .semear-entry-card__weekday {
     font-weight: 600;
     color: var(--semear-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-wrap: wrap;
 }
 
 /* O titulo do registro recebe a cor da categoria correspondente. */
@@ -790,32 +786,25 @@ body {
     color: var(--semear-evento);
 }
 
-/* Etiqueta do tipo, concatenada ao título na listagem dos registros. */
+/* Etiqueta do tipo, concatenada ao título na mesma linha da listagem. */
 .semear-entry-type-tag {
-    font-size: 0.62rem;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    padding: 0.12rem 0.45rem;
-    border-radius: 999px;
-    white-space: nowrap;
-    color: #0a1014;
+    font-weight: 700;
 }
 
 .semear-entry-type-tag--pesadelo {
-    background: var(--semear-pesadelo);
+    color: var(--semear-pesadelo);
 }
 
 .semear-entry-type-tag--medio {
-    background: var(--semear-medio);
+    color: var(--semear-medio);
 }
 
 .semear-entry-type-tag--bom {
-    background: var(--semear-bom);
+    color: var(--semear-bom);
 }
 
 .semear-entry-type-tag--otimo {
-    background: var(--semear-otimo);
+    color: var(--semear-otimo);
 }
 
 .semear-entry-card__long {
