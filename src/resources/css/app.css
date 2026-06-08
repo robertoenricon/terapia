@@ -52,8 +52,8 @@
     --semear-pesadelo-soft: rgba(251, 113, 133, 0.16);
     --semear-medio: #fbbf24;           /* Médio — âmbar */
     --semear-medio-soft: rgba(251, 191, 36, 0.16);
-    --semear-bom: #ebdafd;             /* Bom — roxo claro */
-    --semear-bom-soft: rgba(235, 218, 253, 0.16);
+    --semear-bom: #00f2ff;             /* Bom — ciano vibrante */
+    --semear-bom-soft: rgba(0, 242, 255, 0.16);
     --semear-otimo: #4ade80;           /* Ótimo — verde */
     --semear-otimo-soft: rgba(74, 222, 128, 0.16);
 
