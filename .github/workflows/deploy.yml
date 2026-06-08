@@ -2,20 +2,29 @@
 #
 # A cada push na branch "main" (ou disparo manual), o workflow:
 #   1. Compila os assets do front-end (Vite).
-#   2. Prepara a pasta pública do subdomínio com o index.php ajustado.
-#   3. Envia por FTP a aplicação para "semear_app/" (fora do public_html) e o
+#   2. Roda as migrations no banco de produção (php artisan migrate --force).
+#   3. Prepara a pasta pública do subdomínio com o index.php ajustado.
+#   4. Envia por FTP a aplicação para "semear_app/" (fora do public_html) e o
 #      conteúdo público para "public_html/semear/".
 #
 # O "vendor/" NÃO é enviado pelo workflow (envie-o manualmente uma vez e a cada
 # mudança em composer.lock — a LocalWeb não tem SSH para rodar "composer").
 #
-# As migrations NÃO rodam aqui — execute-as manualmente quando necessário
-# (veja o Passo 3 do README, apontando o .env para a DBaaS).
+# As migrations rodam direto contra o banco de produção (DBaaS) a partir do
+# runner do GitHub Actions — não no servidor de arquivos. Se a migration falhar,
+# o envio por FTP é abortado, evitando publicar código sem o banco atualizado.
+# Para isso, o banco precisa aceitar conexões externas dos IPs do GitHub Actions.
 #
 # Segredos necessários (Settings > Secrets and variables > Actions):
 #   FTP_SERVER    -> host de FTP da LocalWeb (ex.: ftp.seu-dominio.com.br)
 #   FTP_USERNAME  -> usuário de FTP
 #   FTP_PASSWORD  -> senha de FTP
+#   DB_HOST       -> host do banco de produção (DBaaS)
+#   DB_DATABASE   -> nome do banco de produção
+#   DB_USERNAME   -> usuário do banco de produção
+#   DB_PASSWORD   -> senha do banco de produção
+#   DB_PORT       -> porta do banco (opcional; padrão 3306)
+#   APP_KEY       -> chave da aplicação (opcional; usada ao bootar o artisan)
 
 name: Deploy LocalWeb (FTP)
 
@@ -50,6 +59,32 @@ jobs:
         run: |
           npm ci
           npm run build
+
+      - name: Configurar PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, mbstring, bcmath, intl, zip
+          coverage: none
+
+      - name: Instalar dependências PHP (Composer)
+        working-directory: src
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Rodar as migrations no banco de produção
+        working-directory: src
+        # Conecta direto na DBaaS de produção pelos secrets; "--force" permite
+        # rodar migrations fora do ambiente local sem confirmação interativa.
+        env:
+          APP_ENV: production
+          APP_KEY: ${{ secrets.APP_KEY }}
+          DB_CONNECTION: mysql
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT || '3306' }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: php artisan migrate --force
 
       - name: Preparar pasta pública do subdomínio (semear)
         run: |
