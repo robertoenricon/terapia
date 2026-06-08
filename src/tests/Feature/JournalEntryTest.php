@@ -43,6 +43,28 @@ class JournalEntryTest extends TestCase
         ]);
     }
 
+    public function test_it_stores_the_feedback_of_a_dream_entry(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson('/api/journal-entries', [
+            'entry_date' => '2026-06-17',
+            'category' => 'sonhos',
+            'content' => 'Sonhei com o mar',
+            'feedback' => 'Sonho tranquilo e revelador',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('feedback', 'Sonho tranquilo e revelador');
+
+        $this->assertDatabaseHas('journal_entries', [
+            'user_id' => $user->id,
+            'category' => 'sonhos',
+            'feedback' => 'Sonho tranquilo e revelador',
+        ]);
+    }
+
     public function test_users_only_receive_their_own_entries(): void
     {
         $user = User::factory()->create();

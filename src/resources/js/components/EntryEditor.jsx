@@ -20,12 +20,14 @@ const MAX_LENGTH = 5000;
  * @param {string|null} props.type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
+ * @param {string} props.feedback - Feedback livre, exclusivo da categoria "sonhos".
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
  * @param {boolean} props.deleting - Indica se a exclusão está em curso.
  * @param {Function} props.onTypeChange - Callback com o tipo escolhido (ou nulo).
  * @param {Function} props.onTitleChange - Callback com o novo título.
+ * @param {Function} props.onFeedbackChange - Callback com o novo feedback.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
@@ -38,12 +40,14 @@ export default function EntryEditor({
     type,
     title,
     content,
+    feedback,
     length,
     canDelete,
     saving,
     deleting,
     onTypeChange,
     onTitleChange,
+    onFeedbackChange,
     onChange,
     onSave,
     onDelete,
@@ -130,6 +134,20 @@ export default function EntryEditor({
             <div className="semear-main__counter">
                 {length}/{MAX_LENGTH} caracteres
             </div>
+
+            {category === 'sonhos' && (
+                <div className="semear-main__field">
+                    <label className="semear-main__label" htmlFor="entry-feedback">Feedback</label>
+                    <textarea
+                        id="entry-feedback"
+                        className="semear-main__feedback-input"
+                        value={feedback}
+                        onChange={(event) => onFeedbackChange(event.target.value)}
+                        placeholder="Anote suas percepções sobre este sonho..."
+                        rows={4}
+                    />
+                </div>
+            )}
 
             <div className="semear-main__actions">
                 <button

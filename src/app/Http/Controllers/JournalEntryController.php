@@ -60,6 +60,7 @@ class JournalEntryController extends Controller
             'type' => ['nullable', 'in:pesadelo,medio,bom,otimo'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['nullable', 'string', 'max:50000'],
+            'feedback' => ['nullable', 'string', 'max:50000'],
         ]);
 
         $entry = $request->user()
@@ -78,6 +79,7 @@ class JournalEntryController extends Controller
         $entry->type = $data['type'] ?? null;
         $entry->title = $data['title'] ?? null;
         $entry->content = $data['content'] ?? '';
+        $entry->feedback = $data['feedback'] ?? null;
         $entry->save();
 
         return response()->json($entry, $entry->wasRecentlyCreated ? 201 : 200);

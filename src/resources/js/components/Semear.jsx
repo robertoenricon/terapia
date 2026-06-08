@@ -39,6 +39,7 @@ export default function Semear({ userName }) {
     const [type, setType] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [feedback, setFeedback] = useState('');
     const [length, setLength] = useState(0);
     const [loadingEntries, setLoadingEntries] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -102,10 +103,11 @@ export default function Semear({ userName }) {
         [entries, selectedKey, editingCategory],
     );
 
-    // Atualiza o tipo, o título e o conteúdo do editor sempre que a entrada muda.
+    // Atualiza o tipo, o título, o conteúdo e o feedback do editor sempre que a entrada muda.
     useEffect(() => {
         setType(selectedEntry?.type || null);
         setTitle(selectedEntry?.title || '');
+        setFeedback(selectedEntry?.feedback || '');
         const html = selectedEntry?.content || '';
         setContent(html);
         const text = html.replace(/<[^>]*>/g, '');
@@ -215,9 +217,10 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            // O tipo pertence apenas à categoria "Sonhos"; nas demais é descartado.
+            // O tipo e o feedback pertencem apenas à categoria "Sonhos"; nas demais são descartados.
             const entryType = editingCategory === 'sonhos' ? type : null;
-            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title);
+            const entryFeedback = editingCategory === 'sonhos' ? feedback : null;
+            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title, entryFeedback);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
@@ -275,6 +278,7 @@ export default function Semear({ userName }) {
             setType(null);
             setTitle('');
             setContent('');
+            setFeedback('');
             setLength(0);
             setShowDeleteModal(false);
             setSelectedDate(null);
@@ -386,12 +390,14 @@ export default function Semear({ userName }) {
                     type={type}
                     title={title}
                     content={content}
+                    feedback={feedback}
                     length={length}
                     canDelete={Boolean(selectedEntry)}
                     saving={saving}
                     deleting={deleting}
                     onTypeChange={setType}
                     onTitleChange={setTitle}
+                    onFeedbackChange={setFeedback}
                     onChange={handleChange}
                     onSave={handleSave}
                     onDelete={handleRequestDelete}
