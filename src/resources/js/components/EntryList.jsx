@@ -52,10 +52,23 @@ export default function EntryList({
         setActiveType(null);
     }, [activeCategory]);
 
-    // Filtra os registros pelo título (busca sem diferenciar maiúsculas).
+    // Extrai o texto puro de um HTML, descartando as tags de formatação.
+    const getPlainText = (html) => {
+        const parsed = new DOMParser().parseFromString(html || '', 'text/html');
+        return parsed.body.textContent || '';
+    };
+
+    // Filtra os registros pelo título, descrição e feedback (sem diferenciar maiúsculas).
     const query = search.trim().toLowerCase();
     const matched = query
-        ? entries.filter((entry) => (entry.title || '').toLowerCase().includes(query))
+        ? entries.filter((entry) => {
+            const haystack = [
+                entry.title || '',
+                getPlainText(entry.content),
+                entry.feedback || '',
+            ].join(' ').toLowerCase();
+            return haystack.includes(query);
+        })
         : entries;
     // Refina por tipo quando "Sonhos" está ativo e um tipo foi selecionado.
     const filtered = activeType
@@ -66,11 +79,6 @@ export default function EntryList({
         (a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
     );
     const visible = showAll ? ordered : ordered.slice(0, 3);
-
-    const getPlainText = (html) => {
-        const parsed = new DOMParser().parseFromString(html || '', 'text/html');
-        return parsed.body.textContent || '';
-    };
 
     // Sanitiza o HTML e limita o texto visível ao máximo de caracteres definido,
     // preservando a formatação do editor (negrito, itálico, listas, emojis).
@@ -134,8 +142,8 @@ export default function EntryList({
                         className="semear-entries__search-input"
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Buscar por título..."
-                        aria-label="Buscar registros por título"
+                        placeholder="Buscar por título, descrição ou feedback..."
+                        aria-label="Buscar registros por título, descrição ou feedback"
                     />
                 </div>
 
