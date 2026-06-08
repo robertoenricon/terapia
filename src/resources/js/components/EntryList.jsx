@@ -7,6 +7,9 @@ import {
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 
+// Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
+const MAX_PREVIEW_LENGTH = 50;
+
 /**
  * Lista as entradas recentes do Semear ("Registros").
  *
@@ -50,6 +53,31 @@ export default function EntryList({
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
         return parsed.body.textContent || '';
     };
+
+    // Remove elementos e atributos perigosos, preservando a formatação do editor.
+    const sanitizeHtml = (html) => {
+        const parsed = new DOMParser().parseFromString(html || '', 'text/html');
+
+        parsed.body.querySelectorAll('script, style, iframe, object, embed').forEach((node) => node.remove());
+
+        parsed.body.querySelectorAll('*').forEach((node) => {
+            [...node.attributes].forEach((attr) => {
+                const name = attr.name.toLowerCase();
+                const value = attr.value.replace(/\s+/g, '').toLowerCase();
+                // Bloqueia handlers de evento e URLs com javascript:.
+                if (name.startsWith('on') || ((name === 'href' || name === 'src') && value.startsWith('javascript:'))) {
+                    node.removeAttribute(attr.name);
+                }
+            });
+        });
+
+        return parsed.body.innerHTML;
+    };
+
+    // Limita o texto ao máximo de caracteres definido, acrescentando reticências.
+    const truncate = (text, limit = MAX_PREVIEW_LENGTH) => (
+        text.length > limit ? `${text.slice(0, limit)}…` : text
+    );
 
     return (
         <div className="semear-panel semear-entries">
@@ -137,7 +165,7 @@ export default function EntryList({
                                             {entry.title || WEEKDAY_NAMES[date.getDay()]}
                                         </span>
                                         <span className="semear-entry-card__long">
-                                            {getPlainText(entry.content) || 'Sem descrição'}
+                                            {truncate(getPlainText(entry.content)) || 'Sem descrição'}
                                         </span>
                                     </span>
                                     {category && (
@@ -158,12 +186,20 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                <div
-                                    id={`entry-description-${entry.id}`}
-                                    className="semear-entry-card__description"
-                                >
-                                    {getPlainText(entry.content) || 'Esta entrada não possui descrição.'}
-                                </div>
+                                getPlainText(entry.content).trim() ? (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                    />
+                                ) : (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                    >
+                                        Esta entrada não possui descrição.
+                                    </div>
+                                )
                             )}
                         </li>
                     );
