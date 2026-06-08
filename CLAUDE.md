@@ -22,6 +22,7 @@ Este documento define como o código deve ser escrito, documentado e organizado.
 - **A nomenclatura de arquivos, classes e métodos deve estar em Inglês.**
 - **A cada solicitação, criar uma Branch nova.**
 - **Sempre que realizar um commit, já abra a PR em sequencia.**
+- **Toda solicitação deve começar com a criação de uma branch nova.** Nunca continue adicionando conteúdo em uma branch já existente: para cada novo pedido, crie sempre uma branch nova a partir da `main` e, ao final, suba uma PR.
 
 
 ## 3. Nomenclatura (em Inglês)
