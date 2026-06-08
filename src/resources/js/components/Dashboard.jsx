@@ -89,7 +89,7 @@ export default function Dashboard({ userName }) {
                     <div className="semear-user">
                         <span className="semear-user__name">{userName}</span>
                         <a className="semear-nav-link" href="/semear">
-                            Voltar ao Semear
+                            Voltar
                         </a>
                         <button
                             type="button"
