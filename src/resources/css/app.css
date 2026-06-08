@@ -641,8 +641,8 @@ body {
 /* Campo de busca de registros por título */
 .semear-entries__search {
     position: relative;
-    flex: 1 1 12rem;
-    min-width: 12rem;
+    flex: 0 0 auto;
+    width: 100%;
 }
 
 .semear-entries__search-icon {
