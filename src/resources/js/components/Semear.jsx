@@ -225,6 +225,12 @@ export default function Semear({ userName }) {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
             });
+            // Limpa os campos do editor para que uma nova data não herde o conteúdo anterior.
+            setType(null);
+            setTitle('');
+            setContent('');
+            setFeedback('');
+            setLength(0);
             setSelectedDate(null);
             setEditingCategory(null);
             setAlert({
