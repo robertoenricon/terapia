@@ -26,6 +26,7 @@ const MAX_PREVIEW_LENGTH = 150;
  * @param {string|null} props.activeCategory - Categoria filtrada no momento.
  * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
  * @param {Function} props.onEdit - Callback ao alterar uma entrada.
+ * @param {Function} props.onTogglePin - Callback ao fixar/desafixar uma entrada.
  * @param {Function} props.onSelectCategory - Callback ao escolher uma categoria.
  * @param {Function} props.onClearCategory - Callback ao limpar o filtro.
  * @param {Function} props.onToggleAll - Alterna entre ver todas/recentes.
@@ -37,6 +38,7 @@ export default function EntryList({
     activeCategory,
     showAll,
     onEdit,
+    onTogglePin,
     onSelectCategory,
     onClearCategory,
     onToggleAll,
@@ -59,7 +61,11 @@ export default function EntryList({
     const filtered = activeType
         ? matched.filter((entry) => entry.type === activeType)
         : matched;
-    const visible = showAll ? filtered : filtered.slice(0, 3);
+    // Mantém os registros fixados no topo, preservando a ordem de data em cada grupo.
+    const ordered = [...filtered].sort(
+        (a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
+    );
+    const visible = showAll ? ordered : ordered.slice(0, 3);
 
     const getPlainText = (html) => {
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
@@ -197,11 +203,16 @@ export default function EntryList({
                     const category = CATEGORIES[entry.category];
                     const entryType = ENTRY_TYPES[entry.type];
                     const isExpanded = expandedEntryId === entry.id;
+                    const isPinned = Boolean(entry.pinned);
 
                     return (
                         <li
                             key={entry.id}
-                            className={`semear-entry-card ${isSelected ? 'semear-entry-card--selected' : ''}`}
+                            className={[
+                                'semear-entry-card',
+                                isSelected ? 'semear-entry-card--selected' : '',
+                                isPinned ? 'semear-entry-card--pinned' : '',
+                            ].filter(Boolean).join(' ')}
                         >
                             <div className="semear-entry-card__top">
                                 <button
@@ -239,6 +250,20 @@ export default function EntryList({
                                             {category.label}
                                         </span>
                                     )}
+                                </button>
+                                <button
+                                    type="button"
+                                    className={[
+                                        'semear-entry-card__pin',
+                                        `semear-entry-card__pin--${category?.theme || 'terapia'}`,
+                                        isPinned ? 'semear-entry-card__pin--active' : '',
+                                    ].filter(Boolean).join(' ')}
+                                    onClick={() => onTogglePin(entry)}
+                                    aria-label={isPinned ? 'Desafixar' : 'Fixar'}
+                                    aria-pressed={isPinned}
+                                    title={isPinned ? 'Desafixar' : 'Fixar'}
+                                >
+                                    📌
                                 </button>
                                 <button
                                     type="button"
