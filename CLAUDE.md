@@ -20,6 +20,7 @@ Este documento define como o código deve ser escrito, documentado e organizado.
 - **Documente todas as classes e métodos criados**, de forma simples e objetiva.
 - **A documentação (comentários, docblocks, descrições) deve estar em Português do Brasil (PT-BR).**
 - **A nomenclatura de arquivos, classes e métodos deve estar em Inglês.**
+- **A cada solicitação, criar uma Branch nova.**
 
 ---
 
