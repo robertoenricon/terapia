@@ -352,6 +352,7 @@ body {
 
 .semear__calendar {
     grid-area: calendar;
+    height: 100%;
 }
 
 .semear__content {
