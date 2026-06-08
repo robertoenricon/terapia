@@ -226,7 +226,7 @@ export default function EntryList({
                                                 <span
                                                     className={`semear-entry-type-tag semear-entry-type-tag--${entryType.theme}`}
                                                 >
-                                                    {entryType.label}
+                                                    {` - ${entryType.label}`}
                                                 </span>
                                             )}
                                         </span>
