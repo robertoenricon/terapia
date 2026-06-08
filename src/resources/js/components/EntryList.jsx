@@ -9,7 +9,7 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 import { ENTRY_TYPES } from '../utils/entryTypes';
 
 // Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
-const MAX_PREVIEW_LENGTH = 50;
+const MAX_PREVIEW_LENGTH = 150;
 
 /**
  * Lista as entradas recentes do Semear ("Registros").
