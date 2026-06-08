@@ -150,8 +150,10 @@ export default function EntryList({
                                     type="button"
                                     className={`semear-entry-card__edit semear-entry-card__edit--${category?.theme || 'terapia'}`}
                                     onClick={() => onEdit(entry)}
+                                    aria-label="Alterar"
+                                    title="Alterar"
                                 >
-                                    Alterar
+                                    ✏️
                                 </button>
                             </div>
 
