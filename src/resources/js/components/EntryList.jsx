@@ -54,6 +54,26 @@ export default function EntryList({
         return parsed.body.textContent || '';
     };
 
+    // Remove elementos e atributos perigosos, preservando a formatação do editor.
+    const sanitizeHtml = (html) => {
+        const parsed = new DOMParser().parseFromString(html || '', 'text/html');
+
+        parsed.body.querySelectorAll('script, style, iframe, object, embed').forEach((node) => node.remove());
+
+        parsed.body.querySelectorAll('*').forEach((node) => {
+            [...node.attributes].forEach((attr) => {
+                const name = attr.name.toLowerCase();
+                const value = attr.value.replace(/\s+/g, '').toLowerCase();
+                // Bloqueia handlers de evento e URLs com javascript:.
+                if (name.startsWith('on') || ((name === 'href' || name === 'src') && value.startsWith('javascript:'))) {
+                    node.removeAttribute(attr.name);
+                }
+            });
+        });
+
+        return parsed.body.innerHTML;
+    };
+
     // Limita o texto ao máximo de caracteres definido, acrescentando reticências.
     const truncate = (text, limit = MAX_PREVIEW_LENGTH) => (
         text.length > limit ? `${text.slice(0, limit)}…` : text
@@ -166,12 +186,20 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                <div
-                                    id={`entry-description-${entry.id}`}
-                                    className="semear-entry-card__description"
-                                >
-                                    {getPlainText(entry.content) || 'Esta entrada não possui descrição.'}
-                                </div>
+                                getPlainText(entry.content).trim() ? (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                    />
+                                ) : (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                    >
+                                        Esta entrada não possui descrição.
+                                    </div>
+                                )
                             )}
                         </li>
                     );
