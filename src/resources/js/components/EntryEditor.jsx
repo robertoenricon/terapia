@@ -20,7 +20,7 @@ const MAX_LENGTH = 5000;
  * @param {string|null} props.type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
- * @param {string} props.feedback - Feedback livre, exclusivo da categoria "sonhos".
+ * @param {string} props.feedback - Feedback livre, disponível para todas as categorias.
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
@@ -135,19 +135,17 @@ export default function EntryEditor({
                 {length}/{MAX_LENGTH} caracteres
             </div>
 
-            {category === 'sonhos' && (
-                <div className="semear-main__field">
-                    <label className="semear-main__label" htmlFor="entry-feedback">Feedback</label>
-                    <textarea
-                        id="entry-feedback"
-                        className="semear-main__feedback-input"
-                        value={feedback}
-                        onChange={(event) => onFeedbackChange(event.target.value)}
-                        placeholder="Anote suas percepções sobre este sonho..."
-                        rows={4}
-                    />
-                </div>
-            )}
+            <div className="semear-main__field">
+                <label className="semear-main__label" htmlFor="entry-feedback">Feedback</label>
+                <textarea
+                    id="entry-feedback"
+                    className="semear-main__feedback-input"
+                    value={feedback}
+                    onChange={(event) => onFeedbackChange(event.target.value)}
+                    placeholder="Anote suas percepções sobre este registro..."
+                    rows={4}
+                />
+            </div>
 
             <div className="semear-main__actions">
                 <button

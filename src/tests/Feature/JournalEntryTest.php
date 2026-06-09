@@ -65,6 +65,28 @@ class JournalEntryTest extends TestCase
         ]);
     }
 
+    public function test_it_stores_the_feedback_for_any_category(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson('/api/journal-entries', [
+            'entry_date' => '2026-06-18',
+            'category' => 'terapia',
+            'content' => 'Sessão produtiva',
+            'feedback' => 'Feedback de uma entrada de terapia',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('feedback', 'Feedback de uma entrada de terapia');
+
+        $this->assertDatabaseHas('journal_entries', [
+            'user_id' => $user->id,
+            'category' => 'terapia',
+            'feedback' => 'Feedback de uma entrada de terapia',
+        ]);
+    }
+
     public function test_users_only_receive_their_own_entries(): void
     {
         $user = User::factory()->create();

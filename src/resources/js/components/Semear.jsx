@@ -217,10 +217,10 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            // O tipo e o feedback pertencem apenas à categoria "Sonhos"; nas demais são descartados.
+            // O tipo pertence apenas à categoria "Sonhos"; nas demais é descartado.
+            // O feedback está disponível para todas as categorias.
             const entryType = editingCategory === 'sonhos' ? type : null;
-            const entryFeedback = editingCategory === 'sonhos' ? feedback : null;
-            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title, entryFeedback);
+            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title, feedback);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
