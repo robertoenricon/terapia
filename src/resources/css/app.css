@@ -710,8 +710,9 @@ body {
 }
 
 .semear-calendar__day--today {
-    color: #a78bfa;
+    color: #c77dff;
     font-weight: 700;
+    text-shadow: 0 0 12px rgba(199, 125, 255, 0.55);
 }
 
 /* Preenchimento do dia selecionado sem registro: destaca, na cor da
