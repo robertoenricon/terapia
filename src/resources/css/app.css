@@ -426,6 +426,8 @@ body {
 
 .semear-dashboard {
     display: grid;
+    /* Dois gráficos lado a lado em telas largas. */
+    grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
 }
 
@@ -1571,6 +1573,11 @@ body {
     .semear__container {
         padding: 1.25rem;
         border-radius: 1.25rem;
+    }
+
+    /* No responsivo os gráficos empilham em formato de bloco. */
+    .semear-dashboard {
+        grid-template-columns: 1fr;
     }
 
     .semear__layout {

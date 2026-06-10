@@ -143,6 +143,17 @@ export default function Dashboard({ userName }) {
                 ) : (
                     <div className="semear-dashboard">
                         <section className="semear-panel semear-box">
+                            <h2 className="semear-box__title">Dados referentes a Sonhos</h2>
+                            {totalDreams > 0 ? (
+                                <PieChart data={slices} />
+                            ) : (
+                                <p className="semear-box__empty">
+                                    Ainda não há sonhos com tipo definido para exibir o gráfico.
+                                </p>
+                            )}
+                        </section>
+
+                        <section className="semear-panel semear-box">
                             <h2 className="semear-box__title">Registros por categoria</h2>
                             {entries.length > 0 ? (
                                 <PieChart
@@ -154,17 +165,6 @@ export default function Dashboard({ userName }) {
                             ) : (
                                 <p className="semear-box__empty">
                                     Ainda não há registros para exibir o gráfico.
-                                </p>
-                            )}
-                        </section>
-
-                        <section className="semear-panel semear-box">
-                            <h2 className="semear-box__title">Dados referentes a Sonhos</h2>
-                            {totalDreams > 0 ? (
-                                <PieChart data={slices} />
-                            ) : (
-                                <p className="semear-box__empty">
-                                    Ainda não há sonhos com tipo definido para exibir o gráfico.
                                 </p>
                             )}
                         </section>
