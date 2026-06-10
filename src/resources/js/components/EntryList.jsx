@@ -165,7 +165,7 @@ export default function EntryList({
                                 aria-label={category.label}
                                 title={category.label}
                             >
-                                <CategoryIcon name={category.value} />
+                                <CategoryIcon name={category.value} size={28} />
                             </button>
                         ))}
 
