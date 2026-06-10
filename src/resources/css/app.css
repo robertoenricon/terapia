@@ -1658,6 +1658,14 @@ body {
     }
 }
 
+/* Acima de 800px, o justify-content das categorias fica comentado
+   para facilitar a ativação manual quando necessário. */
+@media (min-width: 800px) {
+    .semear-categories {
+        /* justify-content: space-between; */
+    }
+}
+
 /* ------------------------------------------------------------------ */
 /* Modal de seleção de categoria                                     */
 /* ------------------------------------------------------------------ */
