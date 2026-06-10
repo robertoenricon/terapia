@@ -764,6 +764,17 @@ body {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
+/* Com um filtro de categoria ativo, escurece levemente os dias do calendário
+   para deixar em evidência os que possuem registros daquela categoria. */
+.semear-calendar--filtered .semear-calendar__day {
+    opacity: 0.4;
+    transition: opacity 0.15s, background-color 0.15s, color 0.15s, transform 0.15s;
+}
+
+.semear-calendar--filtered .semear-calendar__day--highlight {
+    opacity: 1;
+}
+
 /* Todo dia com registro mostra um ponto por categoria, abaixo do número,
    cada um na cor da sua categoria (uma bolinha por registro daquele dia). */
 .semear-calendar__dots {

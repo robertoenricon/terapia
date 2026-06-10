@@ -27,8 +27,15 @@ export default function Calendar({ viewDate, selectedDate, entryCategories, acti
     const days = buildCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
     const today = new Date();
 
+    // Ao filtrar por categoria, escurece levemente o calendário para destacar
+    // os dias que possuem registros daquela categoria.
+    const calendarClasses = [
+        'semear-calendar',
+        activeCategory ? 'semear-calendar--filtered' : '',
+    ].filter(Boolean).join(' ');
+
     return (
-        <div className="semear-calendar">
+        <div className={calendarClasses}>
             <div className="semear-calendar__header">
                 <button type="button" className="semear-icon-btn" onClick={onPrev} aria-label="Mês anterior">
                     ‹
@@ -58,6 +65,10 @@ export default function Calendar({ viewDate, selectedDate, entryCategories, acti
                     // do número (uma bolinha por registro daquele dia).
                     const hasDots = categories.length > 0;
 
+                    // Com um filtro ativo, mantém em evidência os dias que têm
+                    // registros da categoria filtrada (os demais ficam escurecidos).
+                    const isHighlighted = activeCategory && categories.includes(activeCategory);
+
                     // Sem registro, o dia selecionado é preenchido com a cor da
                     // categoria ativa para destacar onde a entrada será criada.
                     let fillTheme = null;
@@ -71,6 +82,7 @@ export default function Calendar({ viewDate, selectedDate, entryCategories, acti
                         fillTheme ? `semear-calendar__day--fill-${fillTheme}` : '',
                         isSelected ? 'semear-calendar__day--selected' : '',
                         !fillTheme && isToday ? 'semear-calendar__day--today' : '',
+                        isHighlighted ? 'semear-calendar__day--highlight' : '',
                     ].filter(Boolean).join(' ');
 
                     return (
