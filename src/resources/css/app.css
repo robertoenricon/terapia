@@ -1235,22 +1235,6 @@ body {
     box-shadow: 0 8px 20px var(--semear-centro-glow);
 }
 
-.semear-category-clear {
-    background: transparent;
-    border: none;
-    color: var(--semear-muted);
-    font-size: 0.85rem;
-    cursor: pointer;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.6rem;
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.semear-category-clear:hover {
-    background-color: var(--semear-border);
-    color: var(--semear-text);
-}
-
 .semear-entries__toggle {
     width: 100%;
     margin-top: 1rem;

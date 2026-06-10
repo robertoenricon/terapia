@@ -16,7 +16,8 @@ const MAX_PREVIEW_LENGTH = 150;
  * Lista as entradas recentes do Semear ("Registros").
  *
  * Exibe os filtros de categoria; ao escolher um, os demais são ocultados e a
- * lista passa a mostrar apenas aquela categoria. Quando "Sonhos" está ativo,
+ * lista passa a mostrar apenas aquela categoria. Clicar novamente no ícone
+ * ativo limpa o filtro e volta a exibir todas as categorias. Quando "Sonhos" está ativo,
  * também exibe os tipos (Pesadelo, Médio, Bom e Ótimo) para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, permitindo expandir a
  * descrição completa ou abrir a entrada correspondente para alteração.
@@ -161,19 +162,15 @@ export default function EntryList({
                                     `semear-category-chip--${category.theme}`,
                                     activeCategory === category.value ? 'semear-category-chip--active' : '',
                                 ].filter(Boolean).join(' ')}
-                                onClick={() => onSelectCategory(category.value)}
+                                // Alterna o filtro: clicar no ícone ativo limpa, exibindo todas as categorias.
+                                onClick={() => (activeCategory === category.value ? onClearCategory() : onSelectCategory(category.value))}
                                 aria-label={category.label}
+                                aria-pressed={activeCategory === category.value}
                                 title={category.label}
                             >
                                 <CategoryIcon name={category.value} size={20} />
                             </button>
                         ))}
-
-                    {activeCategory && (
-                        <button type="button" className="semear-category-clear" onClick={onClearCategory}>
-                            ← Voltar
-                        </button>
-                    )}
                 </div>
 
                 {activeCategory === 'sonhos' && (
