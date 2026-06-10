@@ -120,16 +120,16 @@ export default function Dashboard({ userName }) {
         <div className="semear">
             <div className="semear__container">
                 <header className="semear__header">
-                    <div>
+                    <div className="semear__brand">
                         <h1 className="semear__title">
                             <span className="semear__logo">🌱</span> Dashboard
                         </h1>
-                    </div>
-                    <div className="semear-user">
-                        <span className="semear-user__name">{userName}</span>
                         <a className="semear-nav-link" href="/semear">
                             Voltar
                         </a>
+                    </div>
+                    <div className="semear-user">
+                        <span className="semear-user__name">{userName}</span>
                         <button
                             type="button"
                             className="semear-logout-btn"
