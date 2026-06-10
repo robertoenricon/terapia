@@ -345,16 +345,16 @@ export default function Semear({ userName }) {
         <div className="semear">
             <div className="semear__container">
                 <header className="semear__header">
-                    <div>
+                    <div className="semear__brand">
                         <h1 className="semear__title">
                             <span className="semear__logo">🌱</span> Semear
                         </h1>
-                    </div>
-                    <div className="semear-user">
-                        <span className="semear-user__name">{userName}</span>
                         <a className="semear-nav-link" href="/dashboard">
                             Dashboard
                         </a>
+                    </div>
+                    <div className="semear-user">
+                        <span className="semear-user__name">{userName}</span>
                         <button
                             type="button"
                             className="semear-logout-btn"

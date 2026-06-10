@@ -269,6 +269,13 @@ body {
     margin-bottom: 1.75rem;
 }
 
+/* Agrupa o título "Semear" e o botão "Dashboard" lado a lado, à esquerda. */
+.semear__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .semear-alert {
     margin: -0.5rem 0 1.5rem;
     border: 0;
