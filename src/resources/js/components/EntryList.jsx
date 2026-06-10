@@ -7,6 +7,7 @@ import {
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 import { ENTRY_TYPES, ENTRY_TYPE_LIST } from '../utils/entryTypes';
+import CategoryIcon from './CategoryIcon';
 
 // Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
 const MAX_PREVIEW_LENGTH = 150;
@@ -156,12 +157,15 @@ export default function EntryList({
                                 type="button"
                                 className={[
                                     'semear-category-chip',
+                                    'semear-category-chip--icon',
                                     `semear-category-chip--${category.theme}`,
                                     activeCategory === category.value ? 'semear-category-chip--active' : '',
                                 ].filter(Boolean).join(' ')}
                                 onClick={() => onSelectCategory(category.value)}
+                                aria-label={category.label}
+                                title={category.label}
                             >
-                                {category.label}
+                                <CategoryIcon name={category.value} />
                             </button>
                         ))}
 
