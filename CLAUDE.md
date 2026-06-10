@@ -20,9 +20,12 @@ Este documento define como o código deve ser escrito, documentado e organizado.
 - **Documente todas as classes e métodos criados**, de forma simples e objetiva.
 - **A documentação (comentários, docblocks, descrições) deve estar em Português do Brasil (PT-BR).**
 - **A nomenclatura de arquivos, classes e métodos deve estar em Inglês.**
-- **A cada solicitação, criar uma Branch nova.**
-- **Sempre que realizar um commit, já abra a PR em sequencia.**
-- **Toda solicitação deve começar com a criação de uma branch nova.** Nunca continue adicionando conteúdo em uma branch já existente: para cada novo pedido, crie sempre uma branch nova a partir da `main` e, ao final, suba uma PR.
+
+### Fluxo de Git (obrigatório a cada solicitação)
+
+1. **Toda solicitação deve começar com a criação de uma branch nova a partir da `main`.** Nunca reutilize ou continue adicionando conteúdo em uma branch que já teve PR aberto: para cada novo pedido, crie sempre uma branch nova.
+2. **Ao finalizar os commits da solicitação, abra o PR automaticamente**, sem aguardar pedido explícito. Cada solicitação tem o seu próprio PR.
+3. **Após o PR ser mesclado, exclua a branch** (local e remota), mantendo a `main` como única base para o próximo pedido. Não exclua a branch antes do merge, pois isso fecharia o PR.
 
 
 ## 3. Nomenclatura (em Inglês)
