@@ -55,16 +55,16 @@
     --grad-centro: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
 
     /* Tipos de registro — escala de humor (pior → melhor) */
-    --semear-pesadelo: #fb7185;        /* Pesadelo — vermelho/rosa */
-    --semear-pesadelo-soft: rgba(251, 113, 133, 0.16);
-    --semear-ruim: #de5d1e;            /* Ruim — laranja */
-    --semear-ruim-soft: rgba(222, 93, 30, 0.16);
-    --semear-medio: #fbbf24;           /* Médio — âmbar */
-    --semear-medio-soft: rgba(251, 191, 36, 0.16);
-    --semear-bom: #00f2ff;             /* Bom — ciano vibrante */
-    --semear-bom-soft: rgba(0, 242, 255, 0.16);
-    --semear-otimo: #4ade80;           /* Ótimo — verde */
-    --semear-otimo-soft: rgba(74, 222, 128, 0.16);
+    --semear-pesadelo: #ff0025;        /* Pesadelo — vermelho */
+    --semear-pesadelo-soft: rgba(255, 0, 37, 0.16);
+    --semear-ruim: #919500;            /* Ruim — verde-oliva */
+    --semear-ruim-soft: rgba(145, 149, 0, 0.16);
+    --semear-medio: #ffe7ab;           /* Médio — areia */
+    --semear-medio-soft: rgba(255, 231, 171, 0.16);
+    --semear-bom: #3aec00;             /* Bom — verde vibrante */
+    --semear-bom-soft: rgba(58, 236, 0, 0.16);
+    --semear-otimo: #00f2ff;           /* Ótimo — ciano vibrante */
+    --semear-otimo-soft: rgba(0, 242, 255, 0.16);
 
     /* Marca: combinação das duas categorias */
     --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
