@@ -5,6 +5,7 @@ import { fetchEntries } from '../api/journal';
 import { logout } from '../api/auth';
 import { ENTRY_TYPE_LIST } from '../utils/entryTypes';
 import { CATEGORY_LIST } from '../utils/categories';
+import { fromDateKey, formatShortDate } from '../utils/date';
 
 /**
  * Tela de indicadores (dashboard) do Semear.
@@ -77,6 +78,22 @@ export default function Dashboard({ userName }) {
         }));
     }, [entries]);
 
+    /**
+     * Data do primeiro registro existente (a entrada mais antiga), já
+     * formatada como "DD/MM/AAAA". Retorna nulo quando não há registros.
+     */
+    const firstEntryDate = useMemo(() => {
+        if (entries.length === 0) {
+            return null;
+        }
+
+        const earliestKey = entries
+            .map((entry) => entry.entry_date.slice(0, 10))
+            .reduce((earliest, key) => (key < earliest ? key : earliest));
+
+        return formatShortDate(fromDateKey(earliestKey));
+    }, [entries]);
+
     /** Total de sonhos com tipo definido (define se há dados para o gráfico). */
     const totalDreams = useMemo(
         () => slices.reduce((sum, slice) => sum + slice.value, 0),
@@ -142,8 +159,17 @@ export default function Dashboard({ userName }) {
                     </div>
                 ) : (
                     <div className="semear-dashboard">
+                        {firstEntryDate && (
+                            <div className="semear-dashboard__intro">
+                                <p className="semear-dashboard__first-entry">
+                                    Primeiro Registro: {firstEntryDate}
+                                </p>
+                                <hr className="semear-dashboard__divider" />
+                            </div>
+                        )}
+
                         <section className="semear-panel semear-box">
-                            <h2 className="semear-box__title">Dados referentes a Sonhos</h2>
+                            <h2 className="semear-box__title">Total por Sonhos</h2>
                             {totalDreams > 0 ? (
                                 <PieChart data={slices} />
                             ) : (
@@ -154,7 +180,7 @@ export default function Dashboard({ userName }) {
                         </section>
 
                         <section className="semear-panel semear-box">
-                            <h2 className="semear-box__title">Registros por categoria</h2>
+                            <h2 className="semear-box__title">Total por Categoria</h2>
                             {entries.length > 0 ? (
                                 <PieChart
                                     data={categorySlices}
