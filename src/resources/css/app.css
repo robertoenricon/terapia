@@ -1658,11 +1658,11 @@ body {
     }
 }
 
-/* Acima de 800px, o justify-content das categorias fica comentado
-   para facilitar a ativação manual quando necessário. */
+/* Acima de 800px, o justify-content deixa de ser aplicado nas categorias,
+   voltando ao alinhamento padrão (à esquerda). */
 @media (min-width: 800px) {
     .semear-categories {
-        /* justify-content: space-between; */
+        justify-content: normal;
     }
 }
 
