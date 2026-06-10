@@ -725,7 +725,7 @@ body {
 }
 
 .semear-calendar__day--today {
-    color: #c77dff;
+    color: #b1ff7d;
     font-weight: 700;
     text-shadow: 0 0 12px rgba(199, 125, 255, 0.55);
 }
