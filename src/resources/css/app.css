@@ -1159,7 +1159,7 @@ body {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .semear-category-chip {
