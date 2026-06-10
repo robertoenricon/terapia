@@ -57,9 +57,18 @@ function describeDonutSlice(cx, cy, outerRadius, innerRadius, startAngle, endAng
  * @param {Object} props - Propriedades do componente.
  * @param {Array<{label: string, value: number, color: string}>} props.data - Fatias do gráfico.
  * @param {number} [props.size] - Tamanho (largura/altura) da rosca em pixels.
+ * @param {string} [props.unitSingular] - Rótulo central no singular (ex.: "sonho").
+ * @param {string} [props.unitPlural] - Rótulo central no plural (ex.: "sonhos").
+ * @param {string} [props.ariaLabel] - Descrição acessível do gráfico.
  * @returns {JSX.Element} Componente do gráfico de rosca.
  */
-export default function PieChart({ data, size = 260 }) {
+export default function PieChart({
+    data,
+    size = 260,
+    unitSingular = 'sonho',
+    unitPlural = 'sonhos',
+    ariaLabel = 'Gráfico de rosca com a porcentagem dos tipos de sonhos',
+}) {
     const total = data.reduce((sum, slice) => sum + slice.value, 0);
     const center = size / 2;
     // Margem para evitar que a sombra/contorno das fatias seja cortado.
@@ -80,7 +89,7 @@ export default function PieChart({ data, size = 260 }) {
                     height={size}
                     viewBox={`0 0 ${size} ${size}`}
                     role="img"
-                    aria-label="Gráfico de rosca com a porcentagem dos tipos de sonhos"
+                    aria-label={ariaLabel}
                 >
                     {slices.length === 1 ? (
                         // Uma única fatia ocupa 100%: desenha o anel completo com
@@ -150,7 +159,7 @@ export default function PieChart({ data, size = 260 }) {
                         textAnchor="middle"
                         dominantBaseline="central"
                     >
-                        {total === 1 ? 'sonho' : 'sonhos'}
+                        {total === 1 ? unitSingular : unitPlural}
                     </text>
                 </svg>
             </div>

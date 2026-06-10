@@ -4,13 +4,15 @@ import BootstrapAlert from './BootstrapAlert';
 import { fetchEntries } from '../api/journal';
 import { logout } from '../api/auth';
 import { ENTRY_TYPE_LIST } from '../utils/entryTypes';
+import { CATEGORY_LIST } from '../utils/categories';
 
 /**
  * Tela de indicadores (dashboard) do Semear.
  *
- * Carrega as entradas registradas, isola as da categoria "Sonhos" e exibe um
- * gráfico de pizza com a porcentagem de cada tipo ("Pesadelo", "Médio", "Bom"
- * e "Ótimo"), usando as mesmas cores definidas para os tipos.
+ * Carrega as entradas registradas e exibe dois gráficos de rosca: um com a
+ * distribuição dos registros por categoria ("Terapia", "Sonhos", "Evento" e
+ * "Centro") e outro com a porcentagem de cada tipo de sonho ("Pesadelo",
+ * "Médio", "Bom" e "Ótimo"), usando as mesmas cores definidas na paleta.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {string} props.userName - Nome do usuário autenticado.
@@ -32,6 +34,26 @@ export default function Dashboard({ userName }) {
             })
             .finally(() => setLoading(false));
     }, []);
+
+    /**
+     * Fatias do gráfico de categorias: total de registros por categoria,
+     * mantendo a ordem e a cor de cada categoria.
+     */
+    const categorySlices = useMemo(() => {
+        const counts = Object.fromEntries(CATEGORY_LIST.map((category) => [category.value, 0]));
+
+        entries.forEach((entry) => {
+            if (counts[entry.category] !== undefined) {
+                counts[entry.category] += 1;
+            }
+        });
+
+        return CATEGORY_LIST.map((category) => ({
+            label: category.label,
+            value: counts[category.value],
+            color: category.color,
+        }));
+    }, [entries]);
 
     /**
      * Fatias do gráfico: contagem de entradas de "Sonhos" por tipo, mantendo a
@@ -120,6 +142,22 @@ export default function Dashboard({ userName }) {
                     </div>
                 ) : (
                     <div className="semear-dashboard">
+                        <section className="semear-panel semear-box">
+                            <h2 className="semear-box__title">Registros por categoria</h2>
+                            {entries.length > 0 ? (
+                                <PieChart
+                                    data={categorySlices}
+                                    unitSingular="registro"
+                                    unitPlural="registros"
+                                    ariaLabel="Gráfico de rosca com o total de registros por categoria"
+                                />
+                            ) : (
+                                <p className="semear-box__empty">
+                                    Ainda não há registros para exibir o gráfico.
+                                </p>
+                            )}
+                        </section>
+
                         <section className="semear-panel semear-box">
                             <h2 className="semear-box__title">Dados referentes a Sonhos</h2>
                             {totalDreams > 0 ? (
