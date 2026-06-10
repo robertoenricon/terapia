@@ -61,6 +61,18 @@ export function formatLongDate(date) {
 }
 
 /**
+ * Formata uma data no padrão curto "DD/MM/AAAA".
+ *
+ * @param {Date} date - Data a ser formatada.
+ * @returns {string} Data no formato "DD/MM/AAAA".
+ */
+export function formatShortDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${day}/${month}/${date.getFullYear()}`;
+}
+
+/**
  * Monta a matriz de dias exibida no calendário de um mês.
  *
  * Inclui os dias do mês anterior e seguinte necessários para completar

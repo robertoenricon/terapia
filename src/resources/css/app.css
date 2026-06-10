@@ -431,6 +431,25 @@ body {
     gap: 1.25rem;
 }
 
+/* Cabeçalho da dashboard com a data do primeiro registro. */
+.semear-dashboard__intro {
+    /* Ocupa a largura total acima dos gráficos lado a lado. */
+    grid-column: 1 / -1;
+}
+
+.semear-dashboard__first-entry {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+    color: var(--semear-text);
+}
+
+.semear-dashboard__divider {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid var(--semear-border);
+    opacity: 1;
+}
+
 .semear-box {
     padding: 1.5rem;
 }
