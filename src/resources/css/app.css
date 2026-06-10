@@ -1159,7 +1159,7 @@ body {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.75rem;
 }
 
 .semear-category-chip {
@@ -1173,14 +1173,14 @@ body {
     transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-/* Variante somente com ícone: chips dividem a largura total da linha. */
+/* Variante somente com ícone: caixa quadrada, proporcional ao ícone. */
 .semear-category-chip--icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: 1 1 0;
-    min-width: 0;
-    padding: 0.9rem;
+    /* Padding igual em todos os lados, proporcional ao tamanho do ícone. */
+    padding: 0.6em;
+    font-size: 20px;
     line-height: 0;
 }
 
