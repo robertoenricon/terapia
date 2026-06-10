@@ -15,7 +15,13 @@ export const CATEGORIES = {
     terapia: { value: 'terapia', label: 'Terapia', theme: 'terapia' },
     sonhos: { value: 'sonhos', label: 'Sonhos', theme: 'sonhos' },
     evento: { value: 'evento', label: 'Evento', theme: 'evento' },
+    centro: { value: 'centro', label: 'Centro', theme: 'centro' },
 };
 
 /** Lista ordenada das categorias para renderização (chips, modal). */
-export const CATEGORY_LIST = [CATEGORIES.terapia, CATEGORIES.sonhos, CATEGORIES.evento];
+export const CATEGORY_LIST = [
+    CATEGORIES.terapia,
+    CATEGORIES.sonhos,
+    CATEGORIES.evento,
+    CATEGORIES.centro,
+];

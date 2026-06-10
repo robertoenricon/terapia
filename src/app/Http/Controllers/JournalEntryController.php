@@ -57,7 +57,7 @@ class JournalEntryController extends Controller
     {
         $data = $request->validate([
             'entry_date' => ['required', 'date'],
-            'category' => ['required', 'in:terapia,sonhos,evento'],
+            'category' => ['required', 'in:terapia,sonhos,evento,centro'],
             'type' => ['nullable', 'in:pesadelo,ruim,medio,bom,otimo'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['nullable', 'string', 'max:50000'],
