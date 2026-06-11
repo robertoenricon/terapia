@@ -21,6 +21,7 @@ const MAX_LENGTH = 5000;
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
  * @param {string} props.feedback - Feedback livre, disponível para todas as categorias.
+ * @param {boolean} props.feedbackVisible - Indica se o campo de feedback está visível.
  * @param {number} props.length - Quantidade de caracteres do texto.
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
@@ -28,6 +29,7 @@ const MAX_LENGTH = 5000;
  * @param {Function} props.onTypeChange - Callback com o tipo escolhido (ou nulo).
  * @param {Function} props.onTitleChange - Callback com o novo título.
  * @param {Function} props.onFeedbackChange - Callback com o novo feedback.
+ * @param {Function} props.onToggleFeedback - Callback para ocultar ou exibir o feedback.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {Function} props.onSave - Callback ao salvar a entrada.
  * @param {Function} props.onDelete - Callback ao excluir a entrada.
@@ -41,6 +43,7 @@ export default function EntryEditor({
     title,
     content,
     feedback,
+    feedbackVisible,
     length,
     canDelete,
     saving,
@@ -48,6 +51,7 @@ export default function EntryEditor({
     onTypeChange,
     onTitleChange,
     onFeedbackChange,
+    onToggleFeedback,
     onChange,
     onSave,
     onDelete,
@@ -136,15 +140,28 @@ export default function EntryEditor({
             </div>
 
             <div className="semear-main__field">
-                <label className="semear-main__label" htmlFor="entry-feedback">Feedback</label>
-                <textarea
-                    id="entry-feedback"
-                    className="semear-main__feedback-input"
-                    value={feedback}
-                    onChange={(event) => onFeedbackChange(event.target.value)}
-                    placeholder="Anote suas percepções sobre este registro..."
-                    rows={4}
-                />
+                <button
+                    type="button"
+                    className="semear-main__label semear-main__label--toggle"
+                    onClick={onToggleFeedback}
+                    aria-expanded={feedbackVisible}
+                    aria-controls="entry-feedback"
+                >
+                    Feedback
+                    <span className="semear-main__toggle-icon" aria-hidden="true">
+                        {feedbackVisible ? '▲' : '▼'}
+                    </span>
+                </button>
+                {feedbackVisible && (
+                    <textarea
+                        id="entry-feedback"
+                        className="semear-main__feedback-input"
+                        value={feedback}
+                        onChange={(event) => onFeedbackChange(event.target.value)}
+                        placeholder="Anote suas percepções sobre este registro..."
+                        rows={4}
+                    />
+                )}
             </div>
 
             <div className="semear-main__actions">

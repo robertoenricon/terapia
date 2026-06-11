@@ -40,6 +40,8 @@ export default function Semear({ userName }) {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [feedback, setFeedback] = useState('');
+    // Controla se o campo de feedback está visível no editor.
+    const [feedbackVisible, setFeedbackVisible] = useState(false);
     const [length, setLength] = useState(0);
     const [loadingEntries, setLoadingEntries] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -107,7 +109,11 @@ export default function Semear({ userName }) {
     useEffect(() => {
         setType(selectedEntry?.type || null);
         setTitle(selectedEntry?.title || '');
-        setFeedback(selectedEntry?.feedback || '');
+        const entryFeedback = selectedEntry?.feedback || '';
+        setFeedback(entryFeedback);
+        // Ao abrir o registro, exibe o campo de feedback apenas quando está vazio;
+        // se já houver feedback, ele começa oculto e pode ser revelado ao clicar.
+        setFeedbackVisible(entryFeedback.trim() === '');
         const html = selectedEntry?.content || '';
         setContent(html);
         const text = html.replace(/<[^>]*>/g, '');
@@ -423,6 +429,7 @@ export default function Semear({ userName }) {
                     title={title}
                     content={content}
                     feedback={feedback}
+                    feedbackVisible={feedbackVisible}
                     length={length}
                     canDelete={Boolean(selectedEntry)}
                     saving={saving}
@@ -430,6 +437,7 @@ export default function Semear({ userName }) {
                     onTypeChange={setType}
                     onTitleChange={setTitle}
                     onFeedbackChange={setFeedback}
+                    onToggleFeedback={() => setFeedbackVisible((visible) => !visible)}
                     onChange={handleChange}
                     onSave={handleSave}
                     onDelete={handleRequestDelete}
