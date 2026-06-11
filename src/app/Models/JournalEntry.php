@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Cada entrada guarda os acontecimentos, pensamentos e sentimentos
  * registrados pelo usuário em um determinado dia.
  */
-#[Fillable(['user_id', 'entry_date', 'category', 'type', 'title', 'content', 'feedback', 'pinned'])]
+#[Fillable(['user_id', 'entry_date', 'category', 'type', 'title', 'content', 'feedback', 'pinned', 'starred'])]
 class JournalEntry extends Model
 {
     /** @use HasFactory<\Database\Factories\JournalEntryFactory> */
@@ -34,6 +34,7 @@ class JournalEntry extends Model
         return [
             'entry_date' => 'date',
             'pinned' => 'boolean',
+            'starred' => 'boolean',
         ];
     }
 }

@@ -1188,6 +1188,103 @@ body {
     box-shadow: inset 3px 0 0 var(--semear-border-strong);
 }
 
+/* Botão de marcar/desmarcar a entrada como favorita (estrela). */
+.semear-entry-card__star {
+    align-self: center;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.65rem;
+    padding: 0;
+    background: transparent;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    /* Ícone neutro quando a entrada não está marcada como favorita. */
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
+}
+
+.semear-entry-card__star:hover {
+    opacity: 1;
+    filter: none;
+    background-color: var(--semear-border);
+}
+
+.semear-entry-card__star:focus-visible {
+    outline: 2px solid var(--semear-sonhos);
+    outline-offset: -2px;
+}
+
+/* Destaca o botão quando a entrada está marcada, com a cor da categoria. */
+.semear-entry-card__star--active {
+    opacity: 1;
+    filter: none;
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--terapia {
+    border-color: var(--semear-terapia);
+    background-color: var(--semear-terapia-soft);
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--sonhos {
+    border-color: var(--semear-sonhos);
+    background-color: var(--semear-sonhos-soft);
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--evento {
+    border-color: var(--semear-evento);
+    background-color: var(--semear-evento-soft);
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--centro {
+    border-color: var(--semear-centro);
+    background-color: var(--semear-centro-soft);
+}
+
+/* Botão de filtro que exibe apenas as entradas favoritas (estrela). */
+.semear-star-filter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.75rem;
+    padding: 0;
+    background: transparent;
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
+}
+
+.semear-star-filter:hover {
+    opacity: 1;
+    filter: none;
+    background-color: var(--semear-border);
+}
+
+.semear-star-filter:focus-visible {
+    outline: 2px solid var(--semear-sonhos);
+    outline-offset: -2px;
+}
+
+/* Realça o filtro de favoritos quando está ativo. */
+.semear-star-filter--active {
+    opacity: 1;
+    filter: none;
+    border-color: var(--semear-centro);
+    background-color: var(--semear-centro-soft);
+}
+
 .semear-entry-card__description {
     padding: 0.9rem 1rem 1rem;
     border-top: 1px solid var(--semear-border);

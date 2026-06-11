@@ -84,6 +84,29 @@ export async function togglePin(id, pinned) {
 }
 
 /**
+ * Alterna a estrela (favorito) de uma entrada do Semear.
+ *
+ * Entradas com estrela são marcadas como favoritas e podem ser filtradas
+ * na listagem.
+ *
+ * @param {number} id - Identificador da entrada.
+ * @param {boolean} starred - Novo estado de estrela desejado.
+ * @returns {Promise<Object>} Entrada atualizada.
+ */
+export async function toggleStar(id, starred) {
+    const response = await fetch(`${BASE_URL}/${id}/star`, {
+        method: 'PATCH',
+        credentials: 'same-origin',
+        headers: jsonHeaders(),
+        body: JSON.stringify({ starred }),
+    });
+    if (!response.ok) {
+        throw new Error('Não foi possível marcar a estrela da entrada.');
+    }
+    return response.json();
+}
+
+/**
  * Remove uma entrada do Semear pelo seu identificador.
  *
  * @param {number} id - Identificador da entrada.

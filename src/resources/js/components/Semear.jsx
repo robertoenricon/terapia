@@ -5,7 +5,7 @@ import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
 import ConfirmModal from './ConfirmModal';
 import BootstrapAlert from './BootstrapAlert';
-import { deleteEntry, fetchEntries, saveEntry, togglePin } from '../api/journal';
+import { deleteEntry, fetchEntries, saveEntry, togglePin, toggleStar } from '../api/journal';
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 import { CATEGORY_LIST } from '../utils/categories';
@@ -282,6 +282,27 @@ export default function Semear({ userName }) {
     };
 
     /**
+     * Marca ou desmarca a estrela (favorito) de uma entrada na listagem.
+     *
+     * Atualiza o estado local com a entrada retornada pela API.
+     *
+     * @param {Object} entry - Entrada que terá a estrela alternada.
+     */
+    const handleToggleStar = async (entry) => {
+        try {
+            const updated = await toggleStar(entry.id, !entry.starred);
+            setEntries((current) => current.map(
+                (item) => (item.id === updated.id ? updated : item),
+            ));
+        } catch (error) {
+            setAlert({
+                type: 'danger',
+                message: error.message,
+            });
+        }
+    };
+
+    /**
      * Abre o modal de confirmação de exclusão, se houver entrada selecionada.
      */
     const handleRequestDelete = () => {
@@ -411,6 +432,7 @@ export default function Semear({ userName }) {
                             showAll={showAll}
                             onEdit={handleEditEntry}
                             onTogglePin={handleTogglePin}
+                            onToggleStar={handleToggleStar}
                             onSelectCategory={handleSelectCategory}
                             onClearCategory={handleClearCategory}
                             onToggleAll={() => setShowAll((open) => !open)}

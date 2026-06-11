@@ -29,6 +29,7 @@ const MAX_PREVIEW_LENGTH = 150;
  * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
  * @param {Function} props.onEdit - Callback ao alterar uma entrada.
  * @param {Function} props.onTogglePin - Callback ao fixar/desafixar uma entrada.
+ * @param {Function} props.onToggleStar - Callback ao marcar/desmarcar a estrela de uma entrada.
  * @param {Function} props.onSelectCategory - Callback ao escolher uma categoria.
  * @param {Function} props.onClearCategory - Callback ao limpar o filtro.
  * @param {Function} props.onToggleAll - Alterna entre ver todas/recentes.
@@ -41,6 +42,7 @@ export default function EntryList({
     showAll,
     onEdit,
     onTogglePin,
+    onToggleStar,
     onSelectCategory,
     onClearCategory,
     onToggleAll,
@@ -48,6 +50,8 @@ export default function EntryList({
     const [expandedEntryId, setExpandedEntryId] = useState(null);
     const [search, setSearch] = useState('');
     const [activeType, setActiveType] = useState(null);
+    // Quando ativo, exibe apenas as entradas marcadas com estrela (favoritas).
+    const [starredOnly, setStarredOnly] = useState(false);
 
     // Os tipos pertencem às categorias "Sonhos" e "Centro"; ao trocar de
     // categoria, limpa o filtro de tipo.
@@ -77,9 +81,13 @@ export default function EntryList({
         })
         : entries;
     // Refina por tipo quando "Sonhos" está ativo e um tipo foi selecionado.
-    const filtered = activeType
+    const byType = activeType
         ? matched.filter((entry) => entry.type === activeType)
         : matched;
+    // Quando o filtro de estrela está ativo, mantém apenas as entradas favoritas.
+    const filtered = starredOnly
+        ? byType.filter((entry) => Boolean(entry.starred))
+        : byType;
     // Mantém os registros fixados no topo, preservando a ordem de data em cada grupo.
     const ordered = [...filtered].sort(
         (a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
@@ -175,6 +183,21 @@ export default function EntryList({
                                 <CategoryIcon name={category.value} size={20} />
                             </button>
                         ))}
+
+                    <button
+                        type="button"
+                        className={[
+                            'semear-star-filter',
+                            starredOnly ? 'semear-star-filter--active' : '',
+                        ].filter(Boolean).join(' ')}
+                        // Alterna o filtro de favoritos: exibe apenas entradas com estrela.
+                        onClick={() => setStarredOnly((active) => !active)}
+                        aria-pressed={starredOnly}
+                        aria-label={starredOnly ? 'Mostrar todas as entradas' : 'Mostrar apenas favoritas'}
+                        title={starredOnly ? 'Mostrar todas as entradas' : 'Mostrar apenas favoritas'}
+                    >
+                        ⭐
+                    </button>
                 </div>
 
                 {typeFilterOptions.length > 0 && (
@@ -201,7 +224,7 @@ export default function EntryList({
 
             {visible.length === 0 && (
                 <p className="semear-entries__empty">
-                    {query || activeType
+                    {query || activeType || starredOnly
                         ? 'Nenhum registro encontrado para esta busca.'
                         : 'Nenhuma entrada registrada ainda.'}
                 </p>
@@ -217,6 +240,7 @@ export default function EntryList({
                     const entryType = ENTRY_TYPES[entry.type];
                     const isExpanded = expandedEntryId === entry.id;
                     const isPinned = Boolean(entry.pinned);
+                    const isStarred = Boolean(entry.starred);
 
                     return (
                         <li
@@ -225,6 +249,7 @@ export default function EntryList({
                                 'semear-entry-card',
                                 isSelected ? 'semear-entry-card--selected' : '',
                                 isPinned ? 'semear-entry-card--pinned' : '',
+                                isStarred ? 'semear-entry-card--starred' : '',
                             ].filter(Boolean).join(' ')}
                         >
                             <div className="semear-entry-card__top">
@@ -277,6 +302,20 @@ export default function EntryList({
                                     title={isPinned ? 'Desafixar' : 'Fixar'}
                                 >
                                     📌
+                                </button>
+                                <button
+                                    type="button"
+                                    className={[
+                                        'semear-entry-card__star',
+                                        `semear-entry-card__star--${category?.theme || 'terapia'}`,
+                                        isStarred ? 'semear-entry-card__star--active' : '',
+                                    ].filter(Boolean).join(' ')}
+                                    onClick={() => onToggleStar(entry)}
+                                    aria-label={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
+                                    aria-pressed={isStarred}
+                                    title={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
+                                >
+                                    ⭐
                                 </button>
                                 <button
                                     type="button"
