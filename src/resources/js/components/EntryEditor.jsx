@@ -96,7 +96,6 @@ export default function EntryEditor({
 
             {typeOptions.length > 0 && (
                 <div className="semear-main__field">
-                    <span className="semear-main__label">Tipo</span>
                     <div className="semear-type-options" role="group" aria-label="Tipo do registro">
                         {typeOptions.map((entryType) => (
                             <button
@@ -119,7 +118,6 @@ export default function EntryEditor({
             )}
 
             <div className="semear-main__field">
-                <label className="semear-main__label" htmlFor="entry-title">Título</label>
                 <input
                     id="entry-title"
                     type="text"
@@ -127,6 +125,7 @@ export default function EntryEditor({
                     value={title}
                     onChange={(event) => onTitleChange(event.target.value)}
                     placeholder="Dê um título para este registro..."
+                    aria-label="Título"
                     maxLength={255}
                 />
             </div>
