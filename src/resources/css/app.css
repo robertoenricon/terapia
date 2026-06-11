@@ -1374,6 +1374,23 @@ body {
     font-weight: 700;
 }
 
+/* Rótulo "Feedback" clicável para ocultar ou exibir o campo. */
+.semear-main__label--toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    justify-self: start;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.semear-main__toggle-icon {
+    font-size: 0.7rem;
+    line-height: 1;
+}
+
 .semear-main__title-input {
     width: 100%;
     border: 1px solid var(--semear-border);
