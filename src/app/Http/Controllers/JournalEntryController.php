@@ -110,6 +110,30 @@ class JournalEntryController extends Controller
     }
 
     /**
+     * Alterna o estado de estrela (favorito) da entrada informada.
+     *
+     * Entradas com estrela são marcadas como favoritas e podem ser
+     * filtradas na listagem.
+     *
+     * @param  Request      $request      Requisição com o novo estado de estrela.
+     * @param  JournalEntry $journalEntry Entrada cuja estrela será alterada.
+     * @return JsonResponse                Entrada atualizada.
+     */
+    public function toggleStar(Request $request, JournalEntry $journalEntry): JsonResponse
+    {
+        abort_unless($journalEntry->user_id === $request->user()->id, 404);
+
+        $data = $request->validate([
+            'starred' => ['required', 'boolean'],
+        ]);
+
+        $journalEntry->starred = $data['starred'];
+        $journalEntry->save();
+
+        return response()->json($journalEntry);
+    }
+
+    /**
      * Remove a entrada informada do Semear.
      *
      * @param  JournalEntry $journalEntry Entrada a ser removida.

@@ -190,6 +190,46 @@ class JournalEntryTest extends TestCase
         ]);
     }
 
+    public function test_it_stars_and_unstars_an_entry(): void
+    {
+        $user = User::factory()->create();
+        $entry = JournalEntry::factory()->for($user)->create([
+            'category' => 'terapia',
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$entry->id}/star", ['starred' => true])
+            ->assertOk()
+            ->assertJsonPath('starred', true);
+
+        $this->assertDatabaseHas('journal_entries', [
+            'id' => $entry->id,
+            'starred' => true,
+        ]);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$entry->id}/star", ['starred' => false])
+            ->assertOk()
+            ->assertJsonPath('starred', false);
+    }
+
+    public function test_user_cannot_star_another_users_entry(): void
+    {
+        $user = User::factory()->create();
+        $otherEntry = JournalEntry::factory()
+            ->for(User::factory())
+            ->create(['category' => 'terapia']);
+
+        $this->actingAs($user)
+            ->patchJson("/api/journal-entries/{$otherEntry->id}/star", ['starred' => true])
+            ->assertNotFound();
+
+        $this->assertDatabaseHas('journal_entries', [
+            'id' => $otherEntry->id,
+            'starred' => false,
+        ]);
+    }
+
     public function test_user_cannot_delete_another_users_entry(): void
     {
         $user = User::factory()->create();
