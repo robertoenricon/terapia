@@ -155,14 +155,14 @@ export default function EntryEditor({
                     </span>
                 </button>
                 {feedbackVisible && (
-                    <textarea
-                        id="entry-feedback"
-                        className="semear-main__feedback-input"
-                        value={feedback}
-                        onChange={(event) => onFeedbackChange(event.target.value)}
-                        placeholder="Anote suas percepções sobre este registro..."
-                        rows={4}
-                    />
+                    <div id="entry-feedback">
+                        <RichTextEditor
+                            value={feedback}
+                            onChange={(html) => onFeedbackChange(html)}
+                            placeholder="Anote suas percepções sobre este registro..."
+                            showToolbar={false}
+                        />
+                    </div>
                 )}
             </div>
 

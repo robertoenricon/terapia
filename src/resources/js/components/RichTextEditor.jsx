@@ -13,9 +13,10 @@ const EMOJIS = ['😀', '😊', '😍', '🥰', '😌', '😢', '😡', '😴', 
  * @param {string} props.value - Conteúdo em HTML exibido no editor.
  * @param {Function} props.onChange - Callback com (html, textLength).
  * @param {string} props.placeholder - Texto exibido quando vazio.
+ * @param {boolean} [props.showToolbar=true] - Exibe a barra de formatação.
  * @returns {JSX.Element} Componente do editor de texto rico.
  */
-export default function RichTextEditor({ value, onChange, placeholder }) {
+export default function RichTextEditor({ value, onChange, placeholder, showToolbar = true }) {
     const editorRef = useRef(null);
     const [showEmojis, setShowEmojis] = useState(false);
 
@@ -62,6 +63,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
 
     return (
         <div className="semear-editor">
+            {showToolbar && (
             <div className="semear-editor__toolbar">
                 <button type="button" className="semear-tool" onClick={() => applyCommand('bold')} aria-label="Negrito">
                     <strong>B</strong>
@@ -100,6 +102,7 @@ export default function RichTextEditor({ value, onChange, placeholder }) {
                     )}
                 </div>
             </div>
+            )}
 
             <div
                 ref={editorRef}

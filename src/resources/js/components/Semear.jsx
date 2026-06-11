@@ -112,9 +112,10 @@ export default function Semear({ userName }) {
         setTitle(selectedEntry?.title || '');
         const entryFeedback = selectedEntry?.feedback || '';
         setFeedback(entryFeedback);
-        // Ao abrir o registro, exibe o campo de feedback apenas quando está vazio;
-        // se já houver feedback, ele começa oculto e pode ser revelado ao clicar.
-        setFeedbackVisible(entryFeedback.trim() === '');
+        // Ao abrir o registro, o campo de feedback começa oculto quando está vazio;
+        // se já houver feedback, ele é exibido e pode ser ocultado ao clicar.
+        const feedbackText = entryFeedback.replace(/<[^>]*>/g, '').trim();
+        setFeedbackVisible(feedbackText !== '');
         const html = selectedEntry?.content || '';
         setContent(html);
         const text = html.replace(/<[^>]*>/g, '');
