@@ -1429,29 +1429,6 @@ body {
 }
 
 /* Campo de feedback do registro (exclusivo da categoria "sonhos"). */
-.semear-main__feedback-input {
-    width: 100%;
-    border: 1px solid var(--semear-border);
-    border-radius: 0.75rem;
-    padding: 0.7rem 0.9rem;
-    color: var(--semear-text);
-    background-color: var(--semear-surface);
-    font-size: 1rem;
-    line-height: 1.5;
-    resize: vertical;
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.semear-main__feedback-input::placeholder {
-    color: var(--semear-faint);
-}
-
-.semear-main__feedback-input:focus {
-    outline: none;
-    border-color: var(--semear-border-strong);
-    box-shadow: 0 0 0 0.2rem var(--semear-border);
-}
-
 /* Seletor de tipo do registro (chips coloridos no editor). */
 .semear-type-options {
     display: flex;
@@ -1611,7 +1588,6 @@ body {
 }
 
 .semear-editor__area {
-    min-height: 18rem;
     padding: 1rem;
     color: var(--semear-text);
     outline: none;

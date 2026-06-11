@@ -71,7 +71,7 @@ export default function EntryList({
             const haystack = [
                 entry.title || '',
                 getPlainText(entry.content),
-                entry.feedback || '',
+                getPlainText(entry.feedback),
             ].join(' ').toLowerCase();
             return haystack.includes(query);
         })
