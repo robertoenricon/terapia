@@ -9,6 +9,7 @@ import { deleteEntry, fetchEntries, saveEntry, togglePin } from '../api/journal'
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 import { CATEGORY_LIST } from '../utils/categories';
+import { getTypeListByCategory } from '../utils/entryTypes';
 
 /** Índice de ordenação das categorias (cor estável dos pontos do calendário). */
 const CATEGORY_ORDER = Object.fromEntries(
@@ -223,9 +224,9 @@ export default function Semear({ userName }) {
         setSaving(true);
         setAlert(null);
         try {
-            // O tipo pertence apenas à categoria "Sonhos"; nas demais é descartado.
-            // O feedback está disponível para todas as categorias.
-            const entryType = editingCategory === 'sonhos' ? type : null;
+            // O tipo pertence às categorias com tipos ("Sonhos" e "Centro");
+            // nas demais é descartado. O feedback está disponível para todas.
+            const entryType = getTypeListByCategory(editingCategory).length > 0 ? type : null;
             const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title, feedback);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);

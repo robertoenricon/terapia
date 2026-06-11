@@ -87,6 +87,28 @@ class JournalEntryTest extends TestCase
         ]);
     }
 
+    public function test_it_stores_the_type_of_a_centro_entry(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->postJson('/api/journal-entries', [
+            'entry_date' => '2026-06-19',
+            'category' => 'centro',
+            'type' => 'umbanda',
+            'content' => 'Gira de Umbanda',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('type', 'umbanda');
+
+        $this->assertDatabaseHas('journal_entries', [
+            'user_id' => $user->id,
+            'category' => 'centro',
+            'type' => 'umbanda',
+        ]);
+    }
+
     public function test_users_only_receive_their_own_entries(): void
     {
         $user = User::factory()->create();

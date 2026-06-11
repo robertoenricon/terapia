@@ -1,7 +1,7 @@
 import RichTextEditor from './RichTextEditor';
 import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
 import { CATEGORIES } from '../utils/categories';
-import { ENTRY_TYPE_LIST } from '../utils/entryTypes';
+import { getTypeListByCategory } from '../utils/entryTypes';
 
 /** Limite máximo de caracteres do conteúdo de uma entrada. */
 const MAX_LENGTH = 5000;
@@ -17,7 +17,7 @@ const MAX_LENGTH = 5000;
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
  * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento" ou "centro").
- * @param {string|null} props.type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
+ * @param {string|null} props.type - Tipo do registro (tipos de "Sonhos" ou de "Centro").
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
  * @param {string} props.feedback - Feedback livre, disponível para todas as categorias.
@@ -58,6 +58,8 @@ export default function EntryEditor({
     onBack,
 }) {
     const categoryInfo = CATEGORIES[category];
+    // Tipos disponíveis para a categoria atual ("Sonhos" e "Centro" possuem tipos).
+    const typeOptions = getTypeListByCategory(category);
 
     return (
         <div className="semear-modal" role="presentation">
@@ -92,11 +94,11 @@ export default function EntryEditor({
                 {categoryInfo?.label || 'Acontecimentos do dia'}
             </h3>
 
-            {category === 'sonhos' && (
+            {typeOptions.length > 0 && (
                 <div className="semear-main__field">
                     <span className="semear-main__label">Tipo</span>
                     <div className="semear-type-options" role="group" aria-label="Tipo do registro">
-                        {ENTRY_TYPE_LIST.map((entryType) => (
+                        {typeOptions.map((entryType) => (
                             <button
                                 key={entryType.value}
                                 type="button"

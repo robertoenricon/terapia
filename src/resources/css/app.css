@@ -66,6 +66,12 @@
     --semear-otimo: #00f2ff;           /* Ótimo — ciano vibrante */
     --semear-otimo-soft: rgba(0, 242, 255, 0.16);
 
+    /* Tipos da categoria "Centro" */
+    --semear-umbanda: #af0b0b;         /* Umbanda — vermelho */
+    --semear-umbanda-soft: rgba(175, 11, 11, 0.16);
+    --semear-nemd: #4c4fe1;            /* NEMD — azul */
+    --semear-nemd-soft: rgba(76, 79, 225, 0.16);
+
     /* Marca: combinação das duas categorias */
     --grad-brand: linear-gradient(135deg, #34d399 0%, #0ea5e9 100%);
 
@@ -1032,6 +1038,14 @@ body {
     color: var(--semear-otimo);
 }
 
+.semear-entry-type-tag--umbanda {
+    color: var(--semear-umbanda);
+}
+
+.semear-entry-type-tag--nemd {
+    color: var(--semear-nemd);
+}
+
 .semear-entry-card__long {
     display: block;
     max-width: 100%;
@@ -1496,6 +1510,21 @@ body {
     background: var(--semear-otimo);
     border-color: var(--semear-otimo);
     box-shadow: 0 0 0 0.18rem var(--semear-otimo-soft);
+}
+
+/* Tipos da categoria "Centro" usam texto claro por terem fundo escuro. */
+.semear-type-chip--umbanda.semear-type-chip--active {
+    color: #ffffff;
+    background: var(--semear-umbanda);
+    border-color: var(--semear-umbanda);
+    box-shadow: 0 0 0 0.18rem var(--semear-umbanda-soft);
+}
+
+.semear-type-chip--nemd.semear-type-chip--active {
+    color: #ffffff;
+    background: var(--semear-nemd);
+    border-color: var(--semear-nemd);
+    box-shadow: 0 0 0 0.18rem var(--semear-nemd-soft);
 }
 
 .semear-editor {
