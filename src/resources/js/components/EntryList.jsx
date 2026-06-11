@@ -6,7 +6,7 @@ import {
     isSameDay,
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
-import { ENTRY_TYPES, ENTRY_TYPE_LIST } from '../utils/entryTypes';
+import { ENTRY_TYPES, getTypeListByCategory } from '../utils/entryTypes';
 import CategoryIcon from './CategoryIcon';
 
 // Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
@@ -17,8 +17,8 @@ const MAX_PREVIEW_LENGTH = 150;
  *
  * Exibe os filtros de categoria; ao escolher um, os demais são ocultados e a
  * lista passa a mostrar apenas aquela categoria. Clicar novamente no ícone
- * ativo limpa o filtro e volta a exibir todas as categorias. Quando "Sonhos" está ativo,
- * também exibe os tipos (Pesadelo, Médio, Bom e Ótimo) para refinar o filtro.
+ * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
+ * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, permitindo expandir a
  * descrição completa ou abrir a entrada correspondente para alteração.
  *
@@ -49,10 +49,14 @@ export default function EntryList({
     const [search, setSearch] = useState('');
     const [activeType, setActiveType] = useState(null);
 
-    // Os tipos pertencem apenas a "Sonhos"; ao trocar de categoria, limpa o filtro.
+    // Os tipos pertencem às categorias "Sonhos" e "Centro"; ao trocar de
+    // categoria, limpa o filtro de tipo.
     useEffect(() => {
         setActiveType(null);
     }, [activeCategory]);
+
+    // Tipos disponíveis para refinar o filtro da categoria ativa.
+    const typeFilterOptions = getTypeListByCategory(activeCategory);
 
     // Extrai o texto puro de um HTML, descartando as tags de formatação.
     const getPlainText = (html) => {
@@ -173,9 +177,9 @@ export default function EntryList({
                         ))}
                 </div>
 
-                {activeCategory === 'sonhos' && (
+                {typeFilterOptions.length > 0 && (
                     <div className="semear-type-options" role="group" aria-label="Filtrar por tipo">
-                        {ENTRY_TYPE_LIST.map((entryType) => (
+                        {typeFilterOptions.map((entryType) => (
                             <button
                                 key={entryType.value}
                                 type="button"
