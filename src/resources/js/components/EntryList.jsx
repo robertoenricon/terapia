@@ -9,9 +9,6 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 import { ENTRY_TYPES, getTypeListByCategory } from '../utils/entryTypes';
 import CategoryIcon from './CategoryIcon';
 
-// Quantidade máxima de caracteres exibidos na prévia da descrição do registro.
-const MAX_PREVIEW_LENGTH = 150;
-
 /**
  * Lista as entradas recentes do Semear ("Registros").
  *
@@ -94,9 +91,10 @@ export default function EntryList({
     );
     const visible = showAll ? ordered : ordered.slice(0, 3);
 
-    // Sanitiza o HTML e limita o texto visível ao máximo de caracteres definido,
-    // preservando a formatação do editor (negrito, itálico, listas, emojis).
-    const sanitizeHtml = (html, limit = MAX_PREVIEW_LENGTH) => {
+    // Sanitiza o HTML do registro preservando a formatação do editor (negrito,
+    // itálico, listas, emojis) e removendo conteúdo perigoso, sem limitar o
+    // número de caracteres exibidos.
+    const sanitizeHtml = (html) => {
         const parsed = new DOMParser().parseFromString(html || '', 'text/html');
 
         // Remove elementos perigosos.
@@ -111,31 +109,6 @@ export default function EntryList({
                     node.removeAttribute(attr.name);
                 }
             });
-        });
-
-        // Percorre os nós de texto acumulando caracteres até atingir o limite;
-        // o excedente é removido e o último trecho recebe reticências.
-        const walker = parsed.createTreeWalker(parsed.body, NodeFilter.SHOW_TEXT);
-        const overflow = [];
-        let remaining = limit;
-        let truncated = false;
-        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-            if (truncated) {
-                overflow.push(node);
-            } else if (node.textContent.length > remaining) {
-                node.textContent = `${node.textContent.slice(0, remaining)}…`;
-                truncated = true;
-            } else {
-                remaining -= node.textContent.length;
-            }
-        }
-        overflow.forEach((node) => node.remove());
-
-        // Remove elementos que ficaram vazios após o corte (ex.: parágrafos finais).
-        parsed.body.querySelectorAll('*').forEach((node) => {
-            if (!node.textContent.trim() && !node.querySelector('br, img')) {
-                node.remove();
-            }
         });
 
         return parsed.body.innerHTML;
