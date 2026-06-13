@@ -1057,6 +1057,19 @@ body {
     text-overflow: ellipsis;
 }
 
+/* Renderiza a formatacao do resumo (negrito, italico, listas) em uma unica
+   linha, achatando os blocos do editor para nao quebrar o card. */
+.semear-entry-card__long * {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.semear-entry-card__long br {
+    display: none;
+}
+
 .semear-entry-card__badge {
     font-size: 0.68rem;
     font-weight: 700;

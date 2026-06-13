@@ -141,11 +141,6 @@ export default function EntryList({
         return parsed.body.innerHTML;
     };
 
-    // Limita o texto ao máximo de caracteres definido, acrescentando reticências.
-    const truncate = (text, limit = MAX_PREVIEW_LENGTH) => (
-        text.length > limit ? `${text.slice(0, limit)}…` : text
-    );
-
     return (
         <div className="semear-panel semear-entries">
             <div className="semear-entries__toolbar">
@@ -279,9 +274,14 @@ export default function EntryList({
                                                 </span>
                                             )}
                                         </span>
-                                        <span className="semear-entry-card__long">
-                                            {truncate(getPlainText(entry.content)) || 'Sem descrição'}
-                                        </span>
+                                        {getPlainText(entry.content).trim() ? (
+                                            <span
+                                                className="semear-entry-card__long"
+                                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                            />
+                                        ) : (
+                                            <span className="semear-entry-card__long">Sem descrição</span>
+                                        )}
                                     </span>
                                     {category && (
                                         <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
