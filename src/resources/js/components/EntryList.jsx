@@ -293,7 +293,7 @@ export default function EntryList({
                                     </button>
                                     <button
                                         type="button"
-                                        className={`semear-entry-card__edit semear-entry-card__edit--${category?.theme || 'terapia'}`}
+                                        className="semear-entry-card__edit"
                                         onClick={() => onEdit(entry)}
                                         aria-label="Alterar"
                                         title="Alterar"

@@ -1103,6 +1103,8 @@ body {
     background: var(--grad-centro);
 }
 
+/* Botão de alterar a entrada na listagem. Segue o mesmo padrão neutro dos
+   botões de fixar e estrela e nunca assume um estado "ativo". */
 .semear-entry-card__edit {
     align-self: center;
     margin-right: 0.75rem;
@@ -1111,35 +1113,23 @@ body {
     justify-content: center;
     width: 2.3rem;
     height: 2.3rem;
-    border: 1px solid currentColor;
+    border: 1px solid var(--semear-border-strong);
     border-radius: 0.65rem;
     padding: 0;
     background: transparent;
     font-size: 1rem;
     line-height: 1;
     cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.semear-entry-card__edit--terapia {
-    color: var(--semear-terapia);
-}
-
-.semear-entry-card__edit--sonhos {
-    color: var(--semear-sonhos);
-}
-
-.semear-entry-card__edit--evento {
-    color: var(--semear-evento);
-}
-
-.semear-entry-card__edit--centro {
-    color: var(--semear-centro);
+    /* Ícone neutro, igual aos demais botões de ação. */
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
 }
 
 .semear-entry-card__edit:hover {
+    opacity: 1;
+    filter: none;
     background-color: var(--semear-border);
-    color: var(--semear-text);
 }
 
 /* Botão de fixar/desafixar a entrada diretamente na listagem. */
