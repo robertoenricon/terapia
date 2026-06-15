@@ -1643,9 +1643,14 @@ body {
     transition: background-color 0.15s, color 0.15s;
 }
 
-.semear-tool:hover {
-    background-color: var(--semear-border);
-    color: var(--semear-text);
+/* Restringe o destaque ao passar o mouse a dispositivos com ponteiro real,
+   evitando o "hover preso" que mantém o botao marcado apos o toque em telas
+   sensiveis ao toque. */
+@media (hover: hover) {
+    .semear-tool:hover {
+        background-color: var(--semear-border);
+        color: var(--semear-text);
+    }
 }
 
 .semear-tool__divider {
