@@ -928,6 +928,13 @@ body {
     align-items: stretch;
 }
 
+/* Agrupa os botões de ação (fixar, estrela e alterar) da entrada.
+   No desktop ficam lado a lado; no responsivo são empilhados em coluna. */
+.semear-entry-card__actions {
+    display: flex;
+    align-items: center;
+}
+
 .semear-entry-card__summary {
     min-width: 0;
     flex: 1;
@@ -1797,6 +1804,20 @@ body {
     .semear-entry-card__summary {
         gap: 0.6rem;
         padding-right: 0.5rem;
+    }
+
+    /* No responsivo, exibe os ícones de ação um abaixo do outro (em lista). */
+    .semear-entry-card__actions {
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.4rem;
+        padding-right: 0.5rem;
+    }
+
+    .semear-entry-card__pin,
+    .semear-entry-card__star,
+    .semear-entry-card__edit {
+        margin-right: 0;
     }
 
     .semear-entry-card__badge {

@@ -262,43 +262,45 @@ export default function EntryList({
                                         </span>
                                     )}
                                 </button>
-                                <button
-                                    type="button"
-                                    className={[
-                                        'semear-entry-card__pin',
-                                        `semear-entry-card__pin--${category?.theme || 'terapia'}`,
-                                        isPinned ? 'semear-entry-card__pin--active' : '',
-                                    ].filter(Boolean).join(' ')}
-                                    onClick={() => onTogglePin(entry)}
-                                    aria-label={isPinned ? 'Desafixar' : 'Fixar'}
-                                    aria-pressed={isPinned}
-                                    title={isPinned ? 'Desafixar' : 'Fixar'}
-                                >
-                                    📌
-                                </button>
-                                <button
-                                    type="button"
-                                    className={[
-                                        'semear-entry-card__star',
-                                        `semear-entry-card__star--${category?.theme || 'terapia'}`,
-                                        isStarred ? 'semear-entry-card__star--active' : '',
-                                    ].filter(Boolean).join(' ')}
-                                    onClick={() => onToggleStar(entry)}
-                                    aria-label={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
-                                    aria-pressed={isStarred}
-                                    title={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
-                                >
-                                    ⭐
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`semear-entry-card__edit semear-entry-card__edit--${category?.theme || 'terapia'}`}
-                                    onClick={() => onEdit(entry)}
-                                    aria-label="Alterar"
-                                    title="Alterar"
-                                >
-                                    ✏️
-                                </button>
+                                <div className="semear-entry-card__actions">
+                                    <button
+                                        type="button"
+                                        className={[
+                                            'semear-entry-card__pin',
+                                            `semear-entry-card__pin--${category?.theme || 'terapia'}`,
+                                            isPinned ? 'semear-entry-card__pin--active' : '',
+                                        ].filter(Boolean).join(' ')}
+                                        onClick={() => onTogglePin(entry)}
+                                        aria-label={isPinned ? 'Desafixar' : 'Fixar'}
+                                        aria-pressed={isPinned}
+                                        title={isPinned ? 'Desafixar' : 'Fixar'}
+                                    >
+                                        📌
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={[
+                                            'semear-entry-card__star',
+                                            `semear-entry-card__star--${category?.theme || 'terapia'}`,
+                                            isStarred ? 'semear-entry-card__star--active' : '',
+                                        ].filter(Boolean).join(' ')}
+                                        onClick={() => onToggleStar(entry)}
+                                        aria-label={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
+                                        aria-pressed={isStarred}
+                                        title={isStarred ? 'Remover estrela' : 'Marcar com estrela'}
+                                    >
+                                        ⭐
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`semear-entry-card__edit semear-entry-card__edit--${category?.theme || 'terapia'}`}
+                                        onClick={() => onEdit(entry)}
+                                        aria-label="Alterar"
+                                        title="Alterar"
+                                    >
+                                        ✏️
+                                    </button>
+                                </div>
                             </div>
 
                             {isExpanded && (
