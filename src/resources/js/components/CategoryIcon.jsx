@@ -47,6 +47,13 @@ const ICONS = {
             <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
         </g>
     ),
+    // Frases: aspas (citação).
+    frases: (
+        <g fill="currentColor">
+            <path d="M6.5 6 h4 a1 1 0 0 1 1 1 v4.5 a5 5 0 0 1 -4 4.9 a0.9 0.9 0 0 1 -0.6 -1.7 a3 3 0 0 0 2.1 -2.2 H6.5 a1 1 0 0 1 -1 -1 V7 a1 1 0 0 1 1 -1 z" />
+            <path d="M14 6 h4 a1 1 0 0 1 1 1 v4.5 a5 5 0 0 1 -4 4.9 a0.9 0.9 0 0 1 -0.6 -1.7 a3 3 0 0 0 2.1 -2.2 H14 a1 1 0 0 1 -1 -1 V7 a1 1 0 0 1 1 -1 z" />
+        </g>
+    ),
     // Centro: igreja (torre com cruz no topo).
     centro: (
         <g

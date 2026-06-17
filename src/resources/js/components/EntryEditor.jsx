@@ -16,7 +16,7 @@ const MAX_LENGTH = 5000;
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
- * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento" ou "centro").
+ * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento", "frases" ou "centro").
  * @param {string|null} props.type - Tipo do registro (tipos de "Sonhos" ou de "Centro").
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.

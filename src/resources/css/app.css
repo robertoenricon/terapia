@@ -47,6 +47,13 @@
     --semear-evento-glow: rgba(239, 68, 68, 0.32);
     --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
 
+    /* Frases — âmbar/dourado (citações, palavras marcantes) */
+    --semear-frases: #fbbf24;
+    --semear-frases-dark: #f59e0b;
+    --semear-frases-soft: rgba(251, 191, 36, 0.16);
+    --semear-frases-glow: rgba(245, 158, 11, 0.32);
+    --grad-frases: linear-gradient(135deg, #fcd34d 0%, #d97706 100%);
+
     /* Centro — violeta/roxo (acolhimento, equilíbrio) */
     --semear-centro: #a78bfa;
     --semear-centro-dark: #8b5cf6;
@@ -648,6 +655,14 @@ body {
     box-shadow: 0 12px 28px var(--semear-evento-glow);
 }
 
+.semear-save-btn--frases {
+    background: var(--grad-frases);
+}
+
+.semear-save-btn--frases:hover:not(:disabled) {
+    box-shadow: 0 12px 28px var(--semear-frases-glow);
+}
+
 .semear-save-btn--centro {
     background: var(--grad-centro);
 }
@@ -785,6 +800,12 @@ body {
     font-weight: 700;
 }
 
+.semear-calendar__day--fill-frases {
+    background: var(--grad-frases);
+    color: #fff;
+    font-weight: 700;
+}
+
 .semear-calendar__day--fill-centro {
     background: var(--grad-centro);
     color: #fff;
@@ -836,6 +857,10 @@ body {
 
 .semear-calendar__dot--evento {
     background: var(--semear-evento);
+}
+
+.semear-calendar__dot--frases {
+    background: var(--semear-frases);
 }
 
 .semear-calendar__dot--centro {
@@ -981,6 +1006,10 @@ body {
     color: var(--semear-evento);
 }
 
+.semear-entry-card__day--frases {
+    color: var(--semear-frases);
+}
+
 .semear-entry-card__day--centro {
     color: var(--semear-centro);
 }
@@ -1014,6 +1043,10 @@ body {
 
 .semear-entry-card__weekday--evento {
     color: var(--semear-evento);
+}
+
+.semear-entry-card__weekday--frases {
+    color: var(--semear-frases);
 }
 
 .semear-entry-card__weekday--centro {
@@ -1097,6 +1130,10 @@ body {
 
 .semear-entry-card__badge--evento {
     background: var(--grad-evento);
+}
+
+.semear-entry-card__badge--frases {
+    background: var(--grad-frases);
 }
 
 .semear-entry-card__badge--centro {
@@ -1186,6 +1223,11 @@ body {
     background-color: var(--semear-evento-soft);
 }
 
+.semear-entry-card__pin--active.semear-entry-card__pin--frases {
+    border-color: var(--semear-frases);
+    background-color: var(--semear-frases-soft);
+}
+
 .semear-entry-card__pin--active.semear-entry-card__pin--centro {
     border-color: var(--semear-centro);
     background-color: var(--semear-centro-soft);
@@ -1250,6 +1292,11 @@ body {
 .semear-entry-card__star--active.semear-entry-card__star--evento {
     border-color: var(--semear-evento);
     background-color: var(--semear-evento-soft);
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--frases {
+    border-color: var(--semear-frases);
+    background-color: var(--semear-frases-soft);
 }
 
 .semear-entry-card__star--active.semear-entry-card__star--centro {
@@ -1383,6 +1430,18 @@ body {
     box-shadow: 0 8px 20px var(--semear-evento-glow);
 }
 
+.semear-category-chip--frases {
+    color: var(--semear-frases);
+}
+
+.semear-category-chip--frases:hover,
+.semear-category-chip--frases.semear-category-chip--active {
+    background: var(--grad-frases);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px var(--semear-frases-glow);
+}
+
 .semear-category-chip--centro {
     color: var(--semear-centro);
 }
@@ -1477,6 +1536,10 @@ body {
 
 .semear-main__subtitle--evento {
     color: var(--semear-evento);
+}
+
+.semear-main__subtitle--frases {
+    color: var(--semear-frases);
 }
 
 .semear-main__subtitle--centro {

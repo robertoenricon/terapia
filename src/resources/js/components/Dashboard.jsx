@@ -11,8 +11,8 @@ import { fromDateKey, formatShortDate } from '../utils/date';
  * Tela de indicadores (dashboard) do Semear.
  *
  * Carrega as entradas registradas e exibe dois gráficos de rosca: um com a
- * distribuição dos registros por categoria ("Terapia", "Sonhos", "Evento" e
- * "Centro") e outro com a porcentagem de cada tipo de sonho ("Pesadelo",
+ * distribuição dos registros por categoria ("Terapia", "Sonhos", "Evento",
+ * "Frases" e "Centro") e outro com a porcentagem de cada tipo de sonho ("Pesadelo",
  * "Médio", "Bom" e "Ótimo"), usando as mesmas cores definidas na paleta.
  *
  * @param {Object} props - Propriedades do componente.
