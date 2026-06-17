@@ -109,6 +109,61 @@ class JournalEntryTest extends TestCase
         ]);
     }
 
+    public function test_it_keeps_two_categories_on_the_same_date(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->postJson('/api/journal-entries', [
+            'entry_date' => '2026-06-17',
+            'category' => 'terapia',
+            'content' => 'Sessão de terapia',
+        ])->assertCreated();
+
+        $this->actingAs($user)->postJson('/api/journal-entries', [
+            'entry_date' => '2026-06-17',
+            'category' => 'sonhos',
+            'content' => 'Sonho da noite',
+        ])->assertCreated();
+
+        // As duas categorias coexistem na mesma data, sem sobrescrever uma à outra.
+        $this->assertDatabaseCount('journal_entries', 2);
+        $this->assertDatabaseHas('journal_entries', [
+            'user_id' => $user->id,
+            'category' => 'terapia',
+            'content' => 'Sessão de terapia',
+        ]);
+        $this->assertDatabaseHas('journal_entries', [
+            'user_id' => $user->id,
+            'category' => 'sonhos',
+            'content' => 'Sonho da noite',
+        ]);
+    }
+
+    public function test_show_by_date_returns_all_categories_of_the_date(): void
+    {
+        $user = User::factory()->create();
+
+        JournalEntry::factory()->for($user)->create([
+            'entry_date' => '2026-06-17',
+            'category' => 'terapia',
+        ]);
+        JournalEntry::factory()->for($user)->create([
+            'entry_date' => '2026-06-17',
+            'category' => 'sonhos',
+        ]);
+        JournalEntry::factory()->for($user)->create([
+            'entry_date' => '2026-06-18',
+            'category' => 'evento',
+        ]);
+
+        $this->actingAs($user)
+            ->getJson('/api/journal-entries/date/2026-06-17')
+            ->assertOk()
+            ->assertJsonCount(2)
+            ->assertJsonPath('0.category', 'sonhos')
+            ->assertJsonPath('1.category', 'terapia');
+    }
+
     public function test_users_only_receive_their_own_entries(): void
     {
         $user = User::factory()->create();
