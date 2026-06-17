@@ -1874,10 +1874,16 @@ body {
         padding-right: 0.5rem;
     }
 
+    /* Ícones de ação um pouco menores no responsivo, deixando a coluna
+       mais enxuta e alinhada ao restante do card. */
     .semear-entry-card__pin,
     .semear-entry-card__star,
     .semear-entry-card__edit {
         margin-right: 0;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.55rem;
+        font-size: 0.85rem;
     }
 
     .semear-entry-card__badge {
