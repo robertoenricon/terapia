@@ -1309,13 +1309,14 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.4rem;
-    height: 2.4rem;
+    /* Mesmo diâmetro da bola dos chips de categoria, na mesma linha. */
+    width: 2.15rem;
+    height: 2.15rem;
     border: 1px solid var(--semear-border-strong);
     border-radius: 0.75rem;
     padding: 0;
     background: transparent;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     line-height: 1;
     cursor: pointer;
     filter: grayscale(1);
@@ -1368,8 +1369,9 @@ body {
     /* Distribui os botões proporcionalmente na largura do container,
        eliminando o espaço em branco ao final da última caixa. */
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+    /* Mantém todos os filtros (categorias + favoritos) na mesma linha. */
+    flex-wrap: nowrap;
+    gap: 0.4rem;
 }
 
 .semear-category-chip {
@@ -1388,9 +1390,9 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    /* Padding igual em todos os lados, proporcional ao tamanho do ícone. */
-    padding: 0.6em;
-    font-size: 20px;
+    /* Bola compacta ao redor do ícone, para caberem todas na mesma linha. */
+    padding: 0.4em;
+    font-size: 18px;
     line-height: 0;
 }
 
@@ -1998,6 +2000,14 @@ body {
 
 .semear-modal__option--evento:hover {
     box-shadow: 0 14px 30px var(--semear-evento-glow);
+}
+
+.semear-modal__option--frases {
+    background: var(--grad-frases);
+}
+
+.semear-modal__option--frases:hover {
+    box-shadow: 0 14px 30px var(--semear-frases-glow);
 }
 
 .semear-modal__option--centro {
