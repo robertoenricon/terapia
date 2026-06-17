@@ -4,9 +4,9 @@ import { CATEGORY_LIST } from '../utils/categories';
  * Modal de seleção da categoria de uma nova entrada.
  *
  * Exibe uma sobreposição com as opções disponíveis (Terapia em verde,
- * Sonhos em azul, Evento em vermelho e Centro em violeta). Ao escolher uma
- * opção, informa o componente pai; ao clicar fora ou no botão de fechar,
- * cancela a seleção.
+ * Sonhos em azul, Evento em vermelho, Frases em âmbar e Centro em violeta).
+ * Ao escolher uma opção, informa o componente pai; ao clicar fora ou no botão
+ * de fechar, cancela a seleção.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Function} props.onChoose - Callback com o valor da categoria escolhida.

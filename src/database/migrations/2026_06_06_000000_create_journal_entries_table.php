@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             // Data à qual a entrada se refere.
             $table->date('entry_date');
-            // Categoria da entrada: "terapia", "sonhos", "evento" ou "centro".
+            // Categoria da entrada: "terapia", "sonhos", "evento", "frases" ou "centro".
             $table->string('category');
             // Conteúdo em HTML simples digitado pelo usuário.
             $table->text('content')->nullable();

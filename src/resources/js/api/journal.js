@@ -42,7 +42,7 @@ export async function fetchEntries() {
  *
  * @param {string} entryDate - Data no formato "YYYY-MM-DD".
  * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
- * @param {string} category - Categoria da entrada ("terapia", "sonhos", "evento" ou "centro").
+ * @param {string} category - Categoria da entrada ("terapia", "sonhos", "evento", "frases" ou "centro").
  * @param {string|null} type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} title - Título curto e opcional da entrada.
  * @param {string|null} feedback - Feedback livre, exclusivo da categoria "sonhos".
