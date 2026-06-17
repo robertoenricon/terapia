@@ -114,6 +114,66 @@ export default function EntryList({
         return parsed.body.innerHTML;
     };
 
+    // Tags de bloco que, ao se sucederem, representam uma quebra de linha.
+    const BLOCK_TAGS = /^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DD|DIV|DL|DT|FIELDSET|FIGURE|FOOTER|FORM|H[1-6]|HEADER|HR|LI|MAIN|NAV|OL|P|PRE|SECTION|TABLE|UL)$/;
+
+    // Extrai o HTML apenas da primeira linha do conteúdo, preservando a
+    // formatação inline (negrito, itálico). Considera quebra de linha tanto o
+    // <br> quanto a fronteira entre blocos (parágrafos, divs, itens de lista).
+    // Quando o conteúdo não possui quebra, o resultado equivale ao conteúdo
+    // completo, mantendo o fluxo atual (linha única com "..." no excesso).
+    const getFirstLineHtml = (html) => {
+        const parsed = new DOMParser().parseFromString(html || '', 'text/html');
+        const firstLine = parsed.createElement('div');
+        // "broke" indica que a primeira quebra de linha já foi encontrada;
+        // "emitted" indica que algum conteúdo visível já foi adicionado.
+        const state = { broke: false, emitted: false };
+
+        const collect = (source, target) => {
+            for (const child of [...source.childNodes]) {
+                if (state.broke) {
+                    return;
+                }
+                // Nós de texto: copia preservando o conteúdo.
+                if (child.nodeType === Node.TEXT_NODE) {
+                    if (child.textContent.trim()) {
+                        state.emitted = true;
+                    }
+                    target.appendChild(child.cloneNode(false));
+                    continue;
+                }
+                if (child.nodeType !== Node.ELEMENT_NODE) {
+                    continue;
+                }
+                // <br>: quebra explícita; encerra a primeira linha.
+                if (child.tagName === 'BR') {
+                    state.broke = true;
+                    return;
+                }
+                // Bloco: representa uma linha inteira.
+                if (BLOCK_TAGS.test(child.tagName)) {
+                    // Um bloco após conteúdo já emitido é uma nova linha.
+                    if (state.emitted) {
+                        state.broke = true;
+                        return;
+                    }
+                    // Achata o primeiro bloco (o resumo é exibido em linha
+                    // única) e encerra: blocos seguintes são novas linhas.
+                    collect(child, target);
+                    state.broke = true;
+                    return;
+                }
+                // Elemento inline (strong, em, span...): clona e processa o conteúdo.
+                const inlineClone = child.cloneNode(false);
+                target.appendChild(inlineClone);
+                collect(child, inlineClone);
+            }
+        };
+
+        collect(parsed.body, firstLine);
+        return firstLine.innerHTML;
+    };
+
     return (
         <div className="semear-panel semear-entries">
             <div className="semear-entries__toolbar">
@@ -250,7 +310,7 @@ export default function EntryList({
                                         {getPlainText(entry.content).trim() ? (
                                             <span
                                                 className="semear-entry-card__long"
-                                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(getFirstLineHtml(entry.content)) }}
                                             />
                                         ) : (
                                             <span className="semear-entry-card__long">Sem descrição</span>
