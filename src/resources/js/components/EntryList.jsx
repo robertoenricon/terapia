@@ -16,8 +16,9 @@ import CategoryIcon from './CategoryIcon';
  * lista passa a mostrar apenas aquela categoria. Clicar novamente no ícone
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
- * Cada item mostra o dia, a data e a categoria, permitindo expandir a
- * descrição completa ou abrir a entrada correspondente para alteração.
+ * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
+ * descrição na linha principal e permitindo expandir o feedback registrado
+ * ou abrir a entrada correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -364,18 +365,18 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                getPlainText(entry.content).trim() ? (
+                                getPlainText(entry.feedback).trim() ? (
                                     <div
                                         id={`entry-description-${entry.id}`}
                                         className="semear-entry-card__description"
-                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
                                     />
                                 ) : (
                                     <div
                                         id={`entry-description-${entry.id}`}
                                         className="semear-entry-card__description"
                                     >
-                                        Esta entrada não possui descrição.
+                                        Esta entrada não possui feedback.
                                     </div>
                                 )
                             )}
