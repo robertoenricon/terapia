@@ -17,8 +17,9 @@ import CategoryIcon from './CategoryIcon';
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
- * descrição na linha principal e permitindo expandir o feedback registrado
- * ou abrir a entrada correspondente para alteração.
+ * descrição na linha principal. Ao expandir, revela o feedback quando
+ * preenchido ou, na ausência dele, a descrição completa, além de permitir
+ * abrir a entrada correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -267,9 +268,10 @@ export default function EntryList({
                         && entry.category === activeCategory;
                     const category = CATEGORIES[entry.category];
                     const entryType = ENTRY_TYPES[entry.type];
-                    // Só permite expandir e revelar a área quando há feedback preenchido.
+                    // Ao expandir, exibe o feedback quando preenchido; caso contrário,
+                    // mostra a descrição completa do registro.
                     const hasFeedback = getPlainText(entry.feedback).trim() !== '';
-                    const isExpanded = hasFeedback && expandedEntryId === entry.id;
+                    const isExpanded = expandedEntryId === entry.id;
                     const isPinned = Boolean(entry.pinned);
                     const isStarred = Boolean(entry.starred);
 
@@ -287,9 +289,9 @@ export default function EntryList({
                                 <button
                                     type="button"
                                     className="semear-entry-card__summary"
-                                    onClick={() => hasFeedback && setExpandedEntryId(isExpanded ? null : entry.id)}
+                                    onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
                                     aria-expanded={isExpanded}
-                                    aria-controls={hasFeedback ? `entry-description-${entry.id}` : undefined}
+                                    aria-controls={`entry-description-${entry.id}`}
                                 >
                                     <span className="semear-entry-card__date">
                                         <span className={`semear-entry-card__day semear-entry-card__day--${entry.category}`}>
@@ -367,11 +369,26 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                <div
-                                    id={`entry-description-${entry.id}`}
-                                    className="semear-entry-card__description"
-                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
-                                />
+                                hasFeedback ? (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
+                                    />
+                                ) : getPlainText(entry.content).trim() ? (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                    />
+                                ) : (
+                                    <div
+                                        id={`entry-description-${entry.id}`}
+                                        className="semear-entry-card__description"
+                                    >
+                                        Esta entrada não possui descrição.
+                                    </div>
+                                )
                             )}
                         </li>
                     );
