@@ -17,9 +17,10 @@ import CategoryIcon from './CategoryIcon';
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
- * descrição na linha principal. Ao expandir, revela o feedback quando
- * preenchido ou, na ausência dele, a descrição completa, além de permitir
- * abrir a entrada correspondente para alteração.
+ * descrição na linha principal e um "Ver mais" dentro do próprio card para
+ * abri-lo. Ao expandir, revela o feedback quando preenchido ou, na ausência
+ * dele, a descrição completa, além de permitir abrir a entrada
+ * correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -320,6 +321,9 @@ export default function EntryList({
                                         ) : (
                                             <span className="semear-entry-card__long">Sem descrição</span>
                                         )}
+                                        <span className="semear-entry-card__more" aria-hidden="true">
+                                            {isExpanded ? 'Ver menos ▲' : 'Ver mais ▼'}
+                                        </span>
                                     </span>
                                     {category && (
                                         <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
