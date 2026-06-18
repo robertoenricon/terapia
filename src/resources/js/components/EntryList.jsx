@@ -267,7 +267,9 @@ export default function EntryList({
                         && entry.category === activeCategory;
                     const category = CATEGORIES[entry.category];
                     const entryType = ENTRY_TYPES[entry.type];
-                    const isExpanded = expandedEntryId === entry.id;
+                    // Só permite expandir e revelar a área quando há feedback preenchido.
+                    const hasFeedback = getPlainText(entry.feedback).trim() !== '';
+                    const isExpanded = hasFeedback && expandedEntryId === entry.id;
                     const isPinned = Boolean(entry.pinned);
                     const isStarred = Boolean(entry.starred);
 
@@ -285,9 +287,9 @@ export default function EntryList({
                                 <button
                                     type="button"
                                     className="semear-entry-card__summary"
-                                    onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
+                                    onClick={() => hasFeedback && setExpandedEntryId(isExpanded ? null : entry.id)}
                                     aria-expanded={isExpanded}
-                                    aria-controls={`entry-description-${entry.id}`}
+                                    aria-controls={hasFeedback ? `entry-description-${entry.id}` : undefined}
                                 >
                                     <span className="semear-entry-card__date">
                                         <span className={`semear-entry-card__day semear-entry-card__day--${entry.category}`}>
@@ -365,20 +367,11 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                getPlainText(entry.feedback).trim() ? (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
-                                    />
-                                ) : (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                    >
-                                        Esta entrada não possui feedback.
-                                    </div>
-                                )
+                                <div
+                                    id={`entry-description-${entry.id}`}
+                                    className="semear-entry-card__description"
+                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
+                                />
                             )}
                         </li>
                     );
