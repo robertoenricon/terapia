@@ -16,8 +16,9 @@ import CategoryIcon from './CategoryIcon';
  * lista passa a mostrar apenas aquela categoria. Clicar novamente no ícone
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
- * Cada item mostra o dia, a data e a categoria, permitindo expandir a
- * descrição completa ou abrir a entrada correspondente para alteração.
+ * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
+ * descrição na linha principal e permitindo expandir o feedback registrado
+ * ou abrir a entrada correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -266,7 +267,9 @@ export default function EntryList({
                         && entry.category === activeCategory;
                     const category = CATEGORIES[entry.category];
                     const entryType = ENTRY_TYPES[entry.type];
-                    const isExpanded = expandedEntryId === entry.id;
+                    // Só permite expandir e revelar a área quando há feedback preenchido.
+                    const hasFeedback = getPlainText(entry.feedback).trim() !== '';
+                    const isExpanded = hasFeedback && expandedEntryId === entry.id;
                     const isPinned = Boolean(entry.pinned);
                     const isStarred = Boolean(entry.starred);
 
@@ -284,9 +287,9 @@ export default function EntryList({
                                 <button
                                     type="button"
                                     className="semear-entry-card__summary"
-                                    onClick={() => setExpandedEntryId(isExpanded ? null : entry.id)}
+                                    onClick={() => hasFeedback && setExpandedEntryId(isExpanded ? null : entry.id)}
                                     aria-expanded={isExpanded}
-                                    aria-controls={`entry-description-${entry.id}`}
+                                    aria-controls={hasFeedback ? `entry-description-${entry.id}` : undefined}
                                 >
                                     <span className="semear-entry-card__date">
                                         <span className={`semear-entry-card__day semear-entry-card__day--${entry.category}`}>
@@ -364,20 +367,11 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                getPlainText(entry.content).trim() ? (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
-                                    />
-                                ) : (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                    >
-                                        Esta entrada não possui descrição.
-                                    </div>
-                                )
+                                <div
+                                    id={`entry-description-${entry.id}`}
+                                    className="semear-entry-card__description"
+                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
+                                />
                             )}
                         </li>
                     );
