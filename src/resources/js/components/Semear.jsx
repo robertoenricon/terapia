@@ -48,7 +48,6 @@ export default function Semear({ userName }) {
     const [saving, setSaving] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [loggingOut, setLoggingOut] = useState(false);
-    const [showAll, setShowAll] = useState(false);
     const [alert, setAlert] = useState(null);
 
     // Carrega as entradas existentes ao montar o componente.
@@ -429,13 +428,11 @@ export default function Semear({ userName }) {
                             entries={filteredEntries}
                             selectedDate={selectedDate}
                             activeCategory={activeCategory}
-                            showAll={showAll}
                             onEdit={handleEditEntry}
                             onTogglePin={handleTogglePin}
                             onToggleStar={handleToggleStar}
                             onSelectCategory={handleSelectCategory}
                             onClearCategory={handleClearCategory}
-                            onToggleAll={() => setShowAll((open) => !open)}
                         />
                     </div>
                 )}

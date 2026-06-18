@@ -1456,6 +1456,18 @@ body {
     box-shadow: 0 8px 20px var(--semear-centro-glow);
 }
 
+/* Rodapé de paginação dos registros ("Ver mais" / "Ver menos") */
+.semear-entries__pagination {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.semear-entries__pagination .semear-entries__toggle {
+    flex: 1;
+    margin-top: 0;
+}
+
 .semear-entries__toggle {
     width: 100%;
     margin-top: 1rem;
