@@ -38,17 +38,20 @@ export async function fetchEntries() {
 }
 
 /**
- * Cria ou atualiza a entrada de uma data e categoria.
+ * Cria uma nova entrada para uma data e categoria.
+ *
+ * Cada chamada cria sempre um novo registro, permitindo mais de um registro
+ * da mesma categoria na mesma data.
  *
  * @param {string} entryDate - Data no formato "YYYY-MM-DD".
  * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
  * @param {string} category - Categoria da entrada ("terapia", "sonhos", "evento", "frases" ou "centro").
  * @param {string|null} type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} title - Título curto e opcional da entrada.
- * @param {string|null} feedback - Feedback livre, exclusivo da categoria "sonhos".
- * @returns {Promise<Object>} Entrada salva.
+ * @param {string|null} feedback - Feedback livre, disponível para todas as categorias.
+ * @returns {Promise<Object>} Entrada criada.
  */
-export async function saveEntry(entryDate, content, category, type, title, feedback) {
+export async function createEntry(entryDate, content, category, type, title, feedback) {
     const response = await fetch(BASE_URL, {
         method: 'POST',
         credentials: 'same-origin',
@@ -57,6 +60,29 @@ export async function saveEntry(entryDate, content, category, type, title, feedb
     });
     if (!response.ok) {
         throw new Error('Não foi possível salvar a entrada.');
+    }
+    return response.json();
+}
+
+/**
+ * Atualiza uma entrada existente, identificada pelo seu id.
+ *
+ * @param {number} id - Identificador da entrada.
+ * @param {string} content - Conteúdo (HTML) dos acontecimentos do dia.
+ * @param {string|null} type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
+ * @param {string} title - Título curto e opcional da entrada.
+ * @param {string|null} feedback - Feedback livre, disponível para todas as categorias.
+ * @returns {Promise<Object>} Entrada atualizada.
+ */
+export async function updateEntry(id, content, type, title, feedback) {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: jsonHeaders(),
+        body: JSON.stringify({ type, title, content, feedback }),
+    });
+    if (!response.ok) {
+        throw new Error('Não foi possível alterar a entrada.');
     }
     return response.json();
 }
