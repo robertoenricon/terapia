@@ -5,7 +5,7 @@ import EntryEditor from './EntryEditor';
 import CategoryModal from './CategoryModal';
 import ConfirmModal from './ConfirmModal';
 import BootstrapAlert from './BootstrapAlert';
-import { deleteEntry, fetchEntries, saveEntry, togglePin, toggleStar } from '../api/journal';
+import { createEntry, deleteEntry, fetchEntries, togglePin, toggleStar, updateEntry } from '../api/journal';
 import { logout } from '../api/auth';
 import { fromDateKey, toDateKey } from '../utils/date';
 import { CATEGORY_LIST } from '../utils/categories';
@@ -34,6 +34,8 @@ export default function Semear({ userName }) {
     const [viewDate, setViewDate] = useState(new Date());
     const [activeCategory, setActiveCategory] = useState(null);
     const [editingCategory, setEditingCategory] = useState(null);
+    // Id da entrada aberta para alteração; nulo quando se está criando um novo registro.
+    const [editingEntryId, setEditingEntryId] = useState(null);
     const [pendingDate, setPendingDate] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -96,16 +98,23 @@ export default function Semear({ userName }) {
         return map;
     }, [filteredEntries]);
 
-    /** Entrada correspondente à data e categoria em edição, se existir. */
+    /**
+     * Entrada aberta para alteração (quando há uma sendo editada).
+     *
+     * Ao escolher uma data e uma categoria, o editor sempre cria um novo
+     * registro (editingEntryId nulo). A edição ocorre apenas quando o usuário
+     * abre um registro existente pela listagem, identificado pelo seu id.
+     */
     const selectedEntry = useMemo(
-        () => entries.find(
-            (entry) => entry.entry_date.slice(0, 10) === selectedKey
-                && entry.category === editingCategory,
-        ) || null,
-        [entries, selectedKey, editingCategory],
+        () => (editingEntryId
+            ? entries.find((entry) => entry.id === editingEntryId) || null
+            : null),
+        [entries, editingEntryId],
     );
 
-    // Atualiza o tipo, o título, o conteúdo e o feedback do editor sempre que a entrada muda.
+    // Carrega no editor os dados da entrada em edição ou limpa os campos ao
+    // abrir um novo registro. Reage à abertura de cada sessão do editor (data,
+    // categoria e id em edição) para nunca herdar conteúdo não salvo.
     useEffect(() => {
         setType(selectedEntry?.type || null);
         setTitle(selectedEntry?.title || '');
@@ -119,7 +128,7 @@ export default function Semear({ userName }) {
         setContent(html);
         const text = html.replace(/<[^>]*>/g, '');
         setLength(text.length);
-    }, [selectedEntry]);
+    }, [selectedEntry, selectedKey, editingCategory, editingEntryId]);
 
     /**
      * Guarda a data escolhida e abre o modal de categorias.
@@ -147,6 +156,8 @@ export default function Semear({ userName }) {
      */
     const handleChooseCategory = (category) => {
         const date = pendingDate || new Date();
+        // Sempre cria um novo registro para a data e categoria escolhidas.
+        setEditingEntryId(null);
         setEditingCategory(category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
@@ -181,6 +192,7 @@ export default function Semear({ userName }) {
     const handleCloseEditor = () => {
         setSelectedDate(null);
         setEditingCategory(null);
+        setEditingEntryId(null);
     };
 
     /**
@@ -190,6 +202,8 @@ export default function Semear({ userName }) {
      */
     const handleEditEntry = (entry) => {
         const date = fromDateKey(entry.entry_date.slice(0, 10));
+        // Abre o registro específico (pelo id) para alteração.
+        setEditingEntryId(entry.id);
         setEditingCategory(entry.category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
@@ -226,7 +240,10 @@ export default function Semear({ userName }) {
             // O tipo pertence às categorias com tipos ("Sonhos" e "Centro");
             // nas demais é descartado. O feedback está disponível para todas.
             const entryType = getTypeListByCategory(editingCategory).length > 0 ? type : null;
-            const saved = await saveEntry(selectedKey, content, editingCategory, entryType, title, feedback);
+            // Edita o registro aberto (por id) ou cria sempre um novo registro.
+            const saved = isEditing
+                ? await updateEntry(selectedEntry.id, content, entryType, title, feedback)
+                : await createEntry(selectedKey, content, editingCategory, entryType, title, feedback);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
                 return [saved, ...others].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
@@ -239,6 +256,7 @@ export default function Semear({ userName }) {
             setLength(0);
             setSelectedDate(null);
             setEditingCategory(null);
+            setEditingEntryId(null);
             setAlert({
                 type: 'success',
                 message: isEditing
@@ -338,6 +356,7 @@ export default function Semear({ userName }) {
             setShowDeleteModal(false);
             setSelectedDate(null);
             setEditingCategory(null);
+            setEditingEntryId(null);
             setAlert({
                 type: 'success',
                 message: 'Registro excluído com sucesso.',

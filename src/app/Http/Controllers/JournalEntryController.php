@@ -52,11 +52,13 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Cria ou atualiza a entrada de uma data e categoria
-     * (uma entrada por categoria em cada dia).
+     * Cria uma nova entrada para a data e categoria informadas.
+     *
+     * Cada chamada cria sempre um novo registro, permitindo que uma mesma
+     * data possua mais de um registro da mesma categoria.
      *
      * @param  Request $request Requisição com a data e o conteúdo.
-     * @return JsonResponse      Entrada salva com status apropriado.
+     * @return JsonResponse      Entrada criada com status 201.
      */
     public function store(Request $request): JsonResponse
     {
@@ -69,18 +71,10 @@ class JournalEntryController extends Controller
             'feedback' => ['nullable', 'string', 'max:50000'],
         ]);
 
-        $entry = $request->user()
-            ->journalEntries()
-            ->whereDate('entry_date', $data['entry_date'])
-            ->where('category', $data['category'])
-            ->first();
-
-        if ($entry === null) {
-            $entry = $request->user()->journalEntries()->make([
-                'entry_date' => $data['entry_date'],
-                'category' => $data['category'],
-            ]);
-        }
+        $entry = $request->user()->journalEntries()->make([
+            'entry_date' => $data['entry_date'],
+            'category' => $data['category'],
+        ]);
 
         $entry->type = $data['type'] ?? null;
         $entry->title = $data['title'] ?? null;
@@ -88,7 +82,37 @@ class JournalEntryController extends Controller
         $entry->feedback = $data['feedback'] ?? null;
         $entry->save();
 
-        return response()->json($entry, $entry->wasRecentlyCreated ? 201 : 200);
+        return response()->json($entry, 201);
+    }
+
+    /**
+     * Atualiza a entrada informada (identificada pelo seu id).
+     *
+     * Usada ao alterar um registro existente já aberto na listagem, sem
+     * afetar os demais registros da mesma data e categoria.
+     *
+     * @param  Request      $request      Requisição com os dados atualizados.
+     * @param  JournalEntry $journalEntry Entrada a ser atualizada.
+     * @return JsonResponse                Entrada atualizada.
+     */
+    public function update(Request $request, JournalEntry $journalEntry): JsonResponse
+    {
+        abort_unless($journalEntry->user_id === $request->user()->id, 404);
+
+        $data = $request->validate([
+            'type' => ['nullable', 'in:pesadelo,ruim,medio,bom,otimo,umbanda,nemd'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'content' => ['nullable', 'string', 'max:50000'],
+            'feedback' => ['nullable', 'string', 'max:50000'],
+        ]);
+
+        $journalEntry->type = $data['type'] ?? null;
+        $journalEntry->title = $data['title'] ?? null;
+        $journalEntry->content = $data['content'] ?? '';
+        $journalEntry->feedback = $data['feedback'] ?? null;
+        $journalEntry->save();
+
+        return response()->json($journalEntry);
     }
 
     /**
