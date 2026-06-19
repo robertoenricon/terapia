@@ -152,12 +152,22 @@ export default function Semear({ userName }) {
      * A escolha define apenas a categoria do registro em edição; o filtro da
      * lista e do calendário permanece como estava.
      *
+     * Sempre inicia um novo registro: mesmo que já exista um registro nesta
+     * data e categoria, o editor abre em branco e nunca abre um existente para
+     * alteração (a edição de um registro existente é feita pela listagem).
+     *
      * @param {string} category - Categoria selecionada ("terapia" ou "sonhos").
      */
     const handleChooseCategory = (category) => {
         const date = pendingDate || new Date();
-        // Sempre cria um novo registro para a data e categoria escolhidas.
+        // Garante que o editor comece em branco, sem herdar nenhum registro.
         setEditingEntryId(null);
+        setType(null);
+        setTitle('');
+        setContent('');
+        setFeedback('');
+        setFeedbackVisible(false);
+        setLength(0);
         setEditingCategory(category);
         setSelectedDate(date);
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
