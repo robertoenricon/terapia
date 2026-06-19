@@ -20,10 +20,10 @@ const PAGE_SIZE = 10;
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
- * descrição na linha principal e um "Ver mais" dentro do próprio card para
- * abri-lo. Ao expandir, revela o feedback quando preenchido ou, na ausência
- * dele, a descrição completa, além de permitir abrir a entrada
- * correspondente para alteração.
+ * descrição na linha principal. Ao clicar no card, ele expande e revela o
+ * feedback quando preenchido ou, na ausência dele, a descrição completa,
+ * além de um botão "Ver mais" que abre o registro no modal com todas as
+ * informações para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
@@ -332,9 +332,6 @@ export default function EntryList({
                                         ) : (
                                             <span className="semear-entry-card__long">Sem descrição</span>
                                         )}
-                                        <span className="semear-entry-card__more" aria-hidden="true">
-                                            {isExpanded ? 'Ver menos ▲' : 'Ver mais ▼'}
-                                        </span>
                                     </span>
                                     {category && (
                                         <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
@@ -384,26 +381,30 @@ export default function EntryList({
                             </div>
 
                             {isExpanded && (
-                                hasFeedback ? (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
-                                    />
-                                ) : getPlainText(entry.content).trim() ? (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
-                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
-                                    />
-                                ) : (
-                                    <div
-                                        id={`entry-description-${entry.id}`}
-                                        className="semear-entry-card__description"
+                                <div id={`entry-description-${entry.id}`} className="semear-entry-card__expand">
+                                    {hasFeedback ? (
+                                        <div
+                                            className="semear-entry-card__description"
+                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.feedback) }}
+                                        />
+                                    ) : getPlainText(entry.content).trim() ? (
+                                        <div
+                                            className="semear-entry-card__description"
+                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(entry.content) }}
+                                        />
+                                    ) : (
+                                        <div className="semear-entry-card__description">
+                                            Esta entrada não possui descrição.
+                                        </div>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="semear-entry-card__more-btn"
+                                        onClick={() => onEdit(entry)}
                                     >
-                                        Esta entrada não possui descrição.
-                                    </div>
-                                )
+                                        Ver mais
+                                    </button>
+                                </div>
                             )}
                         </li>
                     );

@@ -1110,16 +1110,6 @@ body {
     display: none;
 }
 
-/* "Ver mais" / "Ver menos" exibido dentro do card para abrir o registro. */
-.semear-entry-card__more {
-    display: inline-block;
-    margin-top: 0.35rem;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--semear-sonhos);
-}
-
 .semear-entry-card__badge {
     font-size: 0.68rem;
     font-weight: 700;
@@ -1353,14 +1343,40 @@ body {
     background-color: var(--semear-centro-soft);
 }
 
-.semear-entry-card__description {
-    padding: 0.9rem 1rem 1rem;
+/* Área revelada ao expandir o card: descrição/feedback + botão "Ver mais". */
+.semear-entry-card__expand {
     border-top: 1px solid var(--semear-border);
+}
+
+.semear-entry-card__description {
+    padding: 0.9rem 1rem 0.6rem;
     color: var(--semear-text);
     font-size: 0.92rem;
     line-height: 1.65;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+}
+
+/* Botão que abre o modal do registro com todas as informações. */
+.semear-entry-card__more-btn {
+    display: block;
+    width: calc(100% - 2rem);
+    margin: 0 1rem 1rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.7rem;
+    background: transparent;
+    color: var(--semear-sonhos);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.semear-entry-card__more-btn:hover {
+    background-color: var(--semear-surface);
+    border-color: var(--semear-sonhos);
 }
 
 /* Barra de busca + filtros dos registros (busca acima, categorias abaixo) */
