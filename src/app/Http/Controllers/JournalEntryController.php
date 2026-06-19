@@ -31,19 +31,24 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Retorna a entrada correspondente à data informada, se existir.
+     * Retorna as entradas correspondentes à data informada.
+     *
+     * Uma mesma data pode conter mais de uma entrada, desde que sejam de
+     * categorias diferentes (ex.: "terapia" e "sonhos" no mesmo dia). Por
+     * isso a consulta devolve uma coleção, e não apenas um registro.
      *
      * @param  string $date Data no formato Y-m-d.
-     * @return JsonResponse  Entrada encontrada ou objeto nulo.
+     * @return JsonResponse  Coleção de entradas da data (vazia se não houver).
      */
     public function showByDate(Request $request, string $date): JsonResponse
     {
-        $entry = $request->user()
+        $entries = $request->user()
             ->journalEntries()
             ->whereDate('entry_date', $date)
-            ->first();
+            ->orderBy('category')
+            ->get();
 
-        return response()->json($entry);
+        return response()->json($entries);
     }
 
     /**

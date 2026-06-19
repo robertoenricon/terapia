@@ -50,7 +50,6 @@ export default function Semear({ userName }) {
     const [saving, setSaving] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [loggingOut, setLoggingOut] = useState(false);
-    const [showAll, setShowAll] = useState(false);
     const [alert, setAlert] = useState(null);
 
     // Carrega as entradas existentes ao montar o componente.
@@ -132,23 +131,20 @@ export default function Semear({ userName }) {
     }, [selectedEntry, selectedKey, editingCategory, editingEntryId]);
 
     /**
-     * Abre o editor para a data informada. Se um filtro de categoria estiver
-     * ativo, edita diretamente nessa categoria; caso contrário, guarda a data
-     * e abre o modal para o usuário escolher a categoria do registro.
+     * Guarda a data escolhida e abre o modal de categorias.
+     *
+     * Ao selecionar qualquer dia no calendário — tendo ele conteúdo ou não, e
+     * independentemente de haver filtro ativo — o modal de categorias é exibido
+     * para o usuário escolher em qual categoria deseja registrar ou editar.
+     * Isso permite manter duas categorias diferentes na mesma data, pois cada
+     * escolha abre o editor apenas da categoria selecionada.
      *
      * @param {Date} date - Data escolhida.
      */
     const handleSelectDate = (date) => {
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
-        if (activeCategory) {
-            // Sempre inicia um novo registro, mesmo que já exista um nesta data e categoria.
-            setEditingEntryId(null);
-            setEditingCategory(activeCategory);
-            setSelectedDate(date);
-        } else {
-            setPendingDate(date);
-            setShowModal(true);
-        }
+        setPendingDate(date);
+        setShowModal(true);
     };
 
     /**
@@ -450,13 +446,11 @@ export default function Semear({ userName }) {
                             entries={filteredEntries}
                             selectedDate={selectedDate}
                             activeCategory={activeCategory}
-                            showAll={showAll}
                             onEdit={handleEditEntry}
                             onTogglePin={handleTogglePin}
                             onToggleStar={handleToggleStar}
                             onSelectCategory={handleSelectCategory}
                             onClearCategory={handleClearCategory}
-                            onToggleAll={() => setShowAll((open) => !open)}
                         />
                     </div>
                 )}

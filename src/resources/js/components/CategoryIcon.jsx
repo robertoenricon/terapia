@@ -47,11 +47,20 @@ const ICONS = {
             <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
         </g>
     ),
-    // Frases: aspas (citação).
+    // Evolução: foguete (impulso, crescimento).
     frases: (
-        <g fill="currentColor">
-            <path d="M6.5 6 h4 a1 1 0 0 1 1 1 v4.5 a5 5 0 0 1 -4 4.9 a0.9 0.9 0 0 1 -0.6 -1.7 a3 3 0 0 0 2.1 -2.2 H6.5 a1 1 0 0 1 -1 -1 V7 a1 1 0 0 1 1 -1 z" />
-            <path d="M14 6 h4 a1 1 0 0 1 1 1 v4.5 a5 5 0 0 1 -4 4.9 a0.9 0.9 0 0 1 -0.6 -1.7 a3 3 0 0 0 2.1 -2.2 H14 a1 1 0 0 1 -1 -1 V7 a1 1 0 0 1 1 -1 z" />
+        <g
+            stroke="currentColor"
+            strokeWidth="1.6"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        >
+            <path d="M12 2.5c2.3 2 3.5 4.8 3.5 7.9 0 1.6-.3 3.1-.9 4.6h-5.2c-.6-1.5-.9-3-.9-4.6 0-3.1 1.2-5.9 3.5-7.9z" />
+            <circle cx="12" cy="9" r="1.6" />
+            <path d="M8.4 12.2 5.6 15c-.3.3-.5.8-.5 1.2v1.3l3.4-1.6" />
+            <path d="M15.6 12.2 18.4 15c.3.3.5.8.5 1.2v1.3l-3.4-1.6" />
+            <path d="M10.2 15.5c0 1.2.8 3.5 1.8 5 1-1.5 1.8-3.8 1.8-5" />
         </g>
     ),
     // Centro: igreja (torre com cruz no topo).

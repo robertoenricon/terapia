@@ -9,6 +9,9 @@ import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 import { ENTRY_TYPES, getTypeListByCategory } from '../utils/entryTypes';
 import CategoryIcon from './CategoryIcon';
 
+/** Quantidade de registros exibidos por página na listagem. */
+const PAGE_SIZE = 10;
+
 /**
  * Lista as entradas recentes do Semear ("Registros").
  *
@@ -17,46 +20,50 @@ import CategoryIcon from './CategoryIcon';
  * ativo limpa o filtro e volta a exibir todas as categorias. Quando a categoria
  * ativa possui tipos ("Sonhos" ou "Centro"), também os exibe para refinar o filtro.
  * Cada item mostra o dia, a data e a categoria, exibindo um resumo da
- * descrição na linha principal. Ao expandir, revela o feedback quando
- * preenchido ou, na ausência dele, a descrição completa, além de permitir
- * abrir a entrada correspondente para alteração.
+ * descrição na linha principal e um "Ver mais" dentro do próprio card para
+ * abri-lo. Ao expandir, revela o feedback quando preenchido ou, na ausência
+ * dele, a descrição completa, além de permitir abrir a entrada
+ * correspondente para alteração.
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Array} props.entries - Entradas do Semear (já filtradas por categoria).
  * @param {Date|null} props.selectedDate - Data atualmente selecionada.
  * @param {string|null} props.activeCategory - Categoria filtrada no momento.
- * @param {boolean} props.showAll - Indica se todas as entradas são exibidas.
  * @param {Function} props.onEdit - Callback ao alterar uma entrada.
  * @param {Function} props.onTogglePin - Callback ao fixar/desafixar uma entrada.
  * @param {Function} props.onToggleStar - Callback ao marcar/desmarcar a estrela de uma entrada.
  * @param {Function} props.onSelectCategory - Callback ao escolher uma categoria.
  * @param {Function} props.onClearCategory - Callback ao limpar o filtro.
- * @param {Function} props.onToggleAll - Alterna entre ver todas/recentes.
  * @returns {JSX.Element} Componente da lista de entradas.
  */
 export default function EntryList({
     entries,
     selectedDate,
     activeCategory,
-    showAll,
     onEdit,
     onTogglePin,
     onToggleStar,
     onSelectCategory,
     onClearCategory,
-    onToggleAll,
 }) {
     const [expandedEntryId, setExpandedEntryId] = useState(null);
     const [search, setSearch] = useState('');
     const [activeType, setActiveType] = useState(null);
     // Quando ativo, exibe apenas as entradas marcadas com estrela (favoritas).
     const [starredOnly, setStarredOnly] = useState(false);
+    // Quantidade de registros exibidos; aumenta de PAGE_SIZE em PAGE_SIZE ao "Ver mais".
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
     // Os tipos pertencem às categorias "Sonhos" e "Centro"; ao trocar de
     // categoria, limpa o filtro de tipo.
     useEffect(() => {
         setActiveType(null);
     }, [activeCategory]);
+
+    // Ao alterar busca ou filtros, volta à primeira página (PAGE_SIZE registros).
+    useEffect(() => {
+        setVisibleCount(PAGE_SIZE);
+    }, [search, activeCategory, activeType, starredOnly]);
 
     // Tipos disponíveis para refinar o filtro da categoria ativa.
     const typeFilterOptions = getTypeListByCategory(activeCategory);
@@ -91,7 +98,12 @@ export default function EntryList({
     const ordered = [...filtered].sort(
         (a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
     );
-    const visible = showAll ? ordered : ordered.slice(0, 3);
+    // Exibe os registros de forma paginada, mostrando até "visibleCount" itens.
+    const visible = ordered.slice(0, visibleCount);
+    // Indica se ainda há registros além dos exibidos (habilita o "Ver mais").
+    const hasMore = ordered.length > visibleCount;
+    // Indica que a lista foi expandida além da primeira página (habilita o "Ver menos").
+    const canCollapse = visibleCount > PAGE_SIZE;
 
     // Sanitiza o HTML do registro preservando a formatação do editor (negrito,
     // itálico, listas, emojis) e removendo conteúdo perigoso, sem limitar o
@@ -320,6 +332,9 @@ export default function EntryList({
                                         ) : (
                                             <span className="semear-entry-card__long">Sem descrição</span>
                                         )}
+                                        <span className="semear-entry-card__more" aria-hidden="true">
+                                            {isExpanded ? 'Ver menos ▲' : 'Ver mais ▼'}
+                                        </span>
                                     </span>
                                     {category && (
                                         <span className={`semear-entry-card__badge semear-entry-card__badge--${category.theme}`}>
@@ -395,10 +410,27 @@ export default function EntryList({
                 })}
             </ul>
 
-            {filtered.length > 3 && (
-                <button type="button" className="semear-entries__toggle" onClick={onToggleAll}>
-                    {showAll ? 'Ver menos' : 'Ver todas as entradas'}
-                </button>
+            {(hasMore || canCollapse) && (
+                <div className="semear-entries__pagination">
+                    {hasMore && (
+                        <button
+                            type="button"
+                            className="semear-entries__toggle"
+                            onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                        >
+                            Ver mais
+                        </button>
+                    )}
+                    {canCollapse && (
+                        <button
+                            type="button"
+                            className="semear-entries__toggle"
+                            onClick={() => setVisibleCount(PAGE_SIZE)}
+                        >
+                            Ver menos
+                        </button>
+                    )}
+                </div>
             )}
         </div>
     );

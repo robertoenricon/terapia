@@ -17,7 +17,7 @@ export const CATEGORIES = {
     terapia: { value: 'terapia', label: 'Terapia', theme: 'terapia', color: 'var(--semear-terapia)' },
     sonhos: { value: 'sonhos', label: 'Sonhos', theme: 'sonhos', color: 'var(--semear-sonhos)' },
     evento: { value: 'evento', label: 'Evento', theme: 'evento', color: 'var(--semear-evento)' },
-    frases: { value: 'frases', label: 'Frases', theme: 'frases', color: 'var(--semear-frases)' },
+    frases: { value: 'frases', label: 'Evolução', theme: 'frases', color: 'var(--semear-frases)' },
     centro: { value: 'centro', label: 'Centro', theme: 'centro', color: 'var(--semear-centro)' },
 };
 
