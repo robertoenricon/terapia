@@ -123,21 +123,20 @@ export default function Semear({ userName }) {
     }, [selectedEntry]);
 
     /**
-     * Abre o editor para a data informada. Se um filtro de categoria estiver
-     * ativo, edita diretamente nessa categoria; caso contrário, guarda a data
-     * e abre o modal para o usuário escolher a categoria do registro.
+     * Guarda a data escolhida e abre o modal de categorias.
+     *
+     * Ao selecionar qualquer dia no calendário — tendo ele conteúdo ou não, e
+     * independentemente de haver filtro ativo — o modal de categorias é exibido
+     * para o usuário escolher em qual categoria deseja registrar ou editar.
+     * Isso permite manter duas categorias diferentes na mesma data, pois cada
+     * escolha abre o editor apenas da categoria selecionada.
      *
      * @param {Date} date - Data escolhida.
      */
     const handleSelectDate = (date) => {
         setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
-        if (activeCategory) {
-            setEditingCategory(activeCategory);
-            setSelectedDate(date);
-        } else {
-            setPendingDate(date);
-            setShowModal(true);
-        }
+        setPendingDate(date);
+        setShowModal(true);
     };
 
     /**
