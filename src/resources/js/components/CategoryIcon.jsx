@@ -47,17 +47,20 @@ const ICONS = {
             <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
         </g>
     ),
-    // Benção: emoji de mãos em oração (gratidão, agradecimento).
+    // Benção: vela acesa (oração, luz, fé).
     frases: (
-        <text
-            x="12"
-            y="12"
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize="18"
+        <g
+            stroke="currentColor"
+            strokeWidth="1.6"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
         >
-            🙏
-        </text>
+            <path d="M12 2.5c1.8 2.5 2.3 4.3 2.3 5.5 0 1.5-1.1 2.5-2.3 2.5s-2.3-1-2.3-2.5c0-1.2.5-3 2.3-5.5z" />
+            <line x1="12" y1="10.5" x2="12" y2="12" />
+            <rect x="8" y="12" width="8" height="8" rx="1.8" />
+            <line x1="6.3" y1="20.4" x2="17.7" y2="20.4" />
+        </g>
     ),
     // Centro: igreja (torre com cruz no topo).
     centro: (
