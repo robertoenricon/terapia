@@ -54,10 +54,12 @@ class JournalEntryTest extends TestCase
         $user = User::factory()->create();
         $entry = JournalEntry::factory()->for($user)->create([
             'category' => 'sonhos',
+            'entry_date' => '2026-06-17',
             'content' => 'Conteúdo antigo',
         ]);
 
         $response = $this->actingAs($user)->putJson("/api/journal-entries/{$entry->id}", [
+            'entry_date' => '2026-06-17',
             'content' => 'Conteúdo alterado',
         ]);
 
@@ -69,6 +71,28 @@ class JournalEntryTest extends TestCase
         $this->assertDatabaseHas('journal_entries', [
             'id' => $entry->id,
             'content' => 'Conteúdo alterado',
+        ]);
+    }
+
+    public function test_it_updates_the_date_of_an_existing_entry(): void
+    {
+        $user = User::factory()->create();
+        $entry = JournalEntry::factory()->for($user)->create([
+            'category' => 'sonhos',
+            'entry_date' => '2026-06-17',
+            'content' => 'Conteúdo',
+        ]);
+
+        $response = $this->actingAs($user)->putJson("/api/journal-entries/{$entry->id}", [
+            'entry_date' => '2026-06-25',
+            'content' => 'Conteúdo',
+        ]);
+
+        $response->assertOk();
+
+        $this->assertDatabaseHas('journal_entries', [
+            'id' => $entry->id,
+            'entry_date' => '2026-06-25 00:00:00',
         ]);
     }
 

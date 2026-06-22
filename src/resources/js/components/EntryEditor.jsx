@@ -1,6 +1,6 @@
 import RichTextEditor from './RichTextEditor';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
-import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
+import { WEEKDAY_NAMES, fromDateKey, toDateKey } from '../utils/date';
 import { CATEGORIES } from '../utils/categories';
 import { getTypeListByCategory } from '../utils/entryTypes';
 
@@ -27,6 +27,7 @@ const MAX_LENGTH = 5000;
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
  * @param {boolean} props.deleting - Indica se a exclusão está em curso.
+ * @param {Function} props.onDateChange - Callback com a nova data escolhida (objeto Date).
  * @param {Function} props.onTypeChange - Callback com o tipo escolhido (ou nulo).
  * @param {Function} props.onTitleChange - Callback com o novo título.
  * @param {Function} props.onFeedbackChange - Callback com o novo feedback.
@@ -49,6 +50,7 @@ export default function EntryEditor({
     canDelete,
     saving,
     deleting,
+    onDateChange,
     onTypeChange,
     onTitleChange,
     onFeedbackChange,
@@ -81,7 +83,20 @@ export default function EntryEditor({
                 <div className="semear-main__heading">
                     <span className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
                     <div>
-                        <h2 className="semear-main__date">{formatLongDate(selectedDate)}</h2>
+                        <input
+                            type="date"
+                            className="semear-main__date-input"
+                            value={toDateKey(selectedDate)}
+                            // Atualiza a data do registro; ignora valores em branco
+                            // (quando o usuário limpa o campo do seletor nativo).
+                            onChange={(event) => {
+                                if (event.target.value) {
+                                    onDateChange(fromDateKey(event.target.value));
+                                }
+                            }}
+                            disabled={saving || deleting}
+                            aria-label="Data do registro"
+                        />
                         <p className="semear-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
                     </div>
                 </div>

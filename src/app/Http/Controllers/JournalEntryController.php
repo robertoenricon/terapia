@@ -89,7 +89,8 @@ class JournalEntryController extends Controller
      * Atualiza a entrada informada (identificada pelo seu id).
      *
      * Usada ao alterar um registro existente já aberto na listagem, sem
-     * afetar os demais registros da mesma data e categoria.
+     * afetar os demais registros da mesma data e categoria. Permite também
+     * mover o registro para outra data por meio do campo "entry_date".
      *
      * @param  Request      $request      Requisição com os dados atualizados.
      * @param  JournalEntry $journalEntry Entrada a ser atualizada.
@@ -100,12 +101,14 @@ class JournalEntryController extends Controller
         abort_unless($journalEntry->user_id === $request->user()->id, 404);
 
         $data = $request->validate([
+            'entry_date' => ['required', 'date'],
             'type' => ['nullable', 'in:pesadelo,ruim,medio,bom,otimo,umbanda,nemd'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['nullable', 'string', 'max:50000'],
             'feedback' => ['nullable', 'string', 'max:50000'],
         ]);
 
+        $journalEntry->entry_date = $data['entry_date'];
         $journalEntry->type = $data['type'] ?? null;
         $journalEntry->title = $data['title'] ?? null;
         $journalEntry->content = $data['content'] ?? '';
