@@ -368,15 +368,6 @@ export default function EntryList({
                                     >
                                         ⭐
                                     </button>
-                                    <button
-                                        type="button"
-                                        className="semear-entry-card__edit"
-                                        onClick={() => onEdit(entry)}
-                                        aria-label="Alterar"
-                                        title="Alterar"
-                                    >
-                                        ✏️
-                                    </button>
                                 </div>
                             </div>
 
