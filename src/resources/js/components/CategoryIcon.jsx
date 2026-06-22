@@ -47,7 +47,7 @@ const ICONS = {
             <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
         </g>
     ),
-    // Benção: mãos em oração (gratidão, agradecimento).
+    // Benção: vela acesa (oração, luz, fé).
     frases: (
         <g
             stroke="currentColor"
@@ -56,9 +56,10 @@ const ICONS = {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M12 4.3c-1.1 0-2.1.6-2.6 1.6L5.8 13c-.7 1.4-.4 3.1.8 4.1l1.4 1.2c.6.5 1.5.4 2-.2l2-2.5z" />
-            <path d="M12 4.3c1.1 0 2.1.6 2.6 1.6L18.2 13c.7 1.4.4 3.1-.8 4.1l-1.4 1.2c-.6.5-1.5.4-2-.2l-2-2.5z" />
-            <path d="M9.5 14.1 12 12.1l2.5 2" />
+            <path d="M12 2.5c1.8 2.5 2.3 4.3 2.3 5.5 0 1.5-1.1 2.5-2.3 2.5s-2.3-1-2.3-2.5c0-1.2.5-3 2.3-5.5z" />
+            <line x1="12" y1="10.5" x2="12" y2="12" />
+            <rect x="8" y="12" width="8" height="8" rx="1.8" />
+            <line x1="6.3" y1="20.4" x2="17.7" y2="20.4" />
         </g>
     ),
     // Centro: igreja (torre com cruz no topo).
