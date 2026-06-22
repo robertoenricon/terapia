@@ -1544,6 +1544,36 @@ body {
     margin: 0;
 }
 
+.semear-main__date-input {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding: 0.1rem 0.35rem;
+    color: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.semear-main__date-input:hover {
+    border-color: var(--semear-border, rgba(0, 0, 0, 0.12));
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.semear-main__date-input:focus {
+    outline: none;
+    border-color: var(--semear-border, rgba(0, 0, 0, 0.2));
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.semear-main__date-input:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+
 .semear-main__weekday {
     color: var(--semear-muted);
     margin: 0;

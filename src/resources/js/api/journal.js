@@ -72,14 +72,15 @@ export async function createEntry(entryDate, content, category, type, title, fee
  * @param {string|null} type - Tipo do registro ("pesadelo", "medio", "bom" ou "otimo").
  * @param {string} title - Título curto e opcional da entrada.
  * @param {string|null} feedback - Feedback livre, disponível para todas as categorias.
+ * @param {string} entryDate - Data do registro no formato "YYYY-MM-DD".
  * @returns {Promise<Object>} Entrada atualizada.
  */
-export async function updateEntry(id, content, type, title, feedback) {
+export async function updateEntry(id, content, type, title, feedback, entryDate) {
     const response = await fetch(`${BASE_URL}/${id}`, {
         method: 'PUT',
         credentials: 'same-origin',
         headers: jsonHeaders(),
-        body: JSON.stringify({ type, title, content, feedback }),
+        body: JSON.stringify({ entry_date: entryDate, type, title, content, feedback }),
     });
     if (!response.ok) {
         throw new Error('Não foi possível alterar a entrada.');

@@ -220,6 +220,19 @@ export default function Semear({ userName }) {
     };
 
     /**
+     * Altera a data do registro aberto no editor.
+     *
+     * Mantém o calendário sincronizado com a nova data escolhida, permitindo
+     * mover o registro para outro dia antes de salvar.
+     *
+     * @param {Date} date - Nova data escolhida para o registro.
+     */
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setViewDate(new Date(date.getFullYear(), date.getMonth(), 1));
+    };
+
+    /**
      * Avança ou retrocede o mês exibido no calendário.
      *
      * @param {number} offset - Deslocamento de meses (-1 ou +1).
@@ -252,7 +265,7 @@ export default function Semear({ userName }) {
             const entryType = getTypeListByCategory(editingCategory).length > 0 ? type : null;
             // Edita o registro aberto (por id) ou cria sempre um novo registro.
             const saved = isEditing
-                ? await updateEntry(selectedEntry.id, content, entryType, title, feedback)
+                ? await updateEntry(selectedEntry.id, content, entryType, title, feedback, selectedKey)
                 : await createEntry(selectedKey, content, editingCategory, entryType, title, feedback);
             setEntries((current) => {
                 const others = current.filter((entry) => entry.id !== saved.id);
@@ -483,6 +496,7 @@ export default function Semear({ userName }) {
                     canDelete={Boolean(selectedEntry)}
                     saving={saving}
                     deleting={deleting}
+                    onDateChange={handleDateChange}
                     onTypeChange={setType}
                     onTitleChange={setTitle}
                     onFeedbackChange={setFeedback}
