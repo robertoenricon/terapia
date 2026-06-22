@@ -16,3 +16,8 @@
 Thumbs.db
 .idea
 .vscode
+
+# Artefatos de mockup (selecao de icone/cor) - nao versionar
+/gen_mockup.py
+/mockup-bencao-*.png
+/mockup-bencao-*.svg
