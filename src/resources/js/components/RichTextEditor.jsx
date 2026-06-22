@@ -75,12 +75,6 @@ export default function RichTextEditor({ value, onChange, placeholder, showToolb
                 <button type="button" className="semear-tool" onClick={() => applyCommand('insertUnorderedList')} aria-label="Lista com marcadores">
                     ☰
                 </button>
-                <button type="button" className="semear-tool" onClick={() => applyCommand('insertOrderedList')} aria-label="Lista numerada">
-                    ⩾
-                </button>
-                <button type="button" className="semear-tool" onClick={() => applyCommand('indent')} aria-label="Aumentar recuo">
-                    ⇥
-                </button>
                 <span className="semear-tool__divider" />
                 <div className="semear-emoji">
                     <button type="button" className="semear-tool" onClick={() => setShowEmojis((open) => !open)} aria-label="Inserir emoji">
