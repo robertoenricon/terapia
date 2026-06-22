@@ -1568,6 +1568,83 @@ body {
     opacity: 0.7;
 }
 
+/*
+ * Marcação da data do registro.
+ *
+ * Substitui o emoji estático por um mini calendário que exibe o mês e o dia
+ * reais da entrada, com cor de acordo com a categoria selecionada.
+ */
+.semear-date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 3rem;
+    border-radius: 0.65rem;
+    overflow: hidden;
+    background: var(--semear-surface);
+    border: 1px solid var(--semear-border);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.semear-date-badge__month {
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0b1f1a;
+    padding: 0.18rem 0;
+    text-align: center;
+}
+
+.semear-date-badge__day {
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    padding: 0.18rem 0 0.28rem;
+    color: var(--semear-text);
+}
+
+.semear-date-badge--terapia .semear-date-badge__month {
+    background: var(--semear-terapia);
+}
+
+.semear-date-badge--terapia .semear-date-badge__day {
+    background: var(--semear-terapia-soft);
+}
+
+.semear-date-badge--sonhos .semear-date-badge__month {
+    background: var(--semear-sonhos);
+}
+
+.semear-date-badge--sonhos .semear-date-badge__day {
+    background: var(--semear-sonhos-soft);
+}
+
+.semear-date-badge--evento .semear-date-badge__month {
+    background: var(--semear-evento);
+}
+
+.semear-date-badge--evento .semear-date-badge__day {
+    background: var(--semear-evento-soft);
+}
+
+.semear-date-badge--frases .semear-date-badge__month {
+    background: var(--semear-frases);
+}
+
+.semear-date-badge--frases .semear-date-badge__day {
+    background: var(--semear-frases-soft);
+}
+
+.semear-date-badge--centro .semear-date-badge__month {
+    background: var(--semear-centro);
+}
+
+.semear-date-badge--centro .semear-date-badge__day {
+    background: var(--semear-centro-soft);
+}
+
 /* Camada invisível que fecha o calendário ao clicar fora dele. */
 .semear-date-picker__backdrop {
     position: fixed;
