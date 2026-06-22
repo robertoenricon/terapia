@@ -47,20 +47,19 @@ const ICONS = {
             <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
         </g>
     ),
-    // Evolução: foguete (impulso, crescimento).
+    // Benção: mãos em oração (gratidão, agradecimento).
     frases: (
         <g
             stroke="currentColor"
-            strokeWidth="1.6"
+            strokeWidth="1.5"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M12 2.5c2.3 2 3.5 4.8 3.5 7.9 0 1.6-.3 3.1-.9 4.6h-5.2c-.6-1.5-.9-3-.9-4.6 0-3.1 1.2-5.9 3.5-7.9z" />
-            <circle cx="12" cy="9" r="1.6" />
-            <path d="M8.4 12.2 5.6 15c-.3.3-.5.8-.5 1.2v1.3l3.4-1.6" />
-            <path d="M15.6 12.2 18.4 15c.3.3.5.8.5 1.2v1.3l-3.4-1.6" />
-            <path d="M10.2 15.5c0 1.2.8 3.5 1.8 5 1-1.5 1.8-3.8 1.8-5" />
+            <path d="M12 3.2c-1.6 1.4-3.6 4-4.8 7.2-.7 1.9-1.1 3.8-1.1 5.4 0 1.1.2 2 .6 2.6.3.5.8.8 1.4.8.5 0 .9-.2 1.2-.6l2.7-3.4z" />
+            <path d="M12 3.2c1.6 1.4 3.6 4 4.8 7.2.7 1.9 1.1 3.8 1.1 5.4 0 1.1-.2 2-.6 2.6-.3.5-.8.8-1.4.8-.5 0-.9-.2-1.2-.6l-2.7-3.4z" />
+            <path d="M9 19.5 6.6 20.7" />
+            <path d="M15 19.5 17.4 20.7" />
         </g>
     ),
     // Centro: igreja (torre com cruz no topo).

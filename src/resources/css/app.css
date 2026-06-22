@@ -47,12 +47,12 @@
     --semear-evento-glow: rgba(239, 68, 68, 0.32);
     --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
 
-    /* Frases — âmbar/dourado (citações, palavras marcantes) */
-    --semear-frases: #fbbf24;
-    --semear-frases-dark: #f59e0b;
-    --semear-frases-soft: rgba(251, 191, 36, 0.16);
-    --semear-frases-glow: rgba(245, 158, 11, 0.32);
-    --grad-frases: linear-gradient(135deg, #fcd34d 0%, #d97706 100%);
+    /* Benção — verde/azul (gratidão, agradecimento) */
+    --semear-frases: #00ff74;
+    --semear-frases-dark: #0a58ca;
+    --semear-frases-soft: rgba(0, 255, 116, 0.16);
+    --semear-frases-glow: rgba(10, 88, 202, 0.32);
+    --grad-frases: linear-gradient(135deg, #00ff74 0%, #0a58ca 100%);
 
     /* Centro — violeta/roxo (acolhimento, equilíbrio) */
     --semear-centro: #a78bfa;

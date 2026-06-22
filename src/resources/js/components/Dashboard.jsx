@@ -12,7 +12,7 @@ import { fromDateKey, formatShortDate } from '../utils/date';
  *
  * Carrega as entradas registradas e exibe dois gráficos de rosca: um com a
  * distribuição dos registros por categoria ("Terapia", "Sonhos", "Evento",
- * "Evolução" e "Centro") e outro com a porcentagem de cada tipo de sonho ("Pesadelo",
+ * "Benção" e "Centro") e outro com a porcentagem de cada tipo de sonho ("Pesadelo",
  * "Médio", "Bom" e "Ótimo"), usando as mesmas cores definidas na paleta.
  *
  * @param {Object} props - Propriedades do componente.
