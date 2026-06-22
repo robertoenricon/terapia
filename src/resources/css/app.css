@@ -812,8 +812,14 @@ body {
     font-weight: 700;
 }
 
-/* Anel branco interno destaca o dia atualmente selecionado. */
+/* Anel interno (na cor da marca) destaca o dia atualmente selecionado. */
 .semear-calendar__day--selected {
+    box-shadow: inset 0 0 0 2px var(--semear-terapia);
+}
+
+/* Quando o dia selecionado já tem preenchimento colorido (sem registros),
+   usa um anel claro para garantir contraste sobre o gradiente. */
+.semear-calendar__day--selected[class*='semear-calendar__day--fill-'] {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
