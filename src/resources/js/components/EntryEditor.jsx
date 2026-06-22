@@ -2,7 +2,7 @@ import { useState } from 'react';
 import RichTextEditor from './RichTextEditor';
 import Calendar from './Calendar';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
-import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
+import { MONTH_ABBREVIATIONS, WEEKDAY_NAMES, formatLongDate } from '../utils/date';
 import { CATEGORIES } from '../utils/categories';
 import { getTypeListByCategory } from '../utils/entryTypes';
 
@@ -115,7 +115,7 @@ export default function EntryEditor({
                     <div className="semear-date-picker">
                         <button
                             type="button"
-                            className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'} semear-date-picker__toggle`}
+                            className={`semear-date-badge semear-date-badge--${categoryInfo?.theme || 'terapia'} semear-date-picker__toggle`}
                             onClick={() => (datePickerOpen ? setDatePickerOpen(false) : openDatePicker())}
                             disabled={saving || deleting}
                             aria-haspopup="dialog"
@@ -123,7 +123,12 @@ export default function EntryEditor({
                             aria-label="Alterar a data do registro"
                             title="Alterar a data do registro"
                         >
-                            📅
+                            <span className="semear-date-badge__month">
+                                {MONTH_ABBREVIATIONS[selectedDate.getMonth()]}
+                            </span>
+                            <span className="semear-date-badge__day">
+                                {selectedDate.getDate()}
+                            </span>
                         </button>
                         {datePickerOpen && (
                             <>
