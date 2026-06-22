@@ -5,7 +5,7 @@ import useBodyScrollLock from '../hooks/useBodyScrollLock';
  * Modal de seleção da categoria de uma nova entrada.
  *
  * Exibe uma sobreposição com as opções disponíveis (Terapia em verde,
- * Sonhos em azul, Evento em vermelho, Evolução em âmbar e Centro em violeta).
+ * Sonhos em azul, Evento em vermelho, Benção em verde/azul e Centro em violeta).
  * Ao escolher uma opção, informa o componente pai; ao clicar fora ou no botão
  * de fechar, cancela a seleção.
  *
