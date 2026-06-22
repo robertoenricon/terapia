@@ -486,6 +486,7 @@ export default function Semear({ userName }) {
             {selectedDate && editingCategory && (
                 <EntryEditor
                     selectedDate={selectedDate}
+                    entryCategories={entryCategories}
                     category={editingCategory}
                     type={type}
                     title={title}
