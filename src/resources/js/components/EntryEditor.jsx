@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import RichTextEditor from './RichTextEditor';
+import Calendar from './Calendar';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
-import { WEEKDAY_NAMES, fromDateKey, toDateKey } from '../utils/date';
+import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
 import { CATEGORIES } from '../utils/categories';
 import { getTypeListByCategory } from '../utils/entryTypes';
 
@@ -17,6 +19,7 @@ const MAX_LENGTH = 5000;
  *
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
+ * @param {Object} props.entryCategories - Mapa "YYYY-MM-DD" → categorias com registro (pontos do calendário).
  * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento", "frases" ou "centro").
  * @param {string|null} props.type - Tipo do registro (tipos de "Sonhos" ou de "Centro").
  * @param {string} props.title - Título curto e opcional da entrada.
@@ -27,7 +30,7 @@ const MAX_LENGTH = 5000;
  * @param {boolean} props.canDelete - Indica se a entrada já existe.
  * @param {boolean} props.saving - Indica se o salvamento está em curso.
  * @param {boolean} props.deleting - Indica se a exclusão está em curso.
- * @param {Function} props.onDateChange - Callback com a nova data escolhida (objeto Date).
+ * @param {Function} props.onDateChange - Callback com a nova data escolhida no calendário (objeto Date).
  * @param {Function} props.onTypeChange - Callback com o tipo escolhido (ou nulo).
  * @param {Function} props.onTitleChange - Callback com o novo título.
  * @param {Function} props.onFeedbackChange - Callback com o novo feedback.
@@ -40,6 +43,7 @@ const MAX_LENGTH = 5000;
  */
 export default function EntryEditor({
     selectedDate,
+    entryCategories,
     category,
     type,
     title,
@@ -66,6 +70,33 @@ export default function EntryEditor({
     // Tipos disponíveis para a categoria atual ("Sonhos" e "Centro" possuem tipos).
     const typeOptions = getTypeListByCategory(category);
 
+    // Controla a exibição do calendário de seleção de data e o mês nele exibido.
+    const [datePickerOpen, setDatePickerOpen] = useState(false);
+    const [pickerViewDate, setPickerViewDate] = useState(selectedDate);
+
+    /** Abre o calendário de data posicionando-o no mês da data atual. */
+    const openDatePicker = () => {
+        setPickerViewDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
+        setDatePickerOpen(true);
+    };
+
+    /** Avança ou retrocede o mês exibido no calendário de seleção. */
+    const changePickerMonth = (offset) => {
+        setPickerViewDate((current) => new Date(current.getFullYear(), current.getMonth() + offset, 1));
+    };
+
+    /**
+     * Aplica a data escolhida no calendário e fecha o seletor.
+     *
+     * A alteração só é persistida ao salvar o registro.
+     *
+     * @param {Date} date - Data escolhida no calendário.
+     */
+    const handlePickDate = (date) => {
+        onDateChange(date);
+        setDatePickerOpen(false);
+    };
+
     return (
         <div
             className="semear-modal"
@@ -81,22 +112,42 @@ export default function EntryEditor({
             >
             <div className="semear-main__header">
                 <div className="semear-main__heading">
-                    <span className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'}`}>📅</span>
-                    <div>
-                        <input
-                            type="date"
-                            className="semear-main__date-input"
-                            value={toDateKey(selectedDate)}
-                            // Atualiza a data do registro; ignora valores em branco
-                            // (quando o usuário limpa o campo do seletor nativo).
-                            onChange={(event) => {
-                                if (event.target.value) {
-                                    onDateChange(fromDateKey(event.target.value));
-                                }
-                            }}
+                    <div className="semear-date-picker">
+                        <button
+                            type="button"
+                            className={`semear-main__icon semear-main__icon--${categoryInfo?.theme || 'terapia'} semear-date-picker__toggle`}
+                            onClick={() => (datePickerOpen ? setDatePickerOpen(false) : openDatePicker())}
                             disabled={saving || deleting}
-                            aria-label="Data do registro"
-                        />
+                            aria-haspopup="dialog"
+                            aria-expanded={datePickerOpen}
+                            aria-label="Alterar a data do registro"
+                            title="Alterar a data do registro"
+                        >
+                            📅
+                        </button>
+                        {datePickerOpen && (
+                            <>
+                                <div
+                                    className="semear-date-picker__backdrop"
+                                    role="presentation"
+                                    onClick={() => setDatePickerOpen(false)}
+                                />
+                                <div className="semear-panel semear-date-picker__popover" role="dialog" aria-label="Selecionar data">
+                                    <Calendar
+                                        viewDate={pickerViewDate}
+                                        selectedDate={selectedDate}
+                                        entryCategories={entryCategories || {}}
+                                        activeCategory={category}
+                                        onPrev={() => changePickerMonth(-1)}
+                                        onNext={() => changePickerMonth(1)}
+                                        onSelect={handlePickDate}
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    <div>
+                        <h2 className="semear-main__date">{formatLongDate(selectedDate)}</h2>
                         <p className="semear-main__weekday">{WEEKDAY_NAMES[selectedDate.getDay()]}</p>
                     </div>
                 </div>
