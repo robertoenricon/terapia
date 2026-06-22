@@ -1,4 +1,5 @@
 import { CATEGORY_LIST } from '../utils/categories';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 /**
  * Modal de seleção da categoria de uma nova entrada.
@@ -14,6 +15,8 @@ import { CATEGORY_LIST } from '../utils/categories';
  * @returns {JSX.Element} Componente do modal de categorias.
  */
 export default function CategoryModal({ onChoose, onClose }) {
+    useBodyScrollLock();
+
     return (
         <div className="semear-modal" onClick={onClose}>
             <div

@@ -1,3 +1,5 @@
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
+
 /**
  * Modal de confirmação para ações sensíveis (ex.: exclusão de uma entrada).
  *
@@ -24,6 +26,8 @@ export default function ConfirmModal({
     onConfirm,
     onCancel,
 }) {
+    useBodyScrollLock();
+
     return (
         <div className="semear-modal" onClick={loading ? undefined : onCancel}>
             <div

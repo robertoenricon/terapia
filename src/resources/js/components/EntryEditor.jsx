@@ -1,4 +1,5 @@
 import RichTextEditor from './RichTextEditor';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 import { WEEKDAY_NAMES, formatLongDate } from '../utils/date';
 import { CATEGORIES } from '../utils/categories';
 import { getTypeListByCategory } from '../utils/entryTypes';
@@ -57,17 +58,24 @@ export default function EntryEditor({
     onDelete,
     onBack,
 }) {
+    useBodyScrollLock();
+
     const categoryInfo = CATEGORIES[category];
     // Tipos disponíveis para a categoria atual ("Sonhos" e "Centro" possuem tipos).
     const typeOptions = getTypeListByCategory(category);
 
     return (
-        <div className="semear-modal" role="presentation">
+        <div
+            className="semear-modal"
+            role="presentation"
+            onClick={saving || deleting ? undefined : onBack}
+        >
             <div
                 className="semear-modal__card semear-modal__card--editor semear-main"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Editor de registro"
+                onClick={(event) => event.stopPropagation()}
             >
             <div className="semear-main__header">
                 <div className="semear-main__heading">
