@@ -47,12 +47,12 @@
     --semear-evento-glow: rgba(239, 68, 68, 0.32);
     --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
 
-    /* Benção — verde/azul (gratidão, agradecimento) */
-    --semear-frases: #00ff74;
-    --semear-frases-dark: #0a58ca;
-    --semear-frases-soft: rgba(0, 255, 116, 0.16);
-    --semear-frases-glow: rgba(10, 88, 202, 0.32);
-    --grad-frases: linear-gradient(135deg, #00ff74 0%, #0a58ca 100%);
+    /* Benção — rosa lótus (gratidão, devoção, serenidade) */
+    --semear-frases: #f472b6;
+    --semear-frases-dark: #be185d;
+    --semear-frases-soft: rgba(244, 114, 182, 0.16);
+    --semear-frases-glow: rgba(190, 24, 93, 0.32);
+    --grad-frases: linear-gradient(135deg, #f472b6 0%, #be185d 100%);
 
     /* Centro — violeta/roxo (acolhimento, equilíbrio) */
     --semear-centro: #a78bfa;
