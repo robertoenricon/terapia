@@ -1983,7 +1983,39 @@ body {
     width: min(42rem, 100%);
     max-height: calc(100vh - 2rem);
     overflow-y: auto;
+    /* Reserva o espaço da barra apenas quando ela existe, evitando que o
+       conteúdo "salte" ao surgir a rolagem. */
+    scrollbar-gutter: stable;
     padding: 1.25rem;
+}
+
+/* Barra de rolagem moderna do editor: trilho transparente e indicador fino,
+   arredondado e translúcido, que ganha destaque ao passar o mouse. */
+.semear-modal__card--editor {
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--semear-border-strong) transparent;
+}
+
+.semear-modal__card--editor::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.semear-modal__card--editor::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.semear-modal__card--editor::-webkit-scrollbar-thumb {
+    background-color: var(--semear-border-strong);
+    border-radius: 999px;
+    /* A borda transparente cria um respiro entre o indicador e a borda do card. */
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.15s;
+}
+
+.semear-modal__card--editor::-webkit-scrollbar-thumb:hover {
+    background-color: var(--semear-terapia);
 }
 
 .semear-modal__header {
