@@ -1582,6 +1582,10 @@ body {
     left: 0;
     z-index: 11;
     width: min(20rem, 90vw);
+    /* Fundo sólido (igual ao card do editor) para o calendário não ficar
+       transparente sobre o conteúdo do registro. */
+    background-color: #0f1a1c;
+    border-color: var(--semear-border-strong);
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
