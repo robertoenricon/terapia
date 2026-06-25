@@ -200,15 +200,7 @@ export default function EntryList({
         <div className="semear-panel semear-entries">
             <div className="semear-entries__toolbar">
                 <div className="semear-entries__search">
-                    <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
-                    <input
-                        type="search"
-                        className="semear-entries__search-input"
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        placeholder="Buscar por título, descrição ou feedback..."
-                        aria-label="Buscar registros por título, descrição ou feedback"
-                    />
+                    {/* Input de data oculto; acionado pelo botão de calendário abaixo. */}
                     <input
                         ref={dateInputRef}
                         type="date"
@@ -224,24 +216,24 @@ export default function EntryList({
                             searchDate ? 'semear-entries__date-btn--active' : '',
                         ].filter(Boolean).join(' ')}
                         onPointerDown={(e) => e.preventDefault()}
-                        onClick={() => dateInputRef.current?.showPicker()}
-                        aria-label={searchDate ? `Filtro de data ativo: ${searchDate}` : 'Filtrar por data'}
-                        title={searchDate ? `Data: ${searchDate}` : 'Filtrar por data'}
+                        onClick={() => searchDate ? setSearchDate('') : dateInputRef.current?.showPicker()}
+                        aria-pressed={Boolean(searchDate)}
+                        aria-label={searchDate ? `Filtrar por data: ${searchDate} — clique para limpar` : 'Filtrar por data'}
+                        title={searchDate ? `${searchDate} — clique para limpar` : 'Filtrar por data'}
                     >
                         📅
                     </button>
-                    {searchDate && (
-                        <button
-                            type="button"
-                            className="semear-entries__date-clear"
-                            onPointerDown={(e) => e.preventDefault()}
-                            onClick={() => setSearchDate('')}
-                            aria-label="Limpar filtro de data"
-                            title="Limpar filtro de data"
-                        >
-                            ×
-                        </button>
-                    )}
+                    <div className="semear-entries__search-field">
+                        <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
+                        <input
+                            type="search"
+                            className="semear-entries__search-input"
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
+                            placeholder="Buscar por título, descrição ou feedback..."
+                            aria-label="Buscar registros por título, descrição ou feedback"
+                        />
+                    </div>
                 </div>
 
                 <div className="semear-categories">

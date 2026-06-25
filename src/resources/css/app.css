@@ -915,12 +915,18 @@ body {
 
 /* Campo de busca de registros por título */
 .semear-entries__search {
-    position: relative;
     flex: 0 0 auto;
     width: 100%;
     display: flex;
     align-items: center;
     gap: 0.35rem;
+}
+
+/* Wrapper do ícone 🔎 + input, ocupa o espaço restante da linha. */
+.semear-entries__search-field {
+    position: relative;
+    flex: 1;
+    min-width: 0;
 }
 
 .semear-entries__search-icon {
@@ -934,8 +940,7 @@ body {
 }
 
 .semear-entries__search-input {
-    flex: 1;
-    min-width: 0;
+    width: 100%;
     border: 1px solid var(--semear-border);
     border-radius: 0.75rem;
     padding: 0.6rem 0.9rem 0.6rem 2.4rem;
@@ -969,55 +974,44 @@ body {
     padding: 0;
 }
 
-/* Botão de calendário para filtrar por data. */
+/* Botão de filtro por data, alinhado à esquerda do campo de busca.
+   Segue o mesmo padrão visual do semear-star-filter. */
 .semear-entries__date-btn {
-    flex-shrink: 0;
-    background: transparent;
-    border: 1px solid var(--semear-border);
-    border-radius: 0.6rem;
-    width: 2.2rem;
-    height: 2.2rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    flex-shrink: 0;
+    width: 2.15rem;
+    height: 2.15rem;
+    border: 1px solid var(--semear-border-strong);
+    border-radius: 0.75rem;
+    padding: 0;
+    background: transparent;
+    font-size: 0.95rem;
+    line-height: 1;
     cursor: pointer;
-    color: var(--semear-muted);
-    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
 }
 
 .semear-entries__date-btn:hover {
+    opacity: 1;
+    filter: none;
     background-color: var(--semear-border);
-    color: var(--semear-text);
 }
 
+.semear-entries__date-btn:focus-visible {
+    outline: 2px solid var(--semear-sonhos);
+    outline-offset: -2px;
+}
+
+/* Realça o filtro de data quando está ativo — clicar novamente limpa o filtro. */
 .semear-entries__date-btn--active {
-    background-color: var(--semear-terapia-soft);
+    opacity: 1;
+    filter: none;
     border-color: var(--semear-terapia);
-    color: var(--semear-terapia);
-}
-
-/* Botão de limpar o filtro de data (×). */
-.semear-entries__date-clear {
-    flex-shrink: 0;
-    background: transparent;
-    border: 1px solid var(--semear-border);
-    border-radius: 50%;
-    width: 1.6rem;
-    height: 1.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    line-height: 1;
-    cursor: pointer;
-    color: var(--semear-muted);
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.semear-entries__date-clear:hover {
-    background-color: var(--semear-border);
-    color: var(--semear-text);
+    background-color: var(--semear-terapia-soft);
 }
 
 .semear-entries__list {
