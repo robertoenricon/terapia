@@ -1,3 +1,24 @@
+<IfModule mod_headers.c>
+    # Assets compilados pelo Vite têm hash no nome do arquivo — podem ser
+    # cacheados indefinidamente, pois o nome muda a cada novo build.
+    <FilesMatch "^build/.+\.(js|css|woff2?|ttf|eot|svg|png|jpg|webp|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Manifesto do PWA: cache curto para que atualizações de ícone/metadados
+    # cheguem ao dispositivo em no máximo 1 hora.
+    <FilesMatch "\.webmanifest$">
+        Header set Cache-Control "public, max-age=3600"
+    </FilesMatch>
+
+    # HTML / respostas PHP: nunca armazene em cache no mobile.
+    # Garante que o browser sempre busque o HTML atualizado no servidor,
+    # o que resolve o problema de atualizações não aparecendo no mobile/PWA.
+    <FilesMatch "\.php$">
+        Header set Cache-Control "no-store"
+    </FilesMatch>
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
