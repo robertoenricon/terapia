@@ -47,12 +47,12 @@
     --semear-evento-glow: rgba(239, 68, 68, 0.32);
     --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
 
-    /* Benção — turquesa serena (oração, luz, fé) */
-    --semear-frases: #2dd4bf;
-    --semear-frases-dark: #0f766e;
-    --semear-frases-soft: rgba(45, 212, 191, 0.16);
-    --semear-frases-glow: rgba(15, 118, 110, 0.32);
-    --grad-frases: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%);
+    /* Benção — amarelo dourado fluorescente (luz, graça, fé) */
+    --semear-frases: #ffd60a;
+    --semear-frases-dark: #d4af00;
+    --semear-frases-soft: rgba(255, 214, 10, 0.16);
+    --semear-frases-glow: rgba(255, 200, 0, 0.4);
+    --grad-frases: linear-gradient(135deg, #ffe600 0%, #f5b800 100%);
 
     /* Centro — violeta/roxo (acolhimento, equilíbrio) */
     --semear-centro: #a78bfa;
