@@ -223,6 +223,7 @@ export default function EntryList({
                             'semear-entries__date-btn',
                             searchDate ? 'semear-entries__date-btn--active' : '',
                         ].filter(Boolean).join(' ')}
+                        onPointerDown={(e) => e.preventDefault()}
                         onClick={() => dateInputRef.current?.showPicker()}
                         aria-label={searchDate ? `Filtro de data ativo: ${searchDate}` : 'Filtrar por data'}
                         title={searchDate ? `Data: ${searchDate}` : 'Filtrar por data'}
@@ -233,6 +234,7 @@ export default function EntryList({
                         <button
                             type="button"
                             className="semear-entries__date-clear"
+                            onPointerDown={(e) => e.preventDefault()}
                             onClick={() => setSearchDate('')}
                             aria-label="Limpar filtro de data"
                             title="Limpar filtro de data"
