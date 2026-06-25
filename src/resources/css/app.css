@@ -40,12 +40,12 @@
     --semear-sonhos-glow: rgba(14, 165, 233, 0.32);
     --grad-sonhos: linear-gradient(135deg, #22d3ee 0%, #0284c7 100%);
 
-    /* Evento — vermelho (celebração, marcos, datas especiais) */
-    --semear-evento: #f87171;
-    --semear-evento-dark: #ef4444;
-    --semear-evento-soft: rgba(248, 113, 113, 0.16);
-    --semear-evento-glow: rgba(239, 68, 68, 0.32);
-    --grad-evento: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+    /* Evento — vermelho vibrante (celebração, marcos, datas especiais) */
+    --semear-evento: #ff4444;
+    --semear-evento-dark: #e8192c;
+    --semear-evento-soft: rgba(255, 68, 68, 0.16);
+    --semear-evento-glow: rgba(255, 68, 68, 0.36);
+    --grad-evento: linear-gradient(135deg, #ff4444 0%, #cc0022 100%);
 
     /* Benção — amarelo dourado fluorescente (luz, graça, fé) */
     --semear-frases: #ffd60a;
