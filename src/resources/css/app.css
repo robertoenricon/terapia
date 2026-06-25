@@ -61,6 +61,13 @@
     --semear-centro-glow: rgba(139, 92, 246, 0.32);
     --grad-centro: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
 
+    /* Anotações — laranja-âmbar (notas, lembretes, registros livres) */
+    --semear-anotacoes: #fb923c;
+    --semear-anotacoes-dark: #ea580c;
+    --semear-anotacoes-soft: rgba(251, 146, 60, 0.16);
+    --semear-anotacoes-glow: rgba(234, 88, 12, 0.32);
+    --grad-anotacoes: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+
     /* Tipos de registro — escala de humor (pior → melhor) */
     --semear-pesadelo: #ff0025;        /* Pesadelo — vermelho */
     --semear-pesadelo-soft: rgba(255, 0, 37, 0.16);
@@ -671,6 +678,14 @@ body {
     box-shadow: 0 12px 28px var(--semear-centro-glow);
 }
 
+.semear-save-btn--anotacoes {
+    background: var(--grad-anotacoes);
+}
+
+.semear-save-btn--anotacoes:hover:not(:disabled) {
+    box-shadow: 0 12px 28px var(--semear-anotacoes-glow);
+}
+
 .semear-back-btn {
     background-color: var(--semear-border);
     color: var(--semear-text);
@@ -812,6 +827,12 @@ body {
     font-weight: 700;
 }
 
+.semear-calendar__day--fill-anotacoes {
+    background: var(--grad-anotacoes);
+    color: #fff;
+    font-weight: 700;
+}
+
 /* Anel interno (na cor da marca) destaca o dia atualmente selecionado. */
 .semear-calendar__day--selected {
     box-shadow: inset 0 0 0 2px var(--semear-terapia);
@@ -871,6 +892,10 @@ body {
 
 .semear-calendar__dot--centro {
     background: var(--semear-centro);
+}
+
+.semear-calendar__dot--anotacoes {
+    background: var(--semear-anotacoes);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1020,6 +1045,10 @@ body {
     color: var(--semear-centro);
 }
 
+.semear-entry-card__day--anotacoes {
+    color: var(--semear-anotacoes);
+}
+
 .semear-entry-card__month {
     font-size: 0.65rem;
     color: var(--semear-muted);
@@ -1057,6 +1086,10 @@ body {
 
 .semear-entry-card__weekday--centro {
     color: var(--semear-centro);
+}
+
+.semear-entry-card__weekday--anotacoes {
+    color: var(--semear-anotacoes);
 }
 
 /* Etiqueta do tipo, concatenada ao título na mesma linha da listagem. */
@@ -1144,6 +1177,10 @@ body {
 
 .semear-entry-card__badge--centro {
     background: var(--grad-centro);
+}
+
+.semear-entry-card__badge--anotacoes {
+    background: var(--grad-anotacoes);
 }
 
 /* Botão de alterar a entrada na listagem. Segue o mesmo padrão neutro dos
@@ -1239,6 +1276,11 @@ body {
     background-color: var(--semear-centro-soft);
 }
 
+.semear-entry-card__pin--active.semear-entry-card__pin--anotacoes {
+    border-color: var(--semear-anotacoes);
+    background-color: var(--semear-anotacoes-soft);
+}
+
 /* Realça o card das entradas fixadas no topo da listagem. */
 .semear-entry-card--pinned {
     border-color: var(--semear-border-strong);
@@ -1308,6 +1350,11 @@ body {
 .semear-entry-card__star--active.semear-entry-card__star--centro {
     border-color: var(--semear-centro);
     background-color: var(--semear-centro-soft);
+}
+
+.semear-entry-card__star--active.semear-entry-card__star--anotacoes {
+    border-color: var(--semear-anotacoes);
+    background-color: var(--semear-anotacoes-soft);
 }
 
 /* Botão de filtro que exibe apenas as entradas favoritas (estrela). */
@@ -1488,6 +1535,18 @@ body {
     box-shadow: 0 8px 20px var(--semear-centro-glow);
 }
 
+.semear-category-chip--anotacoes {
+    color: var(--semear-anotacoes);
+}
+
+.semear-category-chip--anotacoes:hover,
+.semear-category-chip--anotacoes.semear-category-chip--active {
+    background: var(--grad-anotacoes);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 8px 20px var(--semear-anotacoes-glow);
+}
+
 /* Rodapé de paginação dos registros ("Ver mais" / "Ver menos") */
 .semear-entries__pagination {
     display: flex;
@@ -1651,6 +1710,14 @@ body {
     background: var(--semear-centro-soft);
 }
 
+.semear-date-badge--anotacoes .semear-date-badge__month {
+    background: var(--semear-anotacoes);
+}
+
+.semear-date-badge--anotacoes .semear-date-badge__day {
+    background: var(--semear-anotacoes-soft);
+}
+
 /* Camada invisível que fecha o calendário ao clicar fora dele. */
 .semear-date-picker__backdrop {
     position: fixed;
@@ -1712,6 +1779,10 @@ body {
 
 .semear-main__subtitle--centro {
     color: var(--semear-centro);
+}
+
+.semear-main__subtitle--anotacoes {
+    color: var(--semear-anotacoes);
 }
 
 .semear-main__field {
@@ -2167,6 +2238,10 @@ body {
 }
 
 .semear-modal__option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
     border: none;
     border-radius: 0.9rem;
     padding: 1.4rem 1rem;
@@ -2176,6 +2251,12 @@ body {
     cursor: pointer;
     box-shadow: var(--semear-shadow-sm);
     transition: transform 0.15s, box-shadow 0.15s;
+}
+
+/* Ícone da categoria dentro da opção do modal de criação. */
+.semear-modal__option svg {
+    width: 1.35rem;
+    height: 1.35rem;
 }
 
 .semear-modal__option:hover {
@@ -2220,6 +2301,14 @@ body {
 
 .semear-modal__option--centro:hover {
     box-shadow: 0 14px 30px var(--semear-centro-glow);
+}
+
+.semear-modal__option--anotacoes {
+    background: var(--grad-anotacoes);
+}
+
+.semear-modal__option--anotacoes:hover {
+    box-shadow: 0 14px 30px var(--semear-anotacoes-glow);
 }
 
 /* Confirmação (ex.: exclusão de registro) */
