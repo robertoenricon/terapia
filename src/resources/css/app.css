@@ -1005,7 +1005,8 @@ body {
 
 .semear-entries__date-btn:hover {
     opacity: 1;
-    filter: none;
+    /* Mantém o badge em escala de cinza no hover: realça apenas pela opacidade
+       e pelo leve deslocamento, sem revelar a cor da categoria. */
     transform: translateY(-1px);
 }
 
