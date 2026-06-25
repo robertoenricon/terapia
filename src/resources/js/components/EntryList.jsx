@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
@@ -53,8 +53,6 @@ export default function EntryList({
     const [starredOnly, setStarredOnly] = useState(false);
     // Quando preenchido, filtra as entradas pela data selecionada (formato YYYY-MM-DD).
     const [searchDate, setSearchDate] = useState('');
-    // Referência ao input de data oculto para acionar o seletor nativo do browser.
-    const dateInputRef = useRef(null);
     // Quantidade de registros exibidos; aumenta de PAGE_SIZE em PAGE_SIZE ao "Ver mais".
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -200,38 +198,51 @@ export default function EntryList({
         <div className="semear-panel semear-entries">
             <div className="semear-entries__toolbar">
                 <div className="semear-entries__search">
-                    {/* Input de data oculto; acionado pelo botão de calendário abaixo. */}
-                    <input
-                        ref={dateInputRef}
-                        type="date"
-                        className="semear-entries__date-hidden"
-                        value={searchDate}
-                        onChange={(event) => setSearchDate(event.target.value)}
-                        aria-label="Selecionar data para filtrar"
-                    />
-                    <button
-                        type="button"
-                        className={[
-                            'semear-entries__date-btn',
-                            searchDate ? 'semear-entries__date-btn--active' : '',
-                        ].filter(Boolean).join(' ')}
-                        onPointerDown={(e) => e.preventDefault()}
-                        onClick={() => searchDate ? setSearchDate('') : dateInputRef.current?.showPicker()}
-                        aria-pressed={Boolean(searchDate)}
-                        aria-label={searchDate ? `Filtrar por data: ${searchDate} — clique para limpar` : 'Filtrar por data'}
-                        title={searchDate ? `${searchDate} — clique para limpar` : 'Filtrar por data'}
-                    >
-                        {/* SVG de calendário — renderização consistente em iOS/Android sem depender de emoji */}
-                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style={{ display: 'block' }}>
-                            <g stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
-                                <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
-                                <line x1="8" y1="3" x2="8" y2="6.5" />
-                                <line x1="16" y1="3" x2="16" y2="6.5" />
-                                <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
-                            </g>
-                        </svg>
-                    </button>
+                    {/*
+                     * Wrapper do botão de filtro por data.
+                     * Quando inativo, um <input type="date"> transparente cobre o botão;
+                     * tocar nele abre o seletor nativo do iOS/Android sem depender de
+                     * showPicker(), que é bloqueado em elementos ocultos no Safari.
+                     * Quando ativo (data escolhida), o overlay some e o toque vai direto
+                     * ao botão, que limpa o filtro.
+                     */}
+                    <div className="semear-entries__date-wrap">
+                        <button
+                            type="button"
+                            className={[
+                                'semear-entries__date-btn',
+                                searchDate ? 'semear-entries__date-btn--active' : '',
+                            ].filter(Boolean).join(' ')}
+                            onClick={() => searchDate && setSearchDate('')}
+                            aria-pressed={Boolean(searchDate)}
+                            aria-label={searchDate ? `Filtrar por data: ${searchDate} — clique para limpar` : 'Filtrar por data'}
+                            title={searchDate ? `${searchDate} — clique para limpar` : 'Filtrar por data'}
+                        >
+                            {/* Calendário com linhas de agenda — diferente do ícone da categoria Evento */}
+                            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style={{ display: 'block' }}>
+                                <g stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+                                    <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
+                                    <line x1="8" y1="3" x2="8" y2="6.5" />
+                                    <line x1="16" y1="3" x2="16" y2="6.5" />
+                                    <line x1="7.5" y1="13.5" x2="16.5" y2="13.5" />
+                                    <line x1="7.5" y1="16.5" x2="13.5" y2="16.5" />
+                                </g>
+                            </svg>
+                        </button>
+                        {/* Overlay invisível: só existe quando não há data selecionada.
+                            O toque dispara o seletor nativo no iOS sem showPicker(). */}
+                        {!searchDate && (
+                            <input
+                                type="date"
+                                className="semear-entries__date-overlay"
+                                value=""
+                                onChange={(e) => setSearchDate(e.target.value)}
+                                aria-label="Selecionar data para filtrar"
+                                tabIndex={-1}
+                            />
+                        )}
+                    </div>
                     <div className="semear-entries__search-field">
                         {/* SVG de lupa — renderização consistente em iOS/Android sem depender de emoji */}
                         <span className="semear-entries__search-icon" aria-hidden="true">
