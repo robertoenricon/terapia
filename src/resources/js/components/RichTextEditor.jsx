@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /** Conjunto de emojis disponíveis no seletor rápido. */
 const EMOJIS = ['😀', '😊', '😍', '🥰', '😌', '😢', '😡', '😴', '🤔', '🙏', '❤️', '✨', '🌱', '☀️', '🌧️', '⭐'];
@@ -19,6 +19,8 @@ const EMOJIS = ['😀', '😊', '😍', '🥰', '😌', '😢', '😡', '😴', 
 export default function RichTextEditor({ value, onChange, placeholder, showToolbar = true }) {
     const editorRef = useRef(null);
     const [showEmojis, setShowEmojis] = useState(false);
+    // Rastreia quais formatos estão ativos no trecho selecionado ou na posição do cursor.
+    const [activeFormats, setActiveFormats] = useState({ bold: false, italic: false });
 
     // Sincroniza o conteúdo externo sem mover o cursor durante a digitação.
     useEffect(() => {
@@ -27,6 +29,29 @@ export default function RichTextEditor({ value, onChange, placeholder, showToolb
             editor.innerHTML = value || '';
         }
     }, [value]);
+
+    /**
+     * Atualiza os estados de formatação ativa consultando o documento.
+     * Só atualiza quando a seleção está dentro do editor.
+     */
+    const updateFormatState = useCallback(() => {
+        const selection = window.getSelection();
+        const editor = editorRef.current;
+        if (!editor || !selection || selection.rangeCount === 0) return;
+        const range = selection.getRangeAt(0);
+        if (!editor.contains(range.commonAncestorContainer)) return;
+
+        setActiveFormats({
+            bold: document.queryCommandState('bold'),
+            italic: document.queryCommandState('italic'),
+        });
+    }, []);
+
+    // Atualiza o estado de formatação sempre que a seleção muda no documento.
+    useEffect(() => {
+        document.addEventListener('selectionchange', updateFormatState);
+        return () => document.removeEventListener('selectionchange', updateFormatState);
+    }, [updateFormatState]);
 
     /**
      * Notifica o componente pai sobre a alteração do conteúdo.
@@ -39,13 +64,15 @@ export default function RichTextEditor({ value, onChange, placeholder, showToolb
     };
 
     /**
-     * Aplica um comando de formatação ao trecho selecionado.
+     * Aplica um comando de formatação ao trecho selecionado e
+     * atualiza o estado visual dos botões da barra de ferramentas.
      *
      * @param {string} command - Comando do execCommand.
      */
     const applyCommand = (command) => {
         editorRef.current?.focus();
         document.execCommand(command, false, null);
+        updateFormatState();
         emitChange();
     };
 
@@ -65,10 +92,22 @@ export default function RichTextEditor({ value, onChange, placeholder, showToolb
         <div className="semear-editor">
             {showToolbar && (
             <div className="semear-editor__toolbar">
-                <button type="button" className="semear-tool" onClick={() => applyCommand('bold')} aria-label="Negrito">
+                <button
+                    type="button"
+                    className={`semear-tool${activeFormats.bold ? ' semear-tool--active' : ''}`}
+                    onClick={() => applyCommand('bold')}
+                    aria-label="Negrito"
+                    aria-pressed={activeFormats.bold}
+                >
                     <strong>B</strong>
                 </button>
-                <button type="button" className="semear-tool" onClick={() => applyCommand('italic')} aria-label="Itálico">
+                <button
+                    type="button"
+                    className={`semear-tool${activeFormats.italic ? ' semear-tool--active' : ''}`}
+                    onClick={() => applyCommand('italic')}
+                    aria-label="Itálico"
+                    aria-pressed={activeFormats.italic}
+                >
                     <em>I</em>
                 </button>
                 <span className="semear-tool__divider" />

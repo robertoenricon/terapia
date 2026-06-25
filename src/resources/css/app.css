@@ -1955,6 +1955,11 @@ body {
     }
 }
 
+.semear-tool--active {
+    background-color: var(--semear-border);
+    color: var(--semear-text);
+}
+
 .semear-tool__divider {
     width: 1px;
     height: 1.3rem;
