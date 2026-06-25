@@ -19,6 +19,7 @@ export const CATEGORIES = {
     evento: { value: 'evento', label: 'Evento', theme: 'evento', color: 'var(--semear-evento)' },
     frases: { value: 'frases', label: 'Benção', theme: 'frases', color: 'var(--semear-frases)' },
     centro: { value: 'centro', label: 'Centro', theme: 'centro', color: 'var(--semear-centro)' },
+    anotacoes: { value: 'anotacoes', label: 'Anotações', theme: 'anotacoes', color: 'var(--semear-anotacoes)' },
 };
 
 /** Lista ordenada das categorias para renderização (chips, modal). */
@@ -28,4 +29,5 @@ export const CATEGORY_LIST = [
     CATEGORIES.evento,
     CATEGORIES.frases,
     CATEGORIES.centro,
+    CATEGORIES.anotacoes,
 ];

@@ -79,6 +79,28 @@ const ICONS = {
             <path d="M10.3 20.5 V16 a1.7 1.7 0 0 1 3.4 0 V20.5" fill="currentColor" stroke="none" />
         </g>
     ),
+    // Anotações: bloco de notas com caneta (registro livre, lembretes).
+    anotacoes: (
+        <>
+            <g
+                stroke="currentColor"
+                strokeWidth="1.7"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            >
+                <rect x="4.5" y="3.5" width="13" height="17" rx="2" />
+                <line x1="7.5" y1="8" x2="14.5" y2="8" />
+                <line x1="7.5" y1="11.5" x2="14.5" y2="11.5" />
+                <line x1="7.5" y1="15" x2="12" y2="15" />
+            </g>
+            <path
+                d="M15 14.5 l4.4 -4.4 a1.4 1.4 0 0 1 2 2 L17 16.5 l-2.6 0.6 z"
+                fill="currentColor"
+                stroke="none"
+            />
+        </>
+    ),
 };
 
 /**

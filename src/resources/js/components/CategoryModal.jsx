@@ -1,11 +1,13 @@
 import { CATEGORY_LIST } from '../utils/categories';
 import useBodyScrollLock from '../hooks/useBodyScrollLock';
+import CategoryIcon from './CategoryIcon';
 
 /**
  * Modal de seleção da categoria de uma nova entrada.
  *
  * Exibe uma sobreposição com as opções disponíveis (Terapia em verde,
- * Sonhos em azul, Evento em vermelho, Benção em verde/azul e Centro em violeta).
+ * Sonhos em azul, Evento em vermelho, Benção em amarelo, Centro em violeta
+ * e Anotações em laranja). Cada opção mostra o ícone e o rótulo da categoria.
  * Ao escolher uma opção, informa o componente pai; ao clicar fora ou no botão
  * de fechar, cancela a seleção.
  *
@@ -46,6 +48,7 @@ export default function CategoryModal({ onChoose, onClose }) {
                             className={`semear-modal__option semear-modal__option--${category.theme}`}
                             onClick={() => onChoose(category.value)}
                         >
+                            <CategoryIcon name={category.value} size={22} />
                             {category.label}
                         </button>
                     ))}

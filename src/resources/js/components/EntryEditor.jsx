@@ -20,7 +20,7 @@ const MAX_LENGTH = 5000;
  * @param {Object} props - Propriedades do componente.
  * @param {Date} props.selectedDate - Data selecionada.
  * @param {Object} props.entryCategories - Mapa "YYYY-MM-DD" → categorias com registro (pontos do calendário).
- * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento", "frases" ou "centro").
+ * @param {string} props.category - Categoria da entrada ("terapia", "sonhos", "evento", "frases", "centro" ou "anotacoes").
  * @param {string|null} props.type - Tipo do registro (tipos de "Sonhos" ou de "Centro").
  * @param {string} props.title - Título curto e opcional da entrada.
  * @param {string} props.content - Conteúdo (HTML) atual da entrada.
