@@ -969,124 +969,60 @@ body {
     flex-shrink: 0;
 }
 
-/* Popover customizado de seleção de data para o filtro da listagem. */
-.semear-date-filter-picker {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 0;
-    z-index: 200;
-    background: var(--semear-surface);
-    border: 1px solid var(--semear-border);
-    border-radius: 1rem;
-    padding: 0.85rem;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-    width: 14.5rem;
-}
-
-.semear-date-filter-picker__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.65rem;
-}
-
-.semear-date-filter-picker__title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-}
-
-.semear-date-filter-picker__weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 0.3rem;
-}
-
-.semear-date-filter-picker__weekdays span {
-    text-align: center;
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--semear-faint);
-    padding: 0.2rem 0;
-}
-
-.semear-date-filter-picker__grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.15rem;
-}
-
-.semear-date-filter-picker__day {
-    aspect-ratio: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    color: var(--semear-text);
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-}
-
-.semear-date-filter-picker__day:hover {
-    background-color: var(--semear-border);
-}
-
-.semear-date-filter-picker__day--muted {
-    color: var(--semear-faint);
-}
-
-.semear-date-filter-picker__day--today {
-    color: #b1ff7d;
-    font-weight: 700;
-}
-
-.semear-date-filter-picker__day--selected {
-    background: var(--semear-terapia);
-    color: #fff;
-    font-weight: 700;
+/* Popover do seletor de data do filtro — usa o mesmo Calendar do editor.
+   Ancorado ao botão e com largura compacta para caber no topo da listagem. */
+.semear-entries__date-popover {
+    width: min(18rem, 90vw);
 }
 
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
-   Segue o mesmo padrão visual do semear-star-filter. */
+   Exibe o mini-calendário (date badge) no mesmo padrão visual do editor. */
 .semear-entries__date-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.15rem;
-    height: 2.15rem;
-    border: 1px solid var(--semear-border-strong);
-    border-radius: 0.75rem;
     padding: 0;
+    border: none;
     background: transparent;
     cursor: pointer;
-    color: var(--semear-text);
     filter: grayscale(1);
-    opacity: 0.55;
-    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
+    opacity: 0.6;
+    transition: opacity 0.15s, filter 0.15s, transform 0.15s;
 }
 
 .semear-entries__date-btn:hover {
     opacity: 1;
     filter: none;
-    background-color: var(--semear-border);
+    transform: translateY(-1px);
 }
 
 .semear-entries__date-btn:focus-visible {
     outline: 2px solid var(--semear-sonhos);
-    outline-offset: -2px;
+    outline-offset: 2px;
+    border-radius: 0.6rem;
 }
 
 /* Realça o filtro de data quando está ativo — clicar novamente limpa o filtro. */
 .semear-entries__date-btn--active {
     opacity: 1;
     filter: none;
-    border-color: var(--semear-terapia);
-    background-color: var(--semear-terapia-soft);
+}
+
+/* Versão compacta do date badge para caber na barra de ferramentas do filtro. */
+.semear-entries__date-badge {
+    width: 2.3rem;
+    border-radius: 0.55rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.semear-entries__date-badge .semear-date-badge__month {
+    font-size: 0.5rem;
+    padding: 0.12rem 0;
+}
+
+.semear-entries__date-badge .semear-date-badge__day {
+    font-size: 1.05rem;
+    padding: 0.1rem 0 0.18rem;
 }
 
 .semear-entries__list {
