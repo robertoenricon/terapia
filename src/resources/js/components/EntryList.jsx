@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
+    MONTH_NAMES,
+    WEEKDAY_INITIALS,
     WEEKDAY_NAMES,
+    buildCalendarDays,
     fromDateKey,
     isSameDay,
+    toDateKey,
 } from '../utils/date';
 import { CATEGORIES, CATEGORY_LIST } from '../utils/categories';
 import { ENTRY_TYPES, getTypeListByCategory } from '../utils/entryTypes';
@@ -53,6 +57,54 @@ export default function EntryList({
     const [starredOnly, setStarredOnly] = useState(false);
     // Quando preenchido, filtra as entradas pela data selecionada (formato YYYY-MM-DD).
     const [searchDate, setSearchDate] = useState('');
+    // Controla a abertura/fechamento do popover de seleção de data.
+    const [pickerOpen, setPickerOpen] = useState(false);
+    // Mês exibido dentro do popover de seleção de data.
+    const [pickerViewDate, setPickerViewDate] = useState(() => new Date());
+    // Referência ao wrapper do botão + popover para detectar cliques externos.
+    const dateWrapRef = useRef(null);
+
+    // Fecha o popover ao clicar fora da área do seletor de data.
+    useEffect(() => {
+        if (!pickerOpen) return;
+        const handleOutsideClick = (e) => {
+            if (dateWrapRef.current && !dateWrapRef.current.contains(e.target)) {
+                setPickerOpen(false);
+            }
+        };
+        document.addEventListener('pointerdown', handleOutsideClick);
+        return () => document.removeEventListener('pointerdown', handleOutsideClick);
+    }, [pickerOpen]);
+
+    /**
+     * Alterna o popover de seleção de data.
+     * Quando há filtro ativo, limpa o filtro em vez de abrir o popover.
+     */
+    const handleDateBtnClick = () => {
+        if (searchDate) {
+            setSearchDate('');
+            setPickerOpen(false);
+        } else {
+            if (!pickerOpen) {
+                setPickerViewDate(new Date());
+            }
+            setPickerOpen((open) => !open);
+        }
+    };
+
+    /**
+     * Seleciona uma data no popover, ativa o filtro e fecha o seletor.
+     *
+     * @param {Date} date - Data escolhida no popover.
+     */
+    const handlePickerSelect = (date) => {
+        setSearchDate(toDateKey(date));
+        setPickerOpen(false);
+    };
+
+    // Dias do mês atual exibido no popover de seleção de data.
+    const pickerDays = buildCalendarDays(pickerViewDate.getFullYear(), pickerViewDate.getMonth());
+
     // Quantidade de registros exibidos; aumenta de PAGE_SIZE em PAGE_SIZE ao "Ver mais".
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -198,49 +250,86 @@ export default function EntryList({
         <div className="semear-panel semear-entries">
             <div className="semear-entries__toolbar">
                 <div className="semear-entries__search">
-                    {/*
-                     * Wrapper do botão de filtro por data.
-                     * Quando inativo, um <input type="date"> transparente cobre o botão;
-                     * tocar nele abre o seletor nativo do iOS/Android sem depender de
-                     * showPicker(), que é bloqueado em elementos ocultos no Safari.
-                     * Quando ativo (data escolhida), o overlay some e o toque vai direto
-                     * ao botão, que limpa o filtro.
-                     */}
-                    <div className="semear-entries__date-wrap">
+                    {/* Wrapper do botão + popover de seleção de data. */}
+                    <div className="semear-entries__date-wrap" ref={dateWrapRef}>
                         <button
                             type="button"
                             className={[
                                 'semear-entries__date-btn',
                                 searchDate ? 'semear-entries__date-btn--active' : '',
                             ].filter(Boolean).join(' ')}
-                            onClick={() => searchDate && setSearchDate('')}
-                            aria-pressed={Boolean(searchDate)}
+                            onClick={handleDateBtnClick}
+                            aria-pressed={Boolean(searchDate) || pickerOpen}
                             aria-label={searchDate ? `Filtrar por data: ${searchDate} — clique para limpar` : 'Filtrar por data'}
                             title={searchDate ? `${searchDate} — clique para limpar` : 'Filtrar por data'}
                         >
-                            {/* Calendário com linhas de agenda — diferente do ícone da categoria Evento */}
+                            {/* Calendário com checkmark — distinto do ícone da categoria Evento */}
                             <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style={{ display: 'block' }}>
                                 <g stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                     <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
                                     <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
                                     <line x1="8" y1="3" x2="8" y2="6.5" />
                                     <line x1="16" y1="3" x2="16" y2="6.5" />
-                                    <line x1="7.5" y1="13.5" x2="16.5" y2="13.5" />
-                                    <line x1="7.5" y1="16.5" x2="13.5" y2="16.5" />
+                                    <polyline points="8,14.5 10.5,17 16.5,12" />
                                 </g>
                             </svg>
                         </button>
-                        {/* Overlay invisível: só existe quando não há data selecionada.
-                            O toque dispara o seletor nativo no iOS sem showPicker(). */}
-                        {!searchDate && (
-                            <input
-                                type="date"
-                                className="semear-entries__date-overlay"
-                                value=""
-                                onChange={(e) => setSearchDate(e.target.value)}
-                                aria-label="Selecionar data para filtrar"
-                                tabIndex={-1}
-                            />
+
+                        {/* Popover do seletor de data — abre/fecha ao clicar no botão. */}
+                        {pickerOpen && (
+                            <div className="semear-date-filter-picker" role="dialog" aria-label="Selecionar data para filtrar">
+                                <div className="semear-date-filter-picker__header">
+                                    <button
+                                        type="button"
+                                        className="semear-icon-btn"
+                                        onClick={() => setPickerViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))}
+                                        aria-label="Mês anterior"
+                                    >
+                                        ‹
+                                    </button>
+                                    <span className="semear-date-filter-picker__title">
+                                        {MONTH_NAMES[pickerViewDate.getMonth()]} {pickerViewDate.getFullYear()}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        className="semear-icon-btn"
+                                        onClick={() => setPickerViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))}
+                                        aria-label="Próximo mês"
+                                    >
+                                        ›
+                                    </button>
+                                </div>
+
+                                <div className="semear-date-filter-picker__weekdays">
+                                    {WEEKDAY_INITIALS.map((initial, i) => (
+                                        <span key={i}>{initial}</span>
+                                    ))}
+                                </div>
+
+                                <div className="semear-date-filter-picker__grid">
+                                    {pickerDays.map(({ date, inMonth }) => {
+                                        const key = toDateKey(date);
+                                        const isSelected = searchDate === key;
+                                        const isToday = isSameDay(date, new Date());
+                                        return (
+                                            <button
+                                                type="button"
+                                                key={key}
+                                                className={[
+                                                    'semear-date-filter-picker__day',
+                                                    !inMonth ? 'semear-date-filter-picker__day--muted' : '',
+                                                    isToday && !isSelected ? 'semear-date-filter-picker__day--today' : '',
+                                                    isSelected ? 'semear-date-filter-picker__day--selected' : '',
+                                                ].filter(Boolean).join(' ')}
+                                                onClick={() => handlePickerSelect(date)}
+                                                aria-pressed={isSelected}
+                                            >
+                                                {date.getDate()}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         )}
                     </div>
                     <div className="semear-entries__search-field">
