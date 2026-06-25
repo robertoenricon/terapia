@@ -221,10 +221,27 @@ export default function EntryList({
                         aria-label={searchDate ? `Filtrar por data: ${searchDate} — clique para limpar` : 'Filtrar por data'}
                         title={searchDate ? `${searchDate} — clique para limpar` : 'Filtrar por data'}
                     >
-                        📅
+                        {/* SVG de calendário — renderização consistente em iOS/Android sem depender de emoji */}
+                        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style={{ display: 'block' }}>
+                            <g stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3.5" y="5" width="17" height="15" rx="2.5" />
+                                <line x1="3.5" y1="9.5" x2="20.5" y2="9.5" />
+                                <line x1="8" y1="3" x2="8" y2="6.5" />
+                                <line x1="16" y1="3" x2="16" y2="6.5" />
+                                <circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none" />
+                            </g>
+                        </svg>
                     </button>
                     <div className="semear-entries__search-field">
-                        <span className="semear-entries__search-icon" aria-hidden="true">🔎</span>
+                        {/* SVG de lupa — renderização consistente em iOS/Android sem depender de emoji */}
+                        <span className="semear-entries__search-icon" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false" style={{ display: 'block' }}>
+                                <g stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round">
+                                    <circle cx="10.5" cy="10.5" r="6.5" />
+                                    <line x1="15.5" y1="15.5" x2="21" y2="21" />
+                                </g>
+                            </svg>
+                        </span>
                         <input
                             type="search"
                             className="semear-entries__search-input"

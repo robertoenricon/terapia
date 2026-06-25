@@ -934,9 +934,11 @@ body {
     top: 50%;
     left: 0.85rem;
     transform: translateY(-50%);
-    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
     opacity: 0.7;
     pointer-events: none;
+    color: var(--semear-text);
 }
 
 .semear-entries__search-input {
@@ -987,9 +989,8 @@ body {
     border-radius: 0.75rem;
     padding: 0;
     background: transparent;
-    font-size: 0.95rem;
-    line-height: 1;
     cursor: pointer;
+    color: var(--semear-text);
     filter: grayscale(1);
     opacity: 0.55;
     transition: background-color 0.15s, border-color 0.15s, opacity 0.15s, filter 0.15s;
