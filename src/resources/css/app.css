@@ -991,7 +991,10 @@ body {
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
    Exibe o mini-calendário (date badge) no mesmo padrão visual do editor. */
 .semear-entries__date-btn {
-    display: inline-flex;
+    /* Usa flex (e não inline-flex) para que o botão não gere uma caixa de
+       linha com espaço de leading/descida que empurraria o mini-calendário
+       para baixo, desalinhando-o em relação ao campo de busca. */
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
