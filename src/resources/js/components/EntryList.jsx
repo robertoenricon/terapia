@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
@@ -376,7 +376,7 @@ export default function EntryList({
             )}
 
             <ul className="semear-entries__list">
-                {visible.map((entry) => {
+                {visible.map((entry, index) => {
                     const date = fromDateKey(entry.entry_date.slice(0, 10));
                     const isSelected = selectedDate
                         && isSameDay(date, selectedDate)
@@ -389,10 +389,18 @@ export default function EntryList({
                     const isExpanded = expandedEntryId === entry.id;
                     const isPinned = Boolean(entry.pinned);
                     const isStarred = Boolean(entry.starred);
+                    // Exibe uma linha divisória entre os itens fixados e os comuns:
+                    // verdadeiro no primeiro item comum que vem logo após um fixado.
+                    const showPinnedDivider = !isPinned
+                        && index > 0
+                        && Boolean(visible[index - 1].pinned);
 
                     return (
-                        <li
-                            key={entry.id}
+                        <Fragment key={entry.id}>
+                            {showPinnedDivider && (
+                                <li className="semear-entries__pinned-divider" aria-hidden="true" />
+                            )}
+                            <li
                             className={[
                                 'semear-entry-card',
                                 isSelected ? 'semear-entry-card--selected' : '',
@@ -500,7 +508,8 @@ export default function EntryList({
                                     </button>
                                 </div>
                             )}
-                        </li>
+                            </li>
+                        </Fragment>
                     );
                 })}
             </ul>

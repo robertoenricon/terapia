@@ -975,6 +975,19 @@ body {
     width: min(18rem, 90vw);
 }
 
+/* No calendário usado apenas para filtrar a listagem, neutraliza as cores da
+   marca: o dia selecionado e o dia atual ficam em branco/cinza, em vez do
+   verde do editor, já que aqui o calendário só escolhe a data do filtro. */
+.semear-entries__date-popover .semear-calendar__day--selected {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.semear-entries__date-popover .semear-calendar__day--today {
+    color: var(--semear-text);
+    text-shadow: none;
+}
+
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
    Exibe o mini-calendário (date badge) no mesmo padrão visual do editor. */
 .semear-entries__date-btn {
@@ -1360,6 +1373,15 @@ body {
     border-color: var(--semear-border-strong);
     background-color: var(--semear-surface-strong, var(--semear-surface));
     box-shadow: inset 3px 0 0 var(--semear-border-strong);
+}
+
+/* Linha divisória entre os registros fixados e os registros comuns. */
+.semear-entries__pinned-divider {
+    list-style: none;
+    height: 0;
+    margin: 0.35rem 0;
+    border: none;
+    border-top: 1px solid var(--semear-border-strong);
 }
 
 /* Botão de marcar/desmarcar a entrada como favorita (estrela). */
