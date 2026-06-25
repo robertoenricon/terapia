@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     MONTH_ABBREVIATIONS,
     WEEKDAY_NAMES,
@@ -51,6 +51,10 @@ export default function EntryList({
     const [activeType, setActiveType] = useState(null);
     // Quando ativo, exibe apenas as entradas marcadas com estrela (favoritas).
     const [starredOnly, setStarredOnly] = useState(false);
+    // Quando preenchido, filtra as entradas pela data selecionada (formato YYYY-MM-DD).
+    const [searchDate, setSearchDate] = useState('');
+    // Referência ao input de data oculto para acionar o seletor nativo do browser.
+    const dateInputRef = useRef(null);
     // Quantidade de registros exibidos; aumenta de PAGE_SIZE em PAGE_SIZE ao "Ver mais".
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -63,7 +67,7 @@ export default function EntryList({
     // Ao alterar busca ou filtros, volta à primeira página (PAGE_SIZE registros).
     useEffect(() => {
         setVisibleCount(PAGE_SIZE);
-    }, [search, activeCategory, activeType, starredOnly]);
+    }, [search, searchDate, activeCategory, activeType, starredOnly]);
 
     // Tipos disponíveis para refinar o filtro da categoria ativa.
     const typeFilterOptions = getTypeListByCategory(activeCategory);
@@ -91,9 +95,13 @@ export default function EntryList({
         ? matched.filter((entry) => entry.type === activeType)
         : matched;
     // Quando o filtro de estrela está ativo, mantém apenas as entradas favoritas.
-    const filtered = starredOnly
+    const byStarred = starredOnly
         ? byType.filter((entry) => Boolean(entry.starred))
         : byType;
+    // Quando uma data está selecionada, mantém apenas as entradas daquela data.
+    const filtered = searchDate
+        ? byStarred.filter((entry) => entry.entry_date.slice(0, 10) === searchDate)
+        : byStarred;
     // Mantém os registros fixados no topo, preservando a ordem de data em cada grupo.
     const ordered = [...filtered].sort(
         (a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)),
@@ -201,6 +209,37 @@ export default function EntryList({
                         placeholder="Buscar por título, descrição ou feedback..."
                         aria-label="Buscar registros por título, descrição ou feedback"
                     />
+                    <input
+                        ref={dateInputRef}
+                        type="date"
+                        className="semear-entries__date-hidden"
+                        value={searchDate}
+                        onChange={(event) => setSearchDate(event.target.value)}
+                        aria-label="Selecionar data para filtrar"
+                    />
+                    <button
+                        type="button"
+                        className={[
+                            'semear-entries__date-btn',
+                            searchDate ? 'semear-entries__date-btn--active' : '',
+                        ].filter(Boolean).join(' ')}
+                        onClick={() => dateInputRef.current?.showPicker()}
+                        aria-label={searchDate ? `Filtro de data ativo: ${searchDate}` : 'Filtrar por data'}
+                        title={searchDate ? `Data: ${searchDate}` : 'Filtrar por data'}
+                    >
+                        📅
+                    </button>
+                    {searchDate && (
+                        <button
+                            type="button"
+                            className="semear-entries__date-clear"
+                            onClick={() => setSearchDate('')}
+                            aria-label="Limpar filtro de data"
+                            title="Limpar filtro de data"
+                        >
+                            ×
+                        </button>
+                    )}
                 </div>
 
                 <div className="semear-categories">
@@ -266,7 +305,7 @@ export default function EntryList({
 
             {visible.length === 0 && (
                 <p className="semear-entries__empty">
-                    {query || activeType || starredOnly
+                    {query || activeType || starredOnly || searchDate
                         ? 'Nenhum registro encontrado para esta busca.'
                         : 'Nenhuma entrada registrada ainda.'}
                 </p>
