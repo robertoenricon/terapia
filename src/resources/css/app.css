@@ -969,22 +969,86 @@ body {
     flex-shrink: 0;
 }
 
-/* Input de data transparente que cobre o botão quando inativo.
-   O toque direto no <input type="date"> abre o seletor nativo no
-   iOS/Android sem depender de showPicker(), que não funciona de forma
-   confiável em Safari móvel com elementos não-focados nativamente. */
-.semear-entries__date-overlay {
+/* Popover customizado de seleção de data para o filtro da listagem. */
+.semear-date-filter-picker {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    border: none;
-    padding: 0;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 200;
+    background: var(--semear-surface);
+    border: 1px solid var(--semear-border);
+    border-radius: 1rem;
+    padding: 0.85rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+    width: 14.5rem;
+}
+
+.semear-date-filter-picker__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.65rem;
+}
+
+.semear-date-filter-picker__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.semear-date-filter-picker__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 0.3rem;
+}
+
+.semear-date-filter-picker__weekdays span {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--semear-faint);
+    padding: 0.2rem 0;
+}
+
+.semear-date-filter-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.15rem;
+}
+
+.semear-date-filter-picker__day {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: transparent;
-    /* Garante que o clique/toque chegue ao input, não ao botão abaixo. */
-    z-index: 1;
+    border: none;
+    border-radius: 50%;
+    color: var(--semear-text);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background-color 0.12s, color 0.12s;
+}
+
+.semear-date-filter-picker__day:hover {
+    background-color: var(--semear-border);
+}
+
+.semear-date-filter-picker__day--muted {
+    color: var(--semear-faint);
+}
+
+.semear-date-filter-picker__day--today {
+    color: #b1ff7d;
+    font-weight: 700;
+}
+
+.semear-date-filter-picker__day--selected {
+    background: var(--semear-terapia);
+    color: #fff;
+    font-weight: 700;
 }
 
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
