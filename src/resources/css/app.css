@@ -962,18 +962,29 @@ body {
     box-shadow: 0 0 0 0.2rem var(--semear-border);
 }
 
-/* Input de data oculto — acionado programaticamente pelo botão de calendário.
-   width/height em 1px (não zero) para que showPicker() funcione em mobile
-   (Safari/iOS recusa showPicker em elementos com dimensão zero). */
-.semear-entries__date-hidden {
+/* Wrapper do botão de filtro por data — necessário para empilhar o
+   overlay invisível sobre o botão sem deslocar o layout flex. */
+.semear-entries__date-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Input de data transparente que cobre o botão quando inativo.
+   O toque direto no <input type="date"> abre o seletor nativo no
+   iOS/Android sem depender de showPicker(), que não funciona de forma
+   confiável em Safari móvel com elementos não-focados nativamente. */
+.semear-entries__date-overlay {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
-    pointer-events: none;
+    cursor: pointer;
     border: none;
     padding: 0;
+    background: transparent;
+    /* Garante que o clique/toque chegue ao input, não ao botão abaixo. */
+    z-index: 1;
 }
 
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
@@ -982,7 +993,6 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     width: 2.15rem;
     height: 2.15rem;
     border: 1px solid var(--semear-border-strong);
