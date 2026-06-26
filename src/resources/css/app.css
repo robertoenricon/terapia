@@ -949,7 +949,6 @@ body {
     color: var(--semear-text);
     background-color: var(--semear-surface);
     font-size: 0.9rem;
-    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .semear-entries__search-input::placeholder {
@@ -958,8 +957,6 @@ body {
 
 .semear-entries__search-input:focus {
     outline: none;
-    border-color: var(--semear-border-strong);
-    box-shadow: 0 0 0 0.2rem var(--semear-border);
 }
 
 /* Wrapper do botão de filtro por data — necessário para empilhar o
