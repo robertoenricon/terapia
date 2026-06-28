@@ -61,12 +61,12 @@
     --semear-centro-glow: rgba(139, 92, 246, 0.32);
     --grad-centro: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
 
-    /* Anotações — laranja-âmbar (notas, lembretes, registros livres) */
-    --semear-anotacoes: #fb923c;
-    --semear-anotacoes-dark: #ea580c;
-    --semear-anotacoes-soft: rgba(251, 146, 60, 0.16);
-    --semear-anotacoes-glow: rgba(234, 88, 12, 0.32);
-    --grad-anotacoes: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+    /* Anotações — lilás acinzentado (notas, lembretes, registros livres) */
+    --semear-anotacoes: #9578a7;
+    --semear-anotacoes-dark: #7a5d8c;
+    --semear-anotacoes-soft: rgba(149, 120, 167, 0.16);
+    --semear-anotacoes-glow: rgba(122, 93, 140, 0.32);
+    --grad-anotacoes: linear-gradient(135deg, #9578a7 0%, #7a5d8c 100%);
 
     /* Tipos de registro — escala de humor (pior → melhor) */
     --semear-pesadelo: #ff0025;        /* Pesadelo — vermelho */
