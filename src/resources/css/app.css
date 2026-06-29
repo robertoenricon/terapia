@@ -61,12 +61,12 @@
     --semear-centro-glow: rgba(139, 92, 246, 0.32);
     --grad-centro: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
 
-    /* Anotações — lilás acinzentado (notas, lembretes, registros livres) */
-    --semear-anotacoes: #9578a7;
-    --semear-anotacoes-dark: #7a5d8c;
-    --semear-anotacoes-soft: rgba(149, 120, 167, 0.16);
-    --semear-anotacoes-glow: rgba(122, 93, 140, 0.32);
-    --grad-anotacoes: linear-gradient(135deg, #9578a7 0%, #7a5d8c 100%);
+    /* Anotações — magenta vibrante (notas, lembretes, registros livres) */
+    --semear-anotacoes: #cf00ff;
+    --semear-anotacoes-dark: #a300cc;
+    --semear-anotacoes-soft: rgba(207, 0, 255, 0.16);
+    --semear-anotacoes-glow: rgba(163, 0, 204, 0.32);
+    --grad-anotacoes: linear-gradient(135deg, #cf00ff 0%, #a300cc 100%);
 
     /* Tipos de registro — escala de humor (pior → melhor) */
     --semear-pesadelo: #ff0025;        /* Pesadelo — vermelho */
@@ -784,6 +784,13 @@ body {
     background-color: var(--semear-border);
 }
 
+/* Foco do dia no padrão de cor da aplicação (mesma cor usada nos demais
+   elementos focáveis), evitando o contorno padrão do navegador. */
+.semear-calendar__day:focus-visible {
+    outline: 2px solid var(--semear-sonhos);
+    outline-offset: 2px;
+}
+
 .semear-calendar__day--muted {
     color: var(--semear-faint);
 }
@@ -983,6 +990,12 @@ body {
 .semear-entries__date-popover .semear-calendar__day--today {
     color: var(--semear-text);
     text-shadow: none;
+}
+
+/* No filtro de data, mantém o foco neutro (branco), acompanhando as demais
+   cores neutralizadas do popover em vez da cor da marca. */
+.semear-entries__date-popover .semear-calendar__day:focus-visible {
+    outline-color: rgba(255, 255, 255, 0.55);
 }
 
 /* Botão de filtro por data, alinhado à esquerda do campo de busca.
