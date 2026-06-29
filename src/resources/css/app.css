@@ -1029,10 +1029,11 @@ body {
     border-radius: 0.6rem;
 }
 
-/* Realça o filtro de data quando está ativo — clicar novamente limpa o filtro. */
+/* Realça o filtro de data quando está ativo — clicar novamente limpa o filtro.
+   Mantém o badge em escala de cinza (padrão), sem revelar a cor da marca:
+   o estado ativo é indicado apenas pela opacidade total. */
 .semear-entries__date-btn--active {
     opacity: 1;
-    filter: none;
 }
 
 /* Versão compacta do date badge para caber na barra de ferramentas do filtro. */
