@@ -7,7 +7,7 @@ import CategoryIcon from './CategoryIcon';
  *
  * Exibe uma sobreposição com as opções disponíveis (Terapia em verde,
  * Sonhos em azul, Evento em vermelho, Benção em amarelo, Centro em violeta
- * e Anotações em laranja). Cada opção mostra o ícone e o rótulo da categoria.
+ * e Anotações em magenta). Cada opção mostra o ícone e o rótulo da categoria.
  * Ao escolher uma opção, informa o componente pai; ao clicar fora ou no botão
  * de fechar, cancela a seleção.
  *
