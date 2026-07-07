@@ -101,7 +101,6 @@ export default function EntryEditor({
         <div
             className="semear-modal"
             role="presentation"
-            onClick={saving || deleting ? undefined : onBack}
         >
             <div
                 className="semear-modal__card semear-modal__card--editor semear-main"
