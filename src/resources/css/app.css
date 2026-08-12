@@ -414,9 +414,12 @@ body {
     gap: 1.5rem;
 }
 
+/* O painel do calendário acompanha a altura do próprio conteúdo. Sem isto
+   ele se estica até a altura da coluna de registros, deixando um espaço
+   vazio abaixo dos dias do mês. */
 .semear__calendar {
     grid-area: calendar;
-    height: 100%;
+    align-self: start;
 }
 
 .semear__content {
